@@ -45,6 +45,13 @@ router.post("/login", controllers.Login);
 router.post("/login-user", controllers.UserLogin);
 
 /**
+ * Login for doctor
+ * Path: /api/v1/login-doctor
+ * Permission: All
+ */
+router.post("/login-doctor", controllers.DoctorLogin);
+
+/**
  * Logout
  * Path: /api/v1/logout
  * Permission: All
