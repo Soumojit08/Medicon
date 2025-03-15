@@ -7,10 +7,6 @@ function userauthmiddleware(token) {
         try {
             const tokenValue = req.cookies[token];
             if (!tokenValue) {
-                // res.status(StatusCodes.UNAUTHORIZED).json({
-                //     status: 'Failed',
-                //     message: "Token not found!"
-                // });
                 return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
             } else {
                 try {
@@ -26,24 +22,12 @@ function userauthmiddleware(token) {
                         res.locals.user = userPayload;
                         return next();
                     }
-                    // return res.status(StatusCodes.UNAUTHORIZED).json({
-                    //     status: "Failed",
-                    //     message: "Access denied. Only doctors can access this route.",
-                    // });
                     return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
                 } catch (error) {
-                    // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                    //     status: 'Failed',
-                    //     message: "Internal Server Error!"
-                    // });
                     return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
                 }
             }
         } catch (error) {
-            // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            //     status: 'Failed',
-            //     message: "Internal Server Error!"
-            // });
             return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
         }
     }

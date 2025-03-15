@@ -1,5 +1,6 @@
 import { HeartHandshake, User2 } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const LoginDashboard = () => {
   return (
@@ -21,20 +22,20 @@ const LoginDashboard = () => {
                 Access our comprehensive platform to manage patient care,
                 appointments, and telemedicine services efficiently.
               </p>
-              <a href="/doctorLogin">
-                <button class="btn my-4 py-2 px-6 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-500">
+              <Link href="/login">
+                <button className="btn my-4 py-2 px-6 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-500">
                   Doctor Login
                 </button>
-              </a>
+              </Link>
               <p className="text-center text-gray-100 my-2 text-lg w-[80%]">
                 Don't have an account?{" "}
                 <a href="/doctorSignup" className="text-blue-600">
                   Contact Support
                 </a>{" "}
                 |{" "}
-                <a href="/doctorSignup" className="text-blue-600">
+                <Link href="/signup" className="text-blue-600">
                   Request Access
-                </a>
+                </Link>
               </p>
             </section>
 
@@ -52,24 +53,26 @@ const LoginDashboard = () => {
                 Access your personal health dashboard, book appointments, and
                 connect with healthcare professionals.
               </p>
-              <a href="/userLogin">
-                <button class="btn my-4 py-2 px-6 bg-transparent border border-blue-600 text-blue-600 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white">
+              <Link href="/login">
+                <button className="btn my-4 py-2 px-6 bg-transparent border border-blue-600 text-blue-600 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white">
                   User Login
                 </button>
-              </a>
+              </Link>
               <p className="text-center text-gray-100 my-2 text-lg w-[80%]">
                 Don't have an account?{" "}
-                <a href="/userSignup" className="text-blue-600">
+                <a href="/signup" className="text-blue-600">
                   Contact Support
                 </a>{" "}
                 |{" "}
-                <a href="/userSignup" className="text-blue-600">
+                <Link href="/signup" className="text-blue-600">
                   Sign Up Here
-                </a>
+                </Link>
               </p>
             </section>
           </div>
-          <a href="/adminDashboard" className="text-blue-600 hover:underline ">Admin Login here</a>
+          <Link href="/login" className="text-blue-600 hover:underline ">
+            Admin Login here
+          </Link>
         </div>
       </div>
     </div>
