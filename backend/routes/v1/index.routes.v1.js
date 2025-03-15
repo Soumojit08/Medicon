@@ -24,18 +24,18 @@ router.get("/health", (req, res, next) => {
 });
 
 /**
- * Signup
- * path: /api/v1/signup
- * Permission: All
- */
-router.post("/signup", upload.single("profileimage"), controllers.SignUp);
-
-/**
  * SignUp for user
  * Path: /api/v1/signup-user
  * Permission: All
  */
 router.post("signup-user", upload.single("profileimage"), controllers.UserSignUp);
+
+/**
+ * SignUp for Doctor
+ * Path: /api/v1/signup-doctor
+ * Permission: All
+ */
+router.post("signup-doctor", upload.single("profileimage"), controllers.DoctorSignUp);
 
 /**
  * Login for user
