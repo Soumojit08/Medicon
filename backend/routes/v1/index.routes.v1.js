@@ -31,6 +31,13 @@ router.get("/health", (req, res, next) => {
 router.post("/signup", upload.single("profileimage"), controllers.SignUp);
 
 /**
+ * SignUp for user
+ * Path: /api/v1/signup-user
+ * Permission: All
+ */
+router.post("signup-user", upload.single("profileimage"), controllers.UserSignUp);
+
+/**
  * Login for user
  * Path: /api/v1/login-user
  * Permission: All
