@@ -8,7 +8,11 @@ const doctorLoginController = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.BAD_REQUEST) });
+            // return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.BAD_REQUEST) });
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                status: 'Failed',
+                message: "All fields are required!"
+            });
         }
         
         const Doctor = await Models.DoctorModel.findOne({ email: email });

@@ -1,10 +1,9 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import JWT from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import Models from "../../models/index.models.js";
 import configs from "../../configs/index.configs.js";
 
-const userLoginController = async (req, res) => {
+const adminLoginController = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -14,20 +13,21 @@ const userLoginController = async (req, res) => {
                 message: "All fields are required!"
             });
         }
+        const Admin = await Models.AdminModel.findOne({ email });
+        if (Admin) {
+            // console.log("Admin Found:", Admin);
+            // console.log("Entered Password:", password);
+            // console.log("Stored Password:", Admin.password);
 
-        // Check if user or not...
-        const User = await Models.UserModel.findOne({ email: email });
-        if (User && User !== null) {
-            // Check Password...
-            const hashed_password = User.password;
-            const isPasswordMatch = await bcrypt.compare(password, hashed_password);
-            if (isPasswordMatch) {
+            // If password is hashed, use bcrypt.compare
+            // const isPasswordMatch = await bcrypt.compare(password, Admin.password);
+            if (password === Admin.password) {
                 const playLoad = {
-                    name: User.name,
-                    email: User.email,
-                    role: "user",
+                    _id: Admin._id,
+                    name: Admin.name,
+                    email: Admin.email,
                 };
-                const token = await JWT.sign(playLoad, configs.JWT_SECRET, { expiresIn: '1h' });
+                const token = await JWT.sign(playLoad, configs.JWT_SECRET);
 
                 return res.status(StatusCodes.OK).json({
                     status: 'OK',
@@ -36,7 +36,7 @@ const userLoginController = async (req, res) => {
                     data: {
                         name: playLoad.name,
                         email: playLoad.email,
-                        role: playLoad.role,
+                        role: "admin",
                     }
                 });
             }
@@ -46,6 +46,11 @@ const userLoginController = async (req, res) => {
                 message: "Unauthorized",
             });
         }
+
+        return res.status(StatusCodes.CONFLICT).json({
+            status: 'Failed',
+            message: "Conflict",
+        });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             status: 'Failed',
@@ -54,4 +59,4 @@ const userLoginController = async (req, res) => {
     }
 }
 
-export default userLoginController;
+export default adminLoginController;
