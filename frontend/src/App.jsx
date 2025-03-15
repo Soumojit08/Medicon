@@ -10,6 +10,7 @@ import LoginDashboard from "./pages/LoginDashboard";
 import ErrorPage from "./pages/Error";
 import PatientDashboard from "./pages/PatientDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const App = () => {
   return (
@@ -31,6 +32,9 @@ const App = () => {
 
         {/* Login Dashboard */}
         <Route path="/loginDashboard" element={<LoginDashboard />} />
+
+        {/* Admin Dashboard */}
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
 
         {/* Error Page */}
         <Route path="*" element={<ErrorPage />} />
