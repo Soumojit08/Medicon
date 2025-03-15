@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { axiosInstance } from "../libs/axios";
 
 const UserSignup = () => {
   const [formData, setFormData] = useState({
@@ -31,12 +32,13 @@ const UserSignup = () => {
     form.append("role", "user");
 
     try {
-      const response = await fetch("/api/v1/signup", {
-        method: "POST",
-        body: form,
+      const response = await axiosInstance.post("/api/v1/signup", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      const data = await response.json();
+      const data = response.data;
 
       if (response.ok) {
         console.log("Signup successful");

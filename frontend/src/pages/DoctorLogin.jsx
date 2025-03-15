@@ -1,5 +1,6 @@
 import { HeartHandshake } from "lucide-react";
 import React, { useState } from "react";
+import { axiosInstance } from "../libs/axios.js";
 
 function DoctorLogin() {
   const [formData, setFormData] = useState({
@@ -18,12 +19,10 @@ function DoctorLogin() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/v1/login", {
-        method: "POST",
+      const response = await axiosInstance.post("/api/v1/login", formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
-        body: JSON.stringify(formData),
       });
 
       const data = await response.json();

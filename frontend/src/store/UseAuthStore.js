@@ -1,57 +1,44 @@
-import { create } from "zustand";
-import { axiosInstance } from "../lib/axios";
-import toast from "react-hot-toast";
+import create from "zustand";
+import axiosInstance from "../utils/axiosInstance";
+import { toast } from "react-hot-toast";
 
-const BASE_URL =
-  import.meta.env.MODE === "development" ? "http://localhost:3000" : "/";
+const useAuthStore = create((set) => ({
+  user: null,
+  role: localStorage.getItem("role") || null, // Store role in localStorage
+  isAuthenticated: !!localStorage.getItem("role"),
 
-export const useAuthStore = create((set, get) => ({
-  authUser: null,
-  authDoctor: null,
-  isSigningUp: false,
-  isLoggingIn: false,
-  isUpdatingProfile: false,
-  isCheckingAuth: true,
-  onlineUsers: [],
-
-  checkAuth: async () => {
+  login: async (credentials) => {
     try {
-      const res = await axiosInstance.get("/auth/check");
-
-      set({ authUser: res.data });
+      const { data } = await axiosInstance.post("/login", credentials);
+      localStorage.setItem("role", data.role); // Save role to localStorage
+      set({ user: data.user, role: data.role, isAuthenticated: true });
+      toast.success("Logged In Successfull");
     } catch (error) {
-      console.log("Error in checkAuth:", error);
-      set({ authUser: null });
-    } finally {
-      set({ isCheckingAuth: false });
+      toast.error("Logout failed");
     }
   },
 
-  Usersignup: async (data) => {
-    set({ isSigningUp: true });
+  logout: async () => {
     try {
-      const res = await axiosInstance.post("/v1/signup", data);
-      set({ authUser: res.data });
-      toast.success("Account created successfully");
+      await axiosInstance.get("/logout");
+      localStorage.removeItem("role"); // Remove role from localStorage
+      set({ user: null, role: null, isAuthenticated: false });
+      toast.success("Logged In Successfull");
     } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isSigningUp: false });
+      toast.error("Logout failed");
     }
   },
 
-  Userlogin: async (data) => {
-    set({ isLoggingIn: true });
+  signup: async (userData) => {
     try {
-      const res = await axiosInstance.post("/v1/login", data);
-      set({ authUser: res.data });
-      toast.success("Logged in successfully");
-
-      get().connectSocket();
+      const { data } = await axiosInstance.post("/signup", userData);
+      localStorage.setItem("role", data.role); // Save role to localStorage
+      set({ user: data.user, role: data.role, isAuthenticated: true });
+      toast.success("Signup successfully");
     } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isLoggingIn: false });
+      toast.error("Signup failed");
     }
   },
 }));
+
+export default useAuthStore;

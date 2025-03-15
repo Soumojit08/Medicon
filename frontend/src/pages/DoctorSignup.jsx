@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { User, AlertCircle } from "lucide-react";
+import axiosInstance from "../libs/axios";
 
 function DoctorSignup() {
   const [formData, setFormData] = useState({
@@ -51,14 +52,15 @@ function DoctorSignup() {
     form.append("role", "doctor");
 
     try {
-      const response = await fetch("/api/v1/signup", {
-        method: "POST",
-        body: form,
+      const response = await axiosInstance.post("/api/v1/signup", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (response.ok) {
+      if (response.status === 200) {
         console.log("Signup successful");
         window.location.href = "/doctorLogin";
       } else {
