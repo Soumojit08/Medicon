@@ -1,5 +1,6 @@
 import { User2 } from "lucide-react";
 import React, { useState } from "react";
+import axiosInstance from "../libs/axios";
 
 function UserLogin() {
   const [formData, setFormData] = useState({
@@ -18,15 +19,13 @@ function UserLogin() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/v1/login", {
-        method: "POST",
+      const response = await axiosInstance.post("/api/v1/login", formData, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = response.data;
 
       if (response.ok) {
         console.log("Login successful");

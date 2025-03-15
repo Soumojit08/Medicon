@@ -23,10 +23,24 @@ const logincontroller = async (req, res, next) => {
                     email: User.email,
                     role: "user",
                 };
-                const token = await JWT.sign(playLoad, configs.JWT_SECRET, { expiresIn: '1h' });
-                return res.cookie('usertoken', token).redirect('/userDashboard');
+                const token = await JWT.sign(playLoad, configs.JWT_SECRET, {expiresIn: '1h'});
+
+                return res.status(StatusCodes.OK).json({
+                    status: 'OK',
+                    message: "Successfully logged in",
+                    token: token,
+                    data: {
+                        name: playLoad.name,
+                        email: playLoad.email,
+                        role: playLoad.role,
+                    }
+                });
             }
-            return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
+
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                status: 'Failed',
+                message: "Unauthorized",
+            });
         }
 
         // Check if Doctor or not...
@@ -48,9 +62,23 @@ const logincontroller = async (req, res, next) => {
                 };
                 // Create token...
                 const token = await JWT.sign(playLoad, configs.JWT_SECRET);
-                return res.cookie('doctortoken', token).redirect('/doctorDash');
+                // return res.cookie('doctortoken', token).redirect('/doctorDash');
+                return res.status(StatusCodes.OK).json({
+                    status: 'OK',
+                    message: "Successfully logged in",
+                    token: token,
+                    data: {
+                        name: playLoad.name,
+                        email: playLoad.email,
+                        role: playLoad.role,
+                    }
+                });
             }
-            return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
+            // return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                status: 'Failed',
+                message: "Unauthorized",
+            });
         }
 
         // ✅ Check if Admin
@@ -62,23 +90,44 @@ const logincontroller = async (req, res, next) => {
 
             // If password is hashed, use bcrypt.compare
             // const isPasswordMatch = await bcrypt.compare(password, Admin.password);
-            if (password == Admin.password) {
+            if (password === Admin.password) {
                 const playLoad = {
                     _id: Admin._id,
                     name: Admin.name,
                     email: Admin.email,
                 };
                 const token = await JWT.sign(playLoad, configs.JWT_SECRET);
-                return res.cookie('admintoken', token).redirect('/adminDash');
+
+                return res.status(StatusCodes.OK).json({
+                    status: 'OK',
+                    message: "Successfully logged in",
+                    token: token,
+                    data: {
+                        name: playLoad.name,
+                        email: playLoad.email,
+                        role: "admin",
+                    }
+                });
             }
-            return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
+
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                status: 'Failed',
+                message: "Unauthorized",
+            });
         }
 
-        return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.CONFLICT) });
+        return res.status(StatusCodes.CONFLICT).json({
+            status: 'Failed',
+            message: "Conflict",
+        })
 
     } catch (error) {
         console.error("Login Error:", error);
-        return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
+
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            status: 'Failed',
+            message: "Internal Server Error",
+        });
     }
 }
 

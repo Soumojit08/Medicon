@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import configs from "./configs/index.configs.js";
 import Db_Connect from "./services/connectDb.js";
 import apiRoutes from "./routes/v1/index.routes.v1.js";
+import cors from "cors";
 
 const app = express();
 
@@ -21,6 +22,12 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong!");
 });
 app.use(express.static("public"));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // Apis entry point...
 app.use("/api/v1", apiRoutes);
