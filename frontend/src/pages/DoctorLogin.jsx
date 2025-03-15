@@ -8,6 +8,8 @@ function DoctorLogin() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,15 +23,15 @@ function DoctorLogin() {
     try {
       const response = await axiosInstance.post("/api/v1/login", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
 
-      const data = await response.json();
+      const data = await response.data;
 
-      if (response.ok) {
+      if (response.status === 200) {
         console.log("Login successful");
-        window.location.href = "/";
+        window.location.href = "/doctorDashboard";
       } else {
         console.error("Login failed:", data);
         alert(data.message || "Login Failed");

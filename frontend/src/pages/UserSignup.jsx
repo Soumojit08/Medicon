@@ -32,24 +32,25 @@ const UserSignup = () => {
     form.append("role", "user");
 
     try {
-      const response = await axiosInstance.post("/api/v1/signup", form, {
+      const response = await axiosInstance.post("/api/v1/signup-user", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      const data = response.data;
-
-      if (response.ok) {
+      if (response.status === 201) {
+        // 201 means created successfully
         console.log("Signup successful");
         window.location.href = "/userLogin";
       } else {
-        setError(data.message || "Signup Failed");
-        console.error("Signup failed:", data);
+        setError(response.data.message || "Signup Failed");
+        console.error("Signup failed:", response.data);
       }
     } catch (error) {
       console.error("Error during signup:", error);
-      setError("An error occurred during signup.");
+      setError(
+        error.response?.data?.message || "An error occurred during signup."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -58,7 +59,7 @@ const UserSignup = () => {
   return (
     <div>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
-        <div className="w-[30%] mt-14 bg-white rounded-lg shadow-lg p-6 sm:p-8">
+        <div className="lg:w-[30%] mt-14 bg-white rounded-lg shadow-lg p-6 sm:p-8 sm:w-[85%] ">
           <h2 className="text-center text-2xl font-bold text-gray-800 mb-6">
             User Sign Up
           </h2>

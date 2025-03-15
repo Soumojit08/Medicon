@@ -14,15 +14,15 @@ const DoctorDashboard = () => {
   };
 
   return (
-    <div>
-      <div className="min-h-screen flex flex-col px-20">
-        <div className="container mx-auto p-4 flex-grow">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div>
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow px-4 sm:px-6 md:px-10 lg:px-20">
+        <div className="container mx-auto p-4">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="w-full">
               <DoctorProfileHeader doctor={doctor} />
               <DoctorDetailsForm doctor={doctor} />
             </div>
-            <div>
+            <div className="w-full">
               <ManageSchedule />
             </div>
           </div>

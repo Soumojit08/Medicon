@@ -3,20 +3,20 @@ import Image from "./Image";
 
 const DashboardHeader = ({ user }) => {
   return (
-    <div className="flex justify-between items-center mb-8 p-6 bg-white rounded-lg shadow-md">
-      <div className="flex items-center justify-center gap-4">
+    <div className="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8 p-4 sm:p-6 bg-white rounded-lg shadow-md gap-4">
+      <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4">
         <Image />
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl sm:text-2xl font-bold">
             Welcome, {user ? user.name : "User"}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm sm:text-base">
             Manage your appointments and medical records
           </p>
         </div>
       </div>
       <a href="#doc">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors w-full sm:w-auto">
           Book Appointment
         </button>
       </a>

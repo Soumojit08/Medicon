@@ -8,6 +8,7 @@ function UserLogin() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [Error, setError] = useState()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,30 +18,37 @@ function UserLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
 
     try {
-      const response = await axiosInstance.post("/api/v1/login", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axiosInstance.post(
+        "/api/v1/login-user",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      const data = response.data;
-
-      if (response.ok) {
+      if (response.status === 200) {
+        // 200 means successful request
         console.log("Login successful");
-        window.location.href = "/";
+        window.location.href = "/patientDashboard";
       } else {
-        console.error("Login failed:", data);
-        alert(data.message || "Login Failed");
+        setError(response.data.message || "Login Failed");
+        console.error("Login failed:", response.data);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      alert("An error occurred during login.");
+      setError(
+        error.response?.data?.message || "An error occurred during login."
+      );
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-6">

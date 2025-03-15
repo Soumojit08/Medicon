@@ -18,6 +18,7 @@ function DoctorSignup() {
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
+    console.log(`Field changed: ${name}, Value: ${value}`);
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "file" ? files[0] : value,
@@ -28,6 +29,7 @@ function DoctorSignup() {
     const selectedOptions = Array.from(e.target.selectedOptions).map(
       (option) => option.value
     );
+    console.log(`Specializations selected: ${selectedOptions}`);
     setFormData((prevData) => ({
       ...prevData,
       specialization: selectedOptions,
@@ -51,16 +53,19 @@ function DoctorSignup() {
     }
     form.append("role", "doctor");
 
+    console.log("Submitting form data:", formData);
+
     try {
-      const response = await axiosInstance.post("/api/v1/signup", form, {
+      const response = await axiosInstance.post("/api/v1/signup-doctor", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
       const data = response.data;
+      console.log("Response from signup:", data);
 
-      if (response.status === 200) {
+      if (data.status === "OK") {
         console.log("Signup successful");
         window.location.href = "/doctorLogin";
       } else {
