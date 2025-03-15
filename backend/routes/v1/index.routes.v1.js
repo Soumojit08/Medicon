@@ -38,6 +38,13 @@ router.post("/signup", upload.single("profileimage"), controllers.SignUp);
 router.post("/login", controllers.Login);
 
 /**
+ * Login for user
+ * Path: /api/v1/login-user
+ * Permission: All
+ */
+router.post("/login-user", controllers.UserLogin);
+
+/**
  * Logout
  * Path: /api/v1/logout
  * Permission: All

@@ -11,10 +11,12 @@ import getAllUsers from "./get/getAllUsers.controller.js";
 import userDashboardController from "./dash/user.dash.controller.js";
 import deleteDoctorByIdController from "./delete/deleteDoctorById.controller.js";
 import deleteUserByIdController from "./delete/deleteUserById.controller.js";
+import userLoginController from "./auth/login.user.auth.controller.js";
 
 const controllers = {
   SignUp: signupController, // SignUp Controller Path config
   Login: logincontroller,
+  UserLogin: userLoginController, // Login Controller for User...
   DoctorDashboard: doctorDashboardController,
   UserDashboard: userDashboardController,
   UpdateDoctorDetails: updateDoctorDetailsController,
