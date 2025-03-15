@@ -1,4 +1,3 @@
-import logincontroller from "./auth/login.auth.controller.js";
 import signupController from "./auth/signup.auth.controller.js";
 import doctorDashboardController from "./dash/doctor.dash.controller.js";
 import updateDoctorDetailsController from "./update/update.Doctor.Details.controller.js";
@@ -13,12 +12,13 @@ import deleteDoctorByIdController from "./delete/deleteDoctorById.controller.js"
 import deleteUserByIdController from "./delete/deleteUserById.controller.js";
 import userLoginController from "./auth/login.user.auth.controller.js";
 import doctorLoginController from "./auth/login.doctor.controller.js";
+import adminLoginController from "./auth/login.admin.controller.js";
 
 const controllers = {
   SignUp: signupController, // SignUp Controller Path config
-  Login: logincontroller,
   UserLogin: userLoginController, // Login Controller for User...
   DoctorLogin: doctorLoginController, // Login Controller for Doctor...
+  AdminLogin: adminLoginController, // Login Controller for Admin...
   DoctorDashboard: doctorDashboardController,
   UserDashboard: userDashboardController,
   UpdateDoctorDetails: updateDoctorDetailsController,
