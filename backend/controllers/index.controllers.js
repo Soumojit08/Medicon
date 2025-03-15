@@ -13,7 +13,7 @@ import deleteDoctorByIdController from "./delete/deleteDoctorById.controller.js"
 import deleteUserByIdController from "./delete/deleteUserById.controller.js";
 
 const controllers = {
-  SignUp: signupController,
+  SignUp: signupController, // SignUp Controller Path config
   Login: logincontroller,
   DoctorDashboard: doctorDashboardController,
   UserDashboard: userDashboardController,
