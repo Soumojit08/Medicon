@@ -76,10 +76,10 @@ router.post(
  */
 router.get(
   "/getSchedule",
-  (req, res, next) => {
-    console.log("Route: /api/v1/getSchedule - Request received");
-    next();
-  },
+  // (req, res, next) => {
+  //   console.log("Route: /api/v1/getSchedule - Request received");
+  //   next();
+  // },
   Middlewares.DoctorAuth,
   controllers.GetDoctorSchedule
 );
@@ -105,13 +105,6 @@ router.post(
 router.get('/doctors', controllers.GetAllDoctors); // For testing
 
 /**
- * Get Doctor by id
- * Path: /api/v1/doctors/:id
- * Permission: All
- */
-router.get('/doctor/:id', controllers.GetDoctorById);
-
-/**
  * Get all doctors by spec
  * Path: /api/v1/doctors/specality
  * Body: specality and isVerified: true or false
@@ -126,7 +119,7 @@ router.get('/doctors/specality', controllers.GetAllDoctorsBySpec); // For testin
  * Body: N/A
  * Permission: All
  */
-router.get('/doctor/:id', controllers.GetDoctorById);
+router.get('/doctors/:id', controllers.GetDoctorById);
 
 /**
  * Book an appointment
