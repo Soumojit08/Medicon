@@ -126,6 +126,14 @@ router.get('/doctors/specality', controllers.GetAllDoctorsBySpec); // For testin
 // router.get('/doctors/specality', Middlewares.UserAuth('usertoken'), controllers.GetAllDoctorsBySpec);
 
 /**
+ * Get Doctor by id
+ * Path: /api/v1/doctors/:id
+ * Body: N/A
+ * Permission: All
+ */
+router.get('/doctors/:id', controllers.GetDoctorById);
+
+/**
  * Book an appointment
  * Path: /api/v1/appoint/book
  * Permission: User
