@@ -59,18 +59,6 @@ router.post("/login-doctor", controllers.DoctorLogin);
 router.post("/login-admin", controllers.AdminLogin);
 
 /**
- * Logout
- * Path: /api/v1/logout
- * Permission: All
- */
-router.get("/logout", (req, res) => {
-  res.clearCookie("usertoken");
-  res.clearCookie("doctortoken");
-  res.clearCookie("admintoken");
-  res.status(200).redirect("/");
-});
-
-/**
  * Update Schedule
  * Path: /api/v1/updateSchedule
  * Permission: Doctor
