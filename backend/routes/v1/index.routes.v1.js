@@ -116,6 +116,8 @@ router.post(
 // router.get('/doctors', Middlewares.UserAuth('usertoken'), controllers.GetAllDoctors);
 router.get('/doctors', controllers.GetAllDoctors); // For testing
 
+router.get('/doctor/:id', controllers.GetDoctorById)
+
 /**
  * Get all doctors by spec
  * Path: /api/v1/doctors/specality
