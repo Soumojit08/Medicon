@@ -113,7 +113,7 @@ router.post(
  * Body: isVerified: true or false
  * Permission: User
  */
-// router.get('/doctors', Middlewares.UserAuth('usertoken'), controllers.GetAllDoctors);
+// router.get('/doctors', Middlewares.UserAuth, controllers.GetAllDoctors);
 router.get('/doctors', controllers.GetAllDoctors); // For testing
 
 /**
