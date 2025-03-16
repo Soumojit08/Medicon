@@ -27,7 +27,7 @@ const DoctorDashboard = () => {
 
   const getDoctorData = async (doctorId) => {
     try {
-      const response = await axiosInstance.get(`/api/v1/doctor/${doctorId}`);
+      const response = await axiosInstance.get(`/api/v1/doctors/${doctorId}`);
 
       if (response.data && response.data.data) {
         setDoctor({

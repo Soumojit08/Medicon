@@ -1,6 +1,8 @@
 import { User2 } from "lucide-react";
 import React, { useState } from "react";
 import axiosInstance from "../libs/axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function UserLogin() {
   const [formData, setFormData] = useState({
@@ -8,7 +10,8 @@ function UserLogin() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [Error, setError] = useState()
+  const [Error, setError] = useState();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,13 +35,14 @@ function UserLogin() {
         }
       );
 
+      console.log("API Response:", response.data); // 🔍 Debugging
       const data = response.data;
+      const userId = data.data._id;
 
       if (response.status === 200) {
-        // 200 means successful request
-        console.log("Login successful");
+        toast.success("Login successful");
         localStorage.setItem("usertoken", data.token);
-        window.location.href = "/patientDashboard";
+        navigate(`/patientDashboard/${userId}`);
       } else {
         setError(response.data.message || "Login Failed");
         console.error("Login failed:", response.data);
@@ -52,7 +56,6 @@ function UserLogin() {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-6">

@@ -23,21 +23,29 @@ const userLoginController = async (req, res) => {
             const isPasswordMatch = await bcrypt.compare(password, hashed_password);
             if (isPasswordMatch) {
                 const playLoad = {
-                    name: User.name,
-                    email: User.email,
-                    role: "user",
+                  _id: User._id,
+                  name: User.name,
+                  email: User.email,
+                  role: "user",
+                  profilepic: User.profilepic,
+                  phonenumber: User.phonenumber,
                 };
-                const token = await JWT.sign(playLoad, configs.JWT_SECRET, { expiresIn: '1h' });
+                const token = await JWT.sign(playLoad, configs.JWT_SECRET, {
+                  expiresIn: "1h",
+                });
 
                 return res.status(StatusCodes.OK).json({
-                    status: 'OK',
-                    message: "Successfully logged in",
-                    token: token,
-                    data: {
-                        name: playLoad.name,
-                        email: playLoad.email,
-                        role: playLoad.role,
-                    }
+                  status: "OK",
+                  message: "Successfully logged in",
+                  token: token,
+                  data: {
+                    _id: playLoad._id,
+                    name: playLoad.name,
+                    email: playLoad.email,
+                    role: playLoad.role,
+                    profilepic: playLoad.profilepic,
+                    phonenumber: playLoad.phonenumber,
+                  },
                 });
             }
 

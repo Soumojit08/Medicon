@@ -37,12 +37,12 @@ function DoctorLogin() {
       console.log("API Response:", response.data); // 🔍 Debugging
 
       const data = response.data;
-      const doctorId = data.data._id; // ✅ Corrected extraction
+      const doctorId = data.data._id; // Corrected extraction
 
       if (response.status === 200) {
         toast.success("Login Successful");
         localStorage.setItem("doctortoken", data.token);
-        navigate(`/doctorDashboard/${doctorId}`); // ✅ Now doctorId is correctly passed
+        navigate(`/doctorDashboard/${doctorId}`); //  doctorId is correctly passed
       } else {
         console.error("Login failed:", data);
         toast.error("Login Failed");

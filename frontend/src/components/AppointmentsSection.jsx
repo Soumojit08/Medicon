@@ -18,7 +18,7 @@ const AppointmentsSection = () => {
         <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center space-x-3 sm:space-x-4">
-              <Image />
+              <Image pic={null}/>
               <div>
                 <h3 className="text-base sm:text-lg font-bold">
                   Dr. Michael Brown
