@@ -14,7 +14,7 @@ import doctorLoginController from "./auth/login.doctor.controller.js";
 import adminLoginController from "./auth/login.admin.controller.js";
 import userSignUpController from "./auth/signup.user.auth.controller.js";
 import doctorSignUpController from "./auth/signup.doctor.auth.controller.js";
-import getDoctorById from "./get/getDoctorById.controller.js";
+import getDoctorsByIdController from "./get/getDoctorById.controller.js";
 
 const controllers = {
   UserSignUp: userSignUpController, // SignUp Controller for user...
@@ -22,6 +22,7 @@ const controllers = {
   UserLogin: userLoginController, // Login Controller for User...
   DoctorLogin: doctorLoginController, // Login Controller for Doctor...
   AdminLogin: adminLoginController, // Login Controller for Admin...
+  GetDoctorById: getDoctorsByIdController, // Get Doctor by Id...
   DoctorDashboard: doctorDashboardController,
   UserDashboard: userDashboardController,
   UpdateDoctorDetails: updateDoctorDetailsController,
@@ -29,7 +30,6 @@ const controllers = {
   GetDoctorSchedule: getDoctorSchedule,
   GetAllDoctors: getAllDoctors,
   GetAllDoctorsBySpec: getAllDoctorsBySpec,
-  GetDoctorById: getDoctorById,
   BookAppointment: bookAppointment,
   GetAllUsers: getAllUsers,
   DeleteDoctorById: deleteDoctorByIdController,
