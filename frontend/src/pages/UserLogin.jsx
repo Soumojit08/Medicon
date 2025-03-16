@@ -28,12 +28,16 @@ function UserLogin() {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
       );
+
+      const data = response.data;
 
       if (response.status === 200) {
         // 200 means successful request
         console.log("Login successful");
+        localStorage.setItem("usertoken", data.token);
         window.location.href = "/patientDashboard";
       } else {
         setError(response.data.message || "Login Failed");

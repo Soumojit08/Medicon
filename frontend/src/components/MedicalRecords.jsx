@@ -13,7 +13,7 @@ const MedicalRecords = () => {
       <div className="space-y-4">
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 sm:flex-col md:flex-col">
               <div className="w-12 h-12 bg-gray-300 text-blue-600 rounded-lg flex items-center justify-center">
                 <Newspaper />
               </div>
