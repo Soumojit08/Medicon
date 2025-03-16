@@ -38,6 +38,8 @@ const DoctorDetailsForm = ({ doctorData }) => {
     setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
   };
 
+  const token = localStorage.getItem("doctortoken");
+
   const handleSave = async (e) => {
     e.preventDefault();
     try {
@@ -47,6 +49,7 @@ const DoctorDetailsForm = ({ doctorData }) => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           withCredentials: true,
         }
@@ -59,6 +62,7 @@ const DoctorDetailsForm = ({ doctorData }) => {
         toast.error("Failed to update doctor details");
       }
     } catch (error) {
+      console.log("error", error);
       toast.error("Error updating doctor details");
     }
   };

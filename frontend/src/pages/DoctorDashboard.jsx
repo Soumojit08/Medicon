@@ -20,7 +20,6 @@ const DoctorDashboard = () => {
 
   useEffect(() => {
     const doctorToken = localStorage.getItem("doctortoken");
-
     if (!doctorToken) {
       navigate("/loginDashboard");
     }
