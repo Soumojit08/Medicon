@@ -59,18 +59,6 @@ router.post("/login-doctor", controllers.DoctorLogin);
 router.post("/login-admin", controllers.AdminLogin);
 
 /**
- * Logout
- * Path: /api/v1/logout
- * Permission: All
- */
-router.get("/logout", (req, res) => {
-  res.clearCookie("usertoken");
-  res.clearCookie("doctortoken");
-  res.clearCookie("admintoken");
-  res.status(200).redirect("/");
-});
-
-/**
  * Update Schedule
  * Path: /api/v1/updateSchedule
  * Permission: Doctor
@@ -88,10 +76,10 @@ router.post(
  */
 router.get(
   "/getSchedule",
-  (req, res, next) => {
-    console.log("Route: /api/v1/getSchedule - Request received");
-    next();
-  },
+  // (req, res, next) => {
+  //   console.log("Route: /api/v1/getSchedule - Request received");
+  //   next();
+  // },
   Middlewares.DoctorAuth,
   controllers.GetDoctorSchedule
 );
@@ -113,15 +101,8 @@ router.post(
  * Body: isVerified: true or false
  * Permission: User
  */
-// router.get('/doctors', Middlewares.UserAuth('usertoken'), controllers.GetAllDoctors);
+// router.get('/doctors', Middlewares.UserAuth, controllers.GetAllDoctors);
 router.get('/doctors', controllers.GetAllDoctors); // For testing
-
-/**
- * Get Doctor by id
- * Path: /api/v1/doctors/:id
- * Permission: All
- */
-router.get('/doctor/:id', controllers.GetDoctorById);
 
 /**
  * Get all doctors by spec
@@ -138,7 +119,7 @@ router.get('/doctors/specality', controllers.GetAllDoctorsBySpec); // For testin
  * Body: N/A
  * Permission: All
  */
-router.get('/doctor/:id', controllers.GetDoctorById);
+router.get('/doctors/:id', controllers.GetDoctorById);
 
 /**
  * Book an appointment
