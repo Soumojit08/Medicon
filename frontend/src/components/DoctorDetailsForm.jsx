@@ -1,17 +1,12 @@
 // src/components/DoctorDetailsForm.jsx
 import React, { useState } from "react";
 
-const DoctorDetailsForm = ({ doctor }) => {
+const DoctorDetailsForm = ({ doctorData }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [details, setDetails] = useState({
-    specialization: doctor.specialization.join(", "),
-    registrationId: doctor.RegId,
-    languages: "English, Spanish",
-    education: "MBBS, MD",
-    consultationFee: "$100",
-    address: "123 Clinic St, City, Country",
-    facts: "Always double-check your prescriptions.",
-  });
+  
+  if (!doctorData || Object.keys(doctorData).length === 0) {
+    return <p>Loading...</p>; // ✅ Avoid rendering before data is ready
+  }
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
@@ -42,11 +37,11 @@ const DoctorDetailsForm = ({ doctor }) => {
         <div className="grid grid-cols-1 gap-4">
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
             <label className="text-blue-600 mb-1 sm:mb-0">Specialization</label>
-            <p className="text-gray-800">{details.specialization}</p>
+            <p className="text-gray-800">{doctorData.specialization?.join(",")}</p>
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
             <label className="text-blue-600 mb-1 sm:mb-0">License No.</label>
-            <p className="text-gray-800">{details.registrationId}</p>
+            <p className="text-gray-800">{doctorData.registrationId}</p>
           </div>
         </div>
       </div>
@@ -63,14 +58,14 @@ const DoctorDetailsForm = ({ doctor }) => {
             {isEditing ? (
               <input
                 type="text"
-                value={details.languages}
+                value={doctorData.languages?.join(",")}
                 onChange={(e) =>
                   setDetails({ ...details, languages: e.target.value })
                 }
                 className="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"
               />
             ) : (
-              <p className="text-gray-800">{details.languages}</p>
+              <p className="text-gray-800">{doctorData.languages?.join(",")}</p>
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
@@ -78,14 +73,14 @@ const DoctorDetailsForm = ({ doctor }) => {
             {isEditing ? (
               <input
                 type="text"
-                value={details.education}
+                value={doctorData.education}
                 onChange={(e) =>
                   setDetails({ ...details, education: e.target.value })
                 }
                 className="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"
               />
             ) : (
-              <p className="text-gray-800">{details.education}</p>
+              <p className="text-gray-800">{doctorData.education}</p>
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
@@ -95,14 +90,14 @@ const DoctorDetailsForm = ({ doctor }) => {
             {isEditing ? (
               <input
                 type="text"
-                value={details.consultationFee}
+                value={doctorData.consultationFee}
                 onChange={(e) =>
                   setDetails({ ...details, consultationFee: e.target.value })
                 }
                 className="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"
               />
             ) : (
-              <p className="text-gray-800">{details.consultationFee}</p>
+              <p className="text-gray-800">{doctorData.consultationFee}</p>
             )}
           </div>
 
@@ -111,14 +106,14 @@ const DoctorDetailsForm = ({ doctor }) => {
             {isEditing ? (
               <input
                 type="text"
-                value={details.address}
+                value={doctorData.address}
                 onChange={(e) =>
                   setDetails({ ...details, address: e.target.value })
                 }
                 className="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"
               />
             ) : (
-              <p className="text-gray-800">123, London</p>
+              <p className="text-gray-800">{doctorData.address}</p>
             )}
           </div>
 
@@ -127,14 +122,14 @@ const DoctorDetailsForm = ({ doctor }) => {
             {isEditing ? (
               <input
                 type="text"
-                value={details.experience}
+                value={doctorData.experience || "Not available"}
                 onChange={(e) =>
                   setDetails({ ...details, experience: e.target.value })
                 }
                 className="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"
               />
             ) : (
-              <p className="text-gray-800">10 years</p>
+              <p className="text-gray-800">{doctorData.experience || "Not available"}</p>
             )}
           </div>
         </div>

@@ -35,14 +35,20 @@ const doctorLoginController = async (req, res) => {
                 const token = await JWT.sign(playLoad, configs.JWT_SECRET);
                 // return res.cookie('doctortoken', token).redirect('/doctorDash');
                 return res.status(StatusCodes.OK).json({
-                    status: 'OK',
-                    message: "Successfully logged in",
-                    token: token,
-                    data: {
-                        name: playLoad.name,
-                        email: playLoad.email,
-                        role: playLoad.role,
-                    }
+                  status: "OK",
+                  message: "Successfully logged in",
+                  token: token,
+                  data: {
+                    name: playLoad.name,
+                    email: playLoad.email,
+                    role: playLoad.role,
+                    _id: playLoad._id,
+                    RegId: playLoad.RegId,
+                    address: playLoad.address,
+                    isVerified: playLoad.isVerified,
+                    specialization: playLoad.specialization,
+                    profileimage: playLoad.profileimage,
+                  },
                 });
             }
             // return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });

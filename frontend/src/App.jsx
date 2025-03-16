@@ -23,12 +23,12 @@ const App = () => {
         {/* Doctor Routes */}
         <Route path="/doctorLogin" element={<DoctorLogin />} />
         <Route path="/doctorSignup" element={<DoctorSignup />} />
-        <Route path="/doctorDashboard" element={<DoctorDashboard />} />
+        <Route path="/doctorDashboard/:id" element={<DoctorDashboard />} />
 
         {/* User Routes */}
         <Route path="/userLogin" element={<UserLogin />} />
         <Route path="/userSignup" element={<UserSignup />} />
-        <Route path="/patientDashboard" element={<PatientDashboard />} />
+        <Route path="/patientDashboard/:id" element={<PatientDashboard />} />
 
         {/* Login Dashboard */}
         <Route path="/loginDashboard" element={<LoginDashboard />} />

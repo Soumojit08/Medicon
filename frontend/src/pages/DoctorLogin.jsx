@@ -2,6 +2,7 @@ import { HeartHandshake } from "lucide-react";
 import React, { useState } from "react";
 import { axiosInstance } from "../libs/axios.js";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function DoctorLogin() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ function DoctorLogin() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,12 +34,15 @@ function DoctorLogin() {
         }
       );
 
-      const data = await response.data;
+      console.log("API Response:", response.data); // 🔍 Debugging
+
+      const data = response.data;
+      const doctorId = data.data._id; // ✅ Corrected extraction
 
       if (response.status === 200) {
-        toast.success("Login Successfull");
+        toast.success("Login Successful");
         localStorage.setItem("doctortoken", data.token);
-        window.location.href = "/doctorDashboard";
+        navigate(`/doctorDashboard/${doctorId}`); // ✅ Now doctorId is correctly passed
       } else {
         console.error("Login failed:", data);
         toast.error("Login Failed");

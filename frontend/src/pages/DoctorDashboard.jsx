@@ -5,26 +5,50 @@ import DoctorDetailsForm from "../components/DoctorDetailsForm";
 import ManageSchedule from "../components/ManageSchedule";
 import Footer from "../components/Footer";
 import { axiosInstance } from "../libs/axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const DoctorDashboard = () => {
-  const doctorId = useParams();
-  const [doctor, setDoctor] = useState(null);
+  const { id: doctorId } = useParams();
+  const [doctor, setDoctor] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (doctorId) {
-      console.log("doctorId", doctorId)
+      console.log("doctorId", doctorId);
       getDoctorData(doctorId);
     }
   }, [doctorId]);
 
+  useEffect(() => {
+    const doctorToken = localStorage.getItem("doctortoken");
+
+    if (!doctorToken) {
+      navigate("/loginDashboard");
+    }
+  }, [navigate]);
+
   const getDoctorData = async (doctorId) => {
     try {
       const response = await axiosInstance.get(`/api/v1/doctor/${doctorId}`);
-      const data = response.data;
 
-      console.log(data);
-    } catch (error) {}
+      if (response.data && response.data.data) {
+        setDoctor({
+          name: response.data.data.name || "",
+          address: response.data.data.address || "",
+          education: response.data.data.education || "",
+          facts: response.data.data.facts || "",
+          languages: response.data.data.languages || [],
+          phonenumber: response.data.data.phonenumber || "",
+          profilepic: response.data.data.profilepic || "",
+          registrationId: response.data.data.registrationId || "",
+          specialization: response.data.data.specialization || [],
+        });
+      } else {
+        console.warn("Doctor data is missing in response");
+      }
+    } catch (error) {
+      console.error("Error fetching doctor data:", error);
+    }
   };
 
   return (
@@ -33,8 +57,8 @@ const DoctorDashboard = () => {
         <div className="container mx-auto p-4">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div className="w-full">
-              {/* <DoctorProfileHeader />
-              <DoctorDetailsForm /> */}
+              <DoctorProfileHeader doctorData={doctor} />
+              <DoctorDetailsForm doctorData={doctor} />
             </div>
             <div className="w-full">
               <ManageSchedule />

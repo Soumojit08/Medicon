@@ -4,6 +4,7 @@ import { Heart, CalendarCheck, Headphones, UserCheck } from "lucide-react";
 import Footer from "../components/Footer";
 
 const HomePage = () => {
+  localStorage.clear();
   return (
     <main className="font-sans text-gray-800">
       {/* Hero Section */}

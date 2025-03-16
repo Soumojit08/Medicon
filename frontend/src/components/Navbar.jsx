@@ -1,58 +1,50 @@
 import { useEffect, useState } from "react";
 import { Contact, HomeIcon, Settings, Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
-  const [role, setRole] = useState(null); // Track user role
+  const [role, setRole] = useState(null);
+  const navigate = useNavigate();
 
-  // ✅ Check if any token exists in localStorage on page load
   useEffect(() => {
-    const doctorToken = localStorage.getItem("doctortoken");
-    const userToken = localStorage.getItem("usertoken");
-    const adminToken = localStorage.getItem("admintoken");
+    const checkAuth = () => {
+      const doctorToken = localStorage.getItem("doctortoken");
+      const userToken = localStorage.getItem("usertoken");
+      const adminToken = localStorage.getItem("admintoken");
 
-    if (doctorToken) {
-      setIsAuth(true);
-      setRole("doctor");
-    } else if (userToken) {
-      setIsAuth(true);
-      setRole("user");
-    } else if (adminToken) {
-      setIsAuth(true);
-      setRole("admin");
-    } else {
-      setIsAuth(false);
-      setRole(null);
-    }
-  }, []); // Run only once on component mount
+      if (doctorToken) {
+        setIsAuth(true);
+        setRole("doctor");
+      } else if (userToken) {
+        setIsAuth(true);
+        setRole("user");
+      } else if (adminToken) {
+        setIsAuth(true);
+        setRole("admin");
+      } else {
+        setIsAuth(false);
+        setRole(null);
+      }
+    };
 
-  // ✅ Logout function
+    checkAuth();
+    window.addEventListener("storage", checkAuth);
+
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+    };
+  }, []);
+
   const handleLogout = () => {
-    if (!isAuth) {
-      console.log("User is not logged in");
-      return;
-    }
+    if (!isAuth) return;
 
-    // ✅ Clear only the relevant token
-    if (role === "doctor") {
-      localStorage.removeItem("doctortoken");
-    } else if (role === "user") {
-      localStorage.removeItem("usertoken");
-    } else if (role === "admin") {
-      localStorage.removeItem("admintoken");
-    }
-
-    // ✅ Update state to reflect logout
+    localStorage.clear();
     setIsAuth(false);
     setRole(null);
 
-    // ✅ Redirect to login page
-    window.location.href = "/loginDashboard";
-  };
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    navigate("/loginDashboard");
   };
 
   return (
@@ -63,7 +55,10 @@ const Navbar = () => {
         </h1>
       </div>
       <div className="flex items-center gap-4">
-        <button className="sm:hidden text-gray-100" onClick={toggleMenu}>
+        <button
+          className="sm:hidden text-gray-100"
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <Menu />
         </button>
         <ul

@@ -121,7 +121,7 @@ router.get('/doctors', controllers.GetAllDoctors); // For testing
  * Path: /api/v1/doctors/:id
  * Permission: All
  */
-router.get('/doctors/:id', controllers.GetDoctorById);
+router.get('/doctor/:id', controllers.GetDoctorById);
 
 /**
  * Get all doctors by spec
@@ -138,7 +138,7 @@ router.get('/doctors/specality', controllers.GetAllDoctorsBySpec); // For testin
  * Body: N/A
  * Permission: All
  */
-router.get('/doctors/:id', controllers.GetDoctorById);
+router.get('/doctor/:id', controllers.GetDoctorById);
 
 /**
  * Book an appointment
