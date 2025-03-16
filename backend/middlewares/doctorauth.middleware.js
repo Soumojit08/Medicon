@@ -10,8 +10,9 @@ function doctorauthmiddleware(token) {
 
       if (!tokenValue) {
         console.log("Auth Middleware: Token not found!");
-        return res.render("errorpage", {
-          errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED),
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+          status: 'Failed',
+          message: getReasonPhrase(StatusCodes.UNAUTHORIZED)
         });
       }
 
@@ -20,8 +21,12 @@ function doctorauthmiddleware(token) {
 
       if (!userPayload || !userPayload._id) {
         console.log("Auth Middleware: Invalid token payload!");
-        return res.render("errorpage", {
-          errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED),
+        // return res.render("errorpage", {
+        //   errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED),
+        // });
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+          status: 'Failed',
+          message: getReasonPhrase(StatusCodes.UNAUTHORIZED)
         });
       }
 
@@ -32,18 +37,23 @@ function doctorauthmiddleware(token) {
           role: userPayload.role,
         };
         req.doctor = userPayload;
-        res.locals.doctor = userPayload;
+        // res.locals.doctor = userPayload;
         console.log("Auth Middleware: Doctor authenticated");
         return next();
       }
       console.log("Auth Middleware: Unauthorized role!");
-      return res.render("errorpage", {
-        errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED),
-      });
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        status: 'Failed',
+        message: getReasonPhrase(StatusCodes.UNAUTHORIZED)
+      })
     } catch (error) {
       console.error("Auth Middleware Error:", error);
-      return res.render("errorpage", {
-        errorMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      // return res.render("errorpage", {
+      //   errorMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      // });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: 'Failed',
+        message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
       });
     }
   };
