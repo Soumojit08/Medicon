@@ -151,6 +151,13 @@ router.post('/appoint/book', controllers.BookAppointment);
 router.get('/users', controllers.GetAllUsers);
 
 /**
+ * Get User By Id
+ * Path: /api/v1/users/:id
+ * Permission: All
+ */
+router.get('/users/:id', controllers.GetUserById);
+
+/**
  * Delete doctor by id
  * Path: /api/v1/doctor
  * Body: doctorid
