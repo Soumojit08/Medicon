@@ -64,7 +64,10 @@ router.post("/login-admin", controllers.AdminLogin);
  * Permission: All
  */
 router.get("/logout", (req, res) => {
-  res.clearCookie().redirect("/");
+  res.clearCookie("usertoken");
+  res.clearCookie("doctortoken");
+  res.clearCookie("admintoken");
+  res.status(200).redirect("/");
 });
 
 /**

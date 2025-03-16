@@ -1,6 +1,7 @@
 import { HeartHandshake } from "lucide-react";
 import React, { useState } from "react";
 import { axiosInstance } from "../libs/axios.js";
+import { toast } from "react-hot-toast";
 
 function DoctorLogin() {
   const [formData, setFormData] = useState({
@@ -8,8 +9,7 @@ function DoctorLogin() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,24 +21,30 @@ function DoctorLogin() {
     setIsLoading(true);
 
     try {
-      const response = await axiosInstance.post("/api/v1/login", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axiosInstance.post(
+        "/api/v1/login-doctor",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
 
       const data = await response.data;
 
       if (response.status === 200) {
-        console.log("Login successful");
+        toast.success("Login Successfull");
+        localStorage.setItem("doctortoken", data.token);
         window.location.href = "/doctorDashboard";
       } else {
         console.error("Login failed:", data);
-        alert(data.message || "Login Failed");
+        toast.error("Login Failed");
       }
     } catch (error) {
       console.error("Error during login:", error);
-      alert("An error occurred during login.");
+      toast("An error occurred during login.");
     } finally {
       setIsLoading(false);
     }

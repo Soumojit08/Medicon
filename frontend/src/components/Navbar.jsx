@@ -3,6 +3,13 @@ import { Contact, HomeIcon, Settings, Menu } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+
+  const handleLogout = () => {
+    if(localStorage.getItem("doctortoken" || "usertoken" || "admintoken")){
+      setIsAuth = true
+    }
+  }
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
