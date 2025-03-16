@@ -77,7 +77,7 @@ router.get("/logout", (req, res) => {
  */
 router.post(
   "/updateSchedule",
-  Middlewares.DoctorAuth("doctortoken"),
+  Middlewares.DoctorAuth,
   controllers.UpdateDoctorSchedule
 );
 
@@ -92,7 +92,7 @@ router.get(
     console.log("Route: /api/v1/getSchedule - Request received");
     next();
   },
-  Middlewares.DoctorAuth("doctortoken"),
+  Middlewares.DoctorAuth,
   controllers.GetDoctorSchedule
 );
 
@@ -103,7 +103,7 @@ router.get(
  */
 router.post(
   "/updateDetails",
-  Middlewares.DoctorAuth("doctortoken"),
+  Middlewares.DoctorAuth, // Protected for Doctors
   controllers.UpdateDoctorDetails
 );
 
