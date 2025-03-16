@@ -10,12 +10,19 @@ const getDoctorsByIdController = async (req, res) => {
                 message: "id is required!"
             });
         }
-        const doctorData = await Models.DoctorModel.findById(id).select("-password");
-        return res.status(StatusCodes.OK).json({
-            status: 'OK',
-            message: `Doctor with id: ${id}`,
-            data: doctorData
-        });
+        try {
+            const doctorData = await Models.DoctorModel.findById(id).select("-password");
+            return res.status(StatusCodes.OK).json({
+                status: 'OK',
+                message: `Doctor with id: ${id}`,
+                data: doctorData
+            });
+        } catch (error) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                status: 'Failed',
+                message: "Invalid id!"
+            });
+        }
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             status: 'Failed',
