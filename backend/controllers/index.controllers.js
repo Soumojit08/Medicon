@@ -1,7 +1,7 @@
 import doctorDashboardController from "./dash/doctor.dash.controller.js";
 import updateDoctorDetailsController from "./update/update.Doctor.Details.controller.js";
 import updateDoctorSchedule from "./update/update.schedule.controller.js";
-import getDoctorSchedule from "./dash/get.schedule.controller.js";
+import getDoctorSchedule from "./get/get.schedule.controller.js";
 import getAllDoctors from "./get/getAllDoctors.controller.js";
 import getAllDoctorsBySpec from "./get/getAllDoctorsBySpec.controller.js";
 import bookAppointment from "./appointment/book.appointment.controller.js";
@@ -29,7 +29,7 @@ const controllers = {
   UserDashboard: userDashboardController,
   UpdateDoctorDetails: updateDoctorDetailsController,
   UpdateDoctorSchedule: updateDoctorSchedule,
-  GetDoctorSchedule: getDoctorSchedule,
+  GetDoctorSchedule: getDoctorSchedule, // Get Doctor's Schedule...
   GetAllDoctors: getAllDoctors,
   GetAllDoctorsBySpec: getAllDoctorsBySpec,
   BookAppointment: bookAppointment,
