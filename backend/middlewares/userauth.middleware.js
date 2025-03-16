@@ -7,28 +7,39 @@ function userauthmiddleware(token) {
         try {
             const tokenValue = req.cookies[token];
             if (!tokenValue) {
-                return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
+                return res.status(StatusCodes.UNAUTHORIZED).json({
+                    status: 'Failed',
+                    message: getReasonPhrase(StatusCodes.UNAUTHORIZED)
+                });
             } else {
                 try {
                     const userPayload = JWT.verify(tokenValue, configs.JWT_SECRET);
 
-                    // For Doctor...
+                    // For User...
                     if (userPayload.role === 'user') {
                         req.user = {
                             id: userPayload._id,
                             role: userPayload.role,
                         };
                         req.user = userPayload;
-                        res.locals.user = userPayload;
                         return next();
                     }
-                    return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
+                    return res.status(StatusCodes.UNAUTHORIZED).json({
+                        status: 'Failed',
+                        message: getReasonPhrase(StatusCodes.UNAUTHORIZED)
+                    });
                 } catch (error) {
-                    return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                        status: 'Failed',
+                        message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
+                    });
                 }
             }
         } catch (error) {
-            return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                status: 'Failed',
+                message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
+            });
         }
     }
 }
