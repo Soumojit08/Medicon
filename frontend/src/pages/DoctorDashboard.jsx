@@ -14,7 +14,6 @@ const DoctorDashboard = () => {
 
   useEffect(() => {
     if (doctorId) {
-      console.log("doctorId", doctorId);
       getDoctorData(doctorId);
     }
   }, [doctorId]);

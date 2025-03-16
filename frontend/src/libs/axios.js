@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const axiosInstance = axios.create({
   baseURL:
@@ -12,7 +13,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("role");
-      window.location.href = "/login";
+      toast.error("Session expire. Try again");
     }
     return Promise.reject(error);
   }
