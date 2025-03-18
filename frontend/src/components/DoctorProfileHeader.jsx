@@ -5,7 +5,7 @@ import QuickStats from "../components/QuickStats";
 const DoctorProfileHeader = ({ doctorData }) => {
 
   if (!doctorData || Object.keys(doctorData).length === 0) {
-    return <p>Loading...</p>; // ✅ Avoid rendering before data is ready
+    return <p>Loading...</p>; // Avoid rendering before data is ready
   }
 
   return (

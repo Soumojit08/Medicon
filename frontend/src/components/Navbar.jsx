@@ -3,44 +3,60 @@ import { Contact, HomeIcon, Settings, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   const [isAuth, setIsAuth] = useState(false);
   const [role, setRole] = useState(null);
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const checkAuth = () => {
+    const doctorToken = localStorage.getItem("doctortoken");
+    const userToken = localStorage.getItem("usertoken");
+    const adminToken = localStorage.getItem("admintoken");
+
+    if (doctorToken) {
+      setIsAuth(true);
+      setRole("doctor");
+    } else if (userToken) {
+      setIsAuth(true);
+      setRole("user");
+    } else if (adminToken) {
+      setIsAuth(true);
+      setRole("admin");
+    } else {
+      setIsAuth(false);
+      setRole(null);
+    }
+  };
 
   useEffect(() => {
-    const checkAuth = () => {
-      const doctorToken = localStorage.getItem("doctortoken");
-      const userToken = localStorage.getItem("usertoken");
-      const adminToken = localStorage.getItem("admintoken");
+    checkAuth();
 
-      if (doctorToken) {
-        setIsAuth(true);
-        setRole("doctor");
-      } else if (userToken) {
-        setIsAuth(true);
-        setRole("user");
-      } else if (adminToken) {
-        setIsAuth(true);
-        setRole("admin");
-      } else {
-        setIsAuth(false);
-        setRole(null);
-      }
+    // Listen for localStorage changes to sync authentication state across the app
+    const handleStorageChange = () => {
+      checkAuth();
     };
 
-    checkAuth();
-    window.addEventListener("storage", checkAuth);
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
-  const handleLogout = () => {
-    if (!isAuth) return;
+  // Ensure state updates when login/logout happens in the same tab
+  useEffect(() => {
+    const interval = setInterval(() => {
+      checkAuth();
+    }, 500); // Poll localStorage every 500ms to detect changes
 
-    localStorage.clear();
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("doctortoken");
+    localStorage.removeItem("usertoken");
+    localStorage.removeItem("admintoken");
+
     setIsAuth(false);
     setRole(null);
 
