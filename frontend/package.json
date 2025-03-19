@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
+    "@splinetool/react-spline": "^4.0.0",
+    "@splinetool/runtime": "^1.9.79",
     "@tailwindcss/vite": "^4.0.14",
     "axios": "^1.8.3",
     "framer-motion": "^12.5.0",

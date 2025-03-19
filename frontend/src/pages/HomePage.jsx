@@ -2,8 +2,8 @@ import React from "react";
 import heroImg from "../assets/hero-sec.svg";
 import { Heart, CalendarCheck, Headphones, UserCheck } from "lucide-react";
 import Footer from "../components/Footer";
-import Chatbot from "../components/Chatbot";
 import ChatInterface from "../components/ChatInterface";
+import Spline from "@splinetool/react-spline";
 
 const HomePage = () => {
   localStorage.clear();
@@ -51,10 +51,10 @@ const HomePage = () => {
               <div className="flex justify-center mb-6">
                 <Heart className="text-4xl text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">
+              <h3 className="text-2xl font-semibold mb-3 text-center">
                 AI Health Diagnosis
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed text-center text-lg px-6">
                 Cutting-edge AI technology for accurate health diagnostics.
               </p>
             </div>
@@ -62,10 +62,10 @@ const HomePage = () => {
               <div className="flex justify-center mb-6">
                 <CalendarCheck className="text-4xl text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">
+              <h3 className="text-2xl font-semibold mb-3 text-center">
                 Appointment Booking
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed text-center text-lg px-6">
                 Easy and efficient appointment booking system.
               </p>
             </div>
@@ -73,18 +73,22 @@ const HomePage = () => {
               <div className="flex justify-center mb-6">
                 <Headphones className="text-4xl text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Shift Appointment</Appointment></h3>
-              <p className="text-gray-600 leading-relaxed">
-              Shift appointment allows patients to reschedule their booked appointments to a 
-              different available time slot, subject to doctor availability.
+              <h3 className="text-2xl text-center font-semibold mb-3">
+                Shift Appointment
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-center text-lg px-6">
+                Shift appointment allows patients to reschedule their booked
+                appointments.
               </p>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300">
               <div className="flex justify-center mb-6">
                 <UserCheck className="text-4xl text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">24/7 Support</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="text-2xl text-center font-semibold mb-3">
+                24/7 Support
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-center text-lg px-6">
                 Round-the-clock customer support for all your queries.
               </p>
             </div>
@@ -106,7 +110,8 @@ const HomePage = () => {
                 Advanced Diagnostics
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Get detailed health diagnostics with our premium AI technology in emergency .
+                Get detailed health diagnostics with our premium AI technology
+                in emergency .
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
@@ -119,10 +124,11 @@ const HomePage = () => {
             </div>
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
               <h3 className="text-xl font-semibold mb-3 text-blue-700">
-              Video Consultation
+                Video Consultation
               </h3>
               <p className="text-gray-600 leading-relaxed">
-              Video consultation allows patients to consult doctors through secure live video calls.
+                Video consultation allows patients to consult doctors through
+                secure live video calls.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
