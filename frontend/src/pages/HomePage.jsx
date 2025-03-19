@@ -3,7 +3,6 @@ import heroImg from "../assets/hero-sec.svg";
 import { Heart, CalendarCheck, Headphones, UserCheck } from "lucide-react";
 import Footer from "../components/Footer";
 import ChatInterface from "../components/ChatInterface";
-import Spline from "@splinetool/react-spline";
 
 const HomePage = () => {
   localStorage.clear();
