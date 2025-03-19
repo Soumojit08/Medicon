@@ -3,13 +3,14 @@ import heroImg from "../assets/hero-sec.svg";
 import { Heart, CalendarCheck, Headphones, UserCheck } from "lucide-react";
 import Footer from "../components/Footer";
 import Chatbot from "../components/Chatbot";
+import ChatInterface from "../components/ChatInterface";
 
 const HomePage = () => {
   localStorage.clear();
   return (
     <main className="font-sans text-gray-800 relative">
       {/* Chatbot  */}
-      <Chatbot />
+      <ChatInterface />
       {/* Hero Section */}
       <section
         id="hero"
