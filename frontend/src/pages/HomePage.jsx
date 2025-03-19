@@ -72,18 +72,19 @@ const HomePage = () => {
               <div className="flex justify-center mb-6">
                 <Headphones className="text-4xl text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">24/7 Support</h3>
+              <h3 className="text-xl font-semibold mb-3">Shift Appointment</Appointment></h3>
               <p className="text-gray-600 leading-relaxed">
-                Round-the-clock customer support for all your queries.
+              Shift appointment allows patients to reschedule their booked appointments to a 
+              different available time slot, subject to doctor availability.
               </p>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300">
               <div className="flex justify-center mb-6">
                 <UserCheck className="text-4xl text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Personalized Plans</h3>
+              <h3 className="text-xl font-semibold mb-3">24/7 Support</h3>
               <p className="text-gray-600 leading-relaxed">
-                Customized health plans tailored to individual needs.
+                Round-the-clock customer support for all your queries.
               </p>
             </div>
           </div>
@@ -104,7 +105,7 @@ const HomePage = () => {
                 Advanced Diagnostics
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Get detailed health diagnostics with our premium AI technology.
+                Get detailed health diagnostics with our premium AI technology in emergency .
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
@@ -117,11 +118,10 @@ const HomePage = () => {
             </div>
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
               <h3 className="text-xl font-semibold mb-3 text-blue-700">
-                Exclusive Health Plans
+              Video Consultation
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Access exclusive, tailored health plans designed for optimal
-                care.
+              Video consultation allows patients to consult doctors through secure live video calls.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
