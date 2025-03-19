@@ -8,10 +8,10 @@ MEDICON - This healthcare system is designed to streamline the process of patien
 ## Authors
 
 - [@Soumojit08](https://github.com/Soumojit08)
-- [@Samiran2004](https://github.com/@Samiran2004)
-- [@subrata-code](https://github.com/@subrata-code)
-- [@SayanRik](https://github.com/@SayanRik)
--  [@Kishan-009](https://github.com/@kishan-009)
+- [@Samiran2004](https://github.com/Samiran2004)
+- [@subrata-code](https://github.com/subrata-code)
+- [@SayanRik](https://github.com/SayanRik)
+-  [@Kishan-009](https://github.com/kishan-009)
 
 
 
