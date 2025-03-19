@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import AIbot from "../assets/robo.svg";
-import { X, Send, MessageCircle, Maximize, Minimize } from "lucide-react";
+import { X, Send, Maximize, Minimize } from "lucide-react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import axios from "axios";
 
 const ChatInterface = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +12,33 @@ const ChatInterface = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  const generateContent = async (userPrompt) => {
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD6s-UDSSMZppWUGetZmMtZxw-uR4-hMyo`;
+
+    try {
+      const response = await axios.post(
+        API_URL,
+        {
+          contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Extract AI-generated response
+      const botResponse =
+        response.data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "Sorry, I couldn't generate a response.";
+
+      return botResponse;
+    } catch (error) {
+      return "Sorry, I encountered an error.";
+    }
+  };
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
@@ -25,7 +54,11 @@ const ChatInterface = () => {
     setIsMinimized(!isMinimized);
   };
 
-  const sendMessage = () => {
+  useEffect(() => {
+    generateContent();
+  }, []);
+
+  const sendMessage = async () => {
     if (input.trim() === "") return;
 
     const newMessages = [...messages, { text: input, sender: "user" }];
@@ -35,14 +68,20 @@ const ChatInterface = () => {
     // Show typing indicator
     setIsTyping(true);
 
-    // Simulate bot response
-    setTimeout(() => {
+    try {
+      const botResponse = await generateContent(input);
       setIsTyping(false);
-      setMessages([
-        ...newMessages,
-        { text: "This is a bot response.", sender: "bot" },
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: botResponse, sender: "bot" },
       ]);
-    }, 1500);
+    } catch (error) {
+      setIsTyping(false);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: "Sorry, I couldn't generate a response.", sender: "bot" },
+      ]);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -105,7 +144,7 @@ const ChatInterface = () => {
           {/* Chat content */}
           {!isMinimized && (
             <>
-              <div className="flex-1 overflow-y-auto py-4 px-5 h-80 bg-gray-50">
+              <div className="flex-1 overflow-y-auto py-4 px-5 bg-gray-50 max-h-80">
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center p-6">
                     <div className="bg-blue-100 p-3 rounded-full mb-4 shadow-inner flex items-center justify-center">
@@ -206,7 +245,7 @@ const ChatInterface = () => {
 
       {/* Chat button */}
       <div
-        className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg cursor-pointer transition-all transform hover:scale-110 hover:shadow-xl my-2"
+        className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 shadow-lg cursor-pointer transition-all transform hover:scale-110 hover:shadow-xl my-2"
         onClick={toggleChat}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
