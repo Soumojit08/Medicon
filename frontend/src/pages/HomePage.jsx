@@ -39,11 +39,59 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Premium Section */}
+      <section className="bg-gradient-to-br from-blue-100 to-blue-50 py-16 mb-8">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-semibold text-blue-700">
+              Unique Features
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+              <h3 className="text-xl font-semibold mb-3 text-blue-700">
+                Advanced Diagnostics
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Get detailed health diagnostics with our premium AI technology
+                in emergency .
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+              <h3 className="text-xl font-semibold mb-3 text-blue-700">
+                Priority Support
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Enjoy expedited support with dedicated priority service.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+              <h3 className="text-xl font-semibold mb-3 text-blue-700">
+                Video Consultation
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Video consultation allows patients to consult doctors through
+                secure live video calls.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+              <h3 className="text-xl font-semibold mb-3 text-blue-700">
+                Personal Health Coach
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Work with a personal health coach to achieve your wellness
+                goals.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Feature Section */}
       <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-semibold text-center mb-12 text-gray-800">
-            Our Features
+            Other Features
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300">
@@ -89,54 +137,6 @@ const HomePage = () => {
               </h3>
               <p className="text-gray-600 leading-relaxed text-center text-lg px-6">
                 Round-the-clock customer support for all your queries.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Premium Section */}
-      <section className="bg-gradient-to-br from-blue-100 to-blue-50 py-16 mb-8">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-semibold text-blue-700">
-              Unique Features
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">
-                Advanced Diagnostics
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Get detailed health diagnostics with our premium AI technology
-                in emergency .
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">
-                Priority Support
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Enjoy expedited support with dedicated priority service.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">
-                Video Consultation
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Video consultation allows patients to consult doctors through
-                secure live video calls.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold mb-3 text-blue-700">
-                Personal Health Coach
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Work with a personal health coach to achieve your wellness
-                goals.
               </p>
             </div>
           </div>

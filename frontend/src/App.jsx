@@ -11,6 +11,7 @@ import ErrorPage from "./pages/Error";
 import PatientDashboard from "./pages/PatientDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin"
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
 
         {/* Admin Dashboard */}
         <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route path="/adminLogin" element={<AdminLogin />} />
 
         {/* Error Page */}
         <Route path="*" element={<ErrorPage />} />
