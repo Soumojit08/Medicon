@@ -53,7 +53,6 @@ const HomeSearch = () => {
           Connect with verified healthcare professionals near you. Book
           appointments instantly and get the care you deserve.
         </p>
-
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl p-4 sm:p-6 space-y-4 sm:space-y-0 sm:flex sm:space-x-4">
           {/* Search Input */}
           <div className="flex-1 relative">
@@ -98,22 +97,6 @@ const HomeSearch = () => {
           </button>
         </div>
 
-        {/* Quick Links */}
-        <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
-          {[
-            "Find Nearby Doctors",
-            "Book Appointment",
-            "Video Consultation",
-            "Health Records",
-          ].map((item) => (
-            <button
-              key={item}
-              className="px-4 py-3 bg-white bg-opacity-10 rounded-lg text-white hover:bg-opacity-20 transition-all"
-            >
-              {item}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

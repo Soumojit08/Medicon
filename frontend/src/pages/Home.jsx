@@ -1,6 +1,7 @@
 import React from "react";
 import HomeSearch from "../components/HomeSearch";
 import { Heart, Calendar, Video, Clock, Star, Shield } from "lucide-react";
+import RotatingText from "../components/RotatingText";
 
 const Home = () => {
   const features = [
@@ -42,8 +43,22 @@ const Home = () => {
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-            Why Choose Medicon?
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center space-x-2">
+            <span>Why Choose</span>
+            <span>
+              <RotatingText
+                texts={["Care?", "MEDICON?"]}
+                mainClassName="inline-block px-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white py-1 rounded-lg shadow-md"
+                staggerFrom={"last"}
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-120%" }}
+                staggerDuration={0.025}
+                splitLevelClassName="overflow-hidden"
+                transition={{ type: "spring", damping: 40, stiffness: 200 }}
+                rotationInterval={2000}
+              />
+            </span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
