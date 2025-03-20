@@ -5,10 +5,10 @@ const getDoctorsByIdController = async (req, res) => {
     try {
         const { id } = req.params;
         if (!id) {
-          return res.status(StatusCodes.BAD_REQUEST).json({
-            status: "Failed",
-            message: "id is required!",
-          });
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                status: "Failed",
+                message: "id is required!",
+            });
         }
         try {
             const doctorData = await Models.DoctorModel.findById(id).select("-password");
