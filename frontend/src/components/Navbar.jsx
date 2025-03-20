@@ -1,12 +1,28 @@
 import { useEffect, useState } from "react";
-import { Contact, HomeIcon, Settings, Menu } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {
+  Contact,
+  HomeIcon,
+  Settings,
+  Menu,
+  LogOut,
+  UserCircle,
+  Stethoscope,
+  ShieldCheck,
+  X,
+  Bell,
+  Search,
+  Calendar,
+} from "lucide-react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isAuth, setIsAuth] = useState(false);
   const [role, setRole] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const checkAuth = () => {
     const doctorToken = localStorage.getItem("doctortoken");
@@ -30,95 +46,215 @@ const Navbar = () => {
 
   useEffect(() => {
     checkAuth();
+    setIsOpen(false);
+    setShowNotifications(false);
+  }, [location.pathname]);
 
-    // Listen for localStorage changes to sync authentication state across the app
-    const handleStorageChange = () => {
-      checkAuth();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
-
-  // Ensure state updates when login/logout happens in the same tab
   useEffect(() => {
-    const interval = setInterval(() => {
-      checkAuth();
-    }, 500); // Poll localStorage every 500ms to detect changes
-
-    return () => clearInterval(interval);
+    checkAuth();
+    const handleStorageChange = () => checkAuth();
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("doctortoken");
     localStorage.removeItem("usertoken");
     localStorage.removeItem("admintoken");
-
     setIsAuth(false);
     setRole(null);
-
     navigate("/loginDashboard");
   };
 
-  return (
-    <header className="shadow-sm w-full top-0 z-40 backdrop-blur-lg flex items-center justify-between px-4 py-4 bg-zinc-100">
-      <div>
-        <h1 className="text-2xl uppercase font-semibold text-blue-600">
-          Medicon
-        </h1>
-      </div>
-      <div className="flex items-center gap-4">
-        <button
-          className="sm:hidden text-gray-100"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <Menu />
-        </button>
-        <ul
-          className={`${
-            isOpen
-              ? "flex flex-col absolute top-full left-0 w-full bg-zinc-100 shadow-md rounded-b-md p-4"
-              : "hidden sm:flex gap-4"
-          } sm:flex sm:flex-row gap-4 text-gray-100`}
-        >
-          <li className="list-none">
-            <a href="/" className="flex hover:text-blue-600 items-center p-2">
-              <HomeIcon className="mr-1" />
-              <span>Home</span>
-            </a>
-          </li>
-          <li className="list-none">
-            <a href="/" className="flex hover:text-blue-600 items-center p-2">
-              <Settings className="mr-1" />
-              <span>Service</span>
-            </a>
-          </li>
-          <li className="list-none">
-            <a href="/" className="flex hover:text-blue-600 items-center p-2">
-              <Contact className="mr-1" />
-              <span>Contact</span>
-            </a>
-          </li>
-        </ul>
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/find-doctors?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+    }
+  };
 
-        {isAuth ? (
-          <button
-            onClick={handleLogout}
-            className="bg-blue-600 px-3 py-2 rounded text-white text-sm sm:px-4 sm:py-2 hover:bg-blue-500 cursor-pointer"
-          >
-            Logout
-          </button>
-        ) : (
-          <a href="/loginDashboard">
-            <button className="bg-blue-600 px-3 py-2 rounded text-white text-sm sm:px-4 sm:py-2 hover:bg-blue-500 cursor-pointer">
-              Login
+  const getDashboardLink = () => {
+    const userId = localStorage.getItem(
+      role === "doctor" ? "doctorId" : "userId"
+    );
+    switch (role) {
+      case "doctor":
+        return `/doctorDashboard/${userId}`;
+      case "user":
+        return `/patientDashboard/${userId}`;
+      case "admin":
+        return "/adminDashboard";
+      default:
+        return "/";
+    }
+  };
+
+  const navLinks = [
+    {
+      name: "Home",
+      path: "/",
+      icon: HomeIcon,
+      show: true,
+    },
+    {
+      name: "Dashboard",
+      path: getDashboardLink(),
+      icon: Settings,
+      show: isAuth,
+    },
+    {
+      name: "Find Doctors",
+      path: "/find-doctors",
+      icon: Stethoscope,
+      show: true,
+    },
+    {
+      name: "Appointments",
+      path: "/appointments",
+      icon: Calendar,
+      show: isAuth && role !== "admin",
+    },
+    {
+      name: "Verify Doctors",
+      path: "/verify-doctors",
+      icon: ShieldCheck,
+      show: role === "admin",
+    },
+  ];
+
+  return (
+    <header className="sticky top-0 z-50 bg-white shadow-md">
+      <nav className="max-w-7xl mx-auto px-2">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex items-center flex-shrink-0">
+            <Link
+              to="/"
+              className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent hover:opacity-90 transition-opacity flex items-center"
+            >
+              <Stethoscope className="w-8 h-8 mr-2 text-blue-600" />
+              Medicon
+            </Link>
+          </div>
+
+          {/* Search Bar - Desktop */}
+          <div className="hidden md:flex items-center flex-1 max-w-lg mx-8">
+            <form onSubmit={handleSearch} className="w-full">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search for doctors, specialties..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+              </div>
+            </form>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden sm:flex sm:items-center sm:space-x-4">
+            {navLinks
+              .filter((link) => link.show)
+              .map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    location.pathname === link.path
+                      ? "text-blue-600 bg-blue-50"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                  }`}
+                >
+                  <link.icon className="w-5 h-5 mr-2" />
+                  {link.name}
+                </Link>
+              ))}
+
+            {/* Auth Button */}
+            {isAuth ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/loginDashboard"
+                className="flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                <UserCircle className="w-4 h-4 mr-2" />
+                Login
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex items-center sm:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50 focus:outline-none"
+            >
+              {isOpen ? (
+                <X className="block h-6 w-6" />
+              ) : (
+                <Menu className="block h-6 w-6" />
+              )}
             </button>
-          </a>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {isOpen && (
+          <div className="sm:hidden">
+            <div className="px-4 pt-4 pb-3 space-y-1">
+              {navLinks
+                .filter((link) => link.show)
+                .map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`flex items-center px-4 py-2 rounded-md text-base font-medium ${
+                      location.pathname === link.path
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <link.icon className="w-5 h-5 mr-3" />
+                    {link.name}
+                  </Link>
+                ))}
+
+              {isAuth ? (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="flex w-full items-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                >
+                  <LogOut className="w-5 h-5 mr-3" />
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to="/loginDashboard"
+                  className="flex w-full items-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <UserCircle className="w-5 h-5 mr-3" />
+                  Login
+                </Link>
+              )}
+            </div>
+          </div>
         )}
-      </div>
+      </nav>
     </header>
   );
 };

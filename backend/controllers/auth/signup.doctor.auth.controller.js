@@ -7,64 +7,97 @@ import fs from "fs";
 
 const doctorSignUpController = async (req, res) => {
     try {
-        const { name, email, phonenumber, password, specialization, registrationId, location } = req.body;
+        const { name, email, phonenumber, password, specialization, registrationId, address, geoLocation } = req.body;
         // console.log(req.body);
 
-        if (!name || !email || !phonenumber || !password || !specialization || !registrationId || !location) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                status: 'Failed',
-                message: "Please enter all required fields!"
-            });
+        if (
+          !name ||
+          !email ||
+          !phonenumber ||
+          !password ||
+          !specialization ||
+          !registrationId ||
+          !address ||
+          !geoLocation
+        ) {
+          return res.status(StatusCodes.BAD_REQUEST).json({
+            status: "Failed",
+            message: "Please enter all required fields including location!",
+          });
         }
         // console.log("Check 1");
 
+        // Validate and convert geolocation to GeoJSON format
+        const [latitude, longitude] = geoLocation.split(",").map(Number);
+        if (
+          isNaN(latitude) ||
+          isNaN(longitude) ||
+          latitude < -90 ||
+          latitude > 90 ||
+          longitude < -180 ||
+          longitude > 180
+        ) {
+          return res.status(StatusCodes.BAD_REQUEST).json({
+            status: "Failed",
+            message:
+              "Invalid location format. Please enable location services.",
+          });
+        }
+
         // Check if doctor already exists
         const existingDoctor = await Models.DoctorModel.findOne({
-            $or: [
-                { email: email },
-                { phonenumber: phonenumber },
-                { registrationId: registrationId }
-            ]
+          $or: [
+            { email: email },
+            { phonenumber: phonenumber },
+            { registrationId: registrationId },
+          ],
         });
         // console.log("Check 2");
 
         if (existingDoctor) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                status: 'Failed',
-                message: "Doctor already exists!"
-            });
+          return res.status(StatusCodes.BAD_REQUEST).json({
+            status: "Failed",
+            message: "Doctor already exists!",
+          });
         }
         // console.log("Check 3");
 
         // Hash password
-        const hashed_password = await bcrypt.hash(password, Number(configs.SALT));
+        const hashed_password = await bcrypt.hash(
+          password,
+          Number(configs.SALT)
+        );
 
         // Upload profile picture to Cloudinary
         let profileimage_url = "";
         if (req.file) {
-            try {
-                let uploadImageUrl = await clodinary.uploader.upload(req.file.path);
-                fs.unlinkSync(req.file.path);
-                profileimage_url = uploadImageUrl.secure_url;
-            } catch (error) {
-                return res.status(StatusCodes.BAD_REQUEST).json({
-                    status: 'Failed',
-                    message: "Something Went Wrong in Cloudinary!"
-                });
-            }
+          try {
+            let uploadImageUrl = await clodinary.uploader.upload(req.file.path);
+            fs.unlinkSync(req.file.path);
+            profileimage_url = uploadImageUrl.secure_url;
+          } catch (error) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+              status: "Failed",
+              message: "Something Went Wrong in Cloudinary!",
+            });
+          }
         }
         // console.log("Check 4")
 
         // Create new doctor instance
         const newDoctor = new Models.DoctorModel({
-            name,
-            email,
-            phonenumber,
-            password: hashed_password,
-            profilepic: profileimage_url,
-            specialization,
-            registrationId,
-            address: location,
+          name,
+          email,
+          phonenumber,
+          password: hashed_password,
+          profilepic: profileimage_url,
+          specialization,
+          registrationId,
+          address,
+          geoLocation: {
+            type: "Point",
+            coordinates: [longitude, latitude], // MongoDB expects [longitude, latitude]
+          },
         });
         // console.log("Check 5", newDoctor);
 
@@ -155,17 +188,24 @@ const doctorSignUpController = async (req, res) => {
         //     }
         // });
 
-
         // Save to DB
         await newDoctor.save();
         // console.log("Check 6")
 
         return res.status(StatusCodes.CREATED).json({
-            status: 'OK',
-            message: "New Doctor Created Successfully!",
-            data: newDoctor
+          status: "OK",
+          message: "Successfully Signed Up!",
+          data: {
+            name: newDoctor.name,
+            email: newDoctor.email,
+            specialization: newDoctor.specialization,
+            registrationId: newDoctor.registrationId,
+            address: newDoctor.address,
+            geoLocation: newDoctor.geoLocation,
+          },
         });
     } catch (error) {
+        console.error("Signup Error:", error);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             status: 'Failed',
             message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
