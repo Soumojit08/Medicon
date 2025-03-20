@@ -20,7 +20,10 @@ const UserSchema = new mongoose.Schema({
     },
     profilepic: {
         type: String
-    }
+    },
+    geoLocation: {
+        type: String
+    },
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);

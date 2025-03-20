@@ -68,6 +68,94 @@ const doctorSignUpController = async (req, res) => {
         });
         // console.log("Check 5", newDoctor);
 
+        // Send Mail...
+        // const emailData = {
+        //     to: email,
+        //     subject: "Welcome to Medicon - Join Our Doctor Network",
+        //     html: `
+        //     <!DOCTYPE html>
+        //     <html lang="en">
+        //     <head>
+        //         <meta charset="UTF-8">
+        //         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        //         <title>Welcome to Medicon</title>
+        //         <style>
+        //             body {
+        //                 font-family: Arial, sans-serif;
+        //                 background-color: #f4f4f4;
+        //                 margin: 0;
+        //                 padding: 0;
+        //             }
+        //             .container {
+        //                 width: 100%;
+        //                 padding: 20px;
+        //                 background-color: #f4f4f4;
+        //             }
+        //             .content {
+        //                 max-width: 600px;
+        //                 margin: 0 auto;
+        //                 background-color: #ffffff;
+        //                 padding: 20px;
+        //                 border-radius: 8px;
+        //                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        //                 text-align: center;
+        //             }
+        //             h1 {
+        //                 color: #333333;
+        //             }
+        //             p {
+        //                 color: #666666;
+        //             }
+        //             .button {
+        //                 display: inline-block;
+        //                 padding: 10px 20px;
+        //                 margin-top: 20px;
+        //                 background-color: #28a745;
+        //                 color: #ffffff;
+        //                 text-decoration: none;
+        //                 border-radius: 5px;
+        //             }
+        //             .footer {
+        //                 text-align: center;
+        //                 margin-top: 20px;
+        //                 color: #999999;
+        //                 font-size: 12px;
+        //             }
+        //         </style>
+        //     </head>
+        //     <body>
+        //         <div class="container">
+        //             <div class="content">
+        //                 <h1>Welcome to Medicon, Dr. ${name}!</h1>
+        //                 <p>We are thrilled to have you as a part of our expert doctor network.</p>
+        //                 <p>With <strong>Medicon</strong>, you can:</p>
+        //                 <ul style="text-align: left;">
+        //                     <li>📅 Manage and schedule patient appointments seamlessly.</li>
+        //                     <li>💬 Communicate with patients through secure chat.</li>
+        //                     <li>📹 Offer virtual consultations via high-quality video calls.</li>
+        //                     <li>🤖 Leverage AI-powered chatbot assistance for patient inquiries.</li>
+        //                 </ul>
+        //                 <p>Thank you for joining Medicon and making healthcare more accessible!</p>
+        //                 <a href="https://medicon.onrender.com/doctor-dashboard" class="button">Go to Your Dashboard</a>
+        //                 <div class="footer">
+        //                     <p>&copy; 2024 Medicon. All rights reserved.</p>
+        //                     <p>Medicon HealthTech Pvt Ltd, 123 Wellness Avenue, HealthCity, HC 56789</p>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </body>
+        //     </html>`
+        // };
+
+        // await sendMail(emailData, (error, info) => {
+        //     if (error) {
+        //         console.log("Mail Sending Error: " + error);
+        //     } else {
+        //         console.log("Mail Sent: " + info);
+        //     }
+        // });
+
+
         // Save to DB
         await newDoctor.save();
         // console.log("Check 6")
