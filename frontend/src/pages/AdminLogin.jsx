@@ -37,12 +37,11 @@ function AdminLogin() {
 
       console.log("API Response:", response.data); // 🔍 Debugging
       const data = response.data;
-      const adminId = data.data._id;
 
       if (response.status === 200) {
         toast.success("Login successful");
         localStorage.setItem("admintoken", data.token);
-        navigate(`/adminDashboard/${adminId}`);
+        navigate(`/adminDashboard`);
       } else {
         setError(response.data.message || "Login Failed");
         console.error("Login failed:", response.data);
