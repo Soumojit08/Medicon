@@ -180,7 +180,8 @@ const ChatInterface = () => {
                               : "bg-white text-gray-800 rounded-tl-none border border-blue-100"
                           }`}
                         >
-                          {msg.text}
+                          {"Response as medical adviser and give first aid " +
+                            msg.text}
                         </div>
                       </div>
                     ))}
