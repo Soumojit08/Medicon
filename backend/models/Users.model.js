@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
     geoLocation: {
         type: String
     },
+    secNumber: {
+        type: Number,
+        required: true
+    }
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);
