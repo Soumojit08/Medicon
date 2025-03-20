@@ -4,6 +4,14 @@ import Models from "../../models/index.models.js";
 const getAllDoctors = async (req, res, next) => {
     try {
         const { isVerified } = req.body;
+        if(req.query.search){
+            const doctors = await Models.DoctorModel.find({specialization: { $regex: req.query.search, $options: "i" }}).select("-password");
+            return res.status(StatusCodes.OK).json({
+                status: 'OK',
+                message: "All Doctors",
+                data: doctors
+            });
+        }
         if (isVerified) {
             const doctors = await Models.DoctorModel.find({ isVerified: true }).select("-password");
             return res.status(StatusCodes.OK).json({

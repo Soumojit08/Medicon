@@ -149,7 +149,7 @@ router.get('/users/:id', controllers.GetUserById);
  * Body: doctorid
  * Permission: Admin
  */
-router.delete('/doctor' ,controllers.DeleteDoctorById); // For testing
+router.delete('/doctor', controllers.DeleteDoctorById); // For testing
 
 /**
  * Delete user by id
