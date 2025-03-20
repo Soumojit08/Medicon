@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import FindDoctors from "./pages/FindDoctors";
 import AdminDoctorVerification from "./components/AdminDoctorVerification";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
@@ -22,7 +23,7 @@ const App = () => {
       <main className="flex-grow">
         <Routes>
           {/* Home Page */}
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Home />} />
 
           {/* Doctor Routes */}
           <Route path="/doctorLogin" element={<DoctorLogin />} />
