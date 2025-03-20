@@ -159,4 +159,12 @@ router.delete('/doctor' ,controllers.DeleteDoctorById); // For testing
  */
 router.delete('/user', Middlewares.AdminAuth, controllers.DeleteUserById); // For testing
 
+/**
+ * Verify doctors
+ * Path: /api/v1/verifyDoctor
+ * Body: doctorid
+ * Permission: Admin
+ */
+router.post('/verifyDoctor', Middlewares.AdminAuth, controllers.VerifyDoctor);
+
 export default router;
