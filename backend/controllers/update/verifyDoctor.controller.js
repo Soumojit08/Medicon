@@ -4,28 +4,35 @@ import sendMail from "../../services/sendMail.js";
 
 const verifyDoctorController = async (req, res) => {
     try {
-        const { doctorId, isVerify } = req.body;
-        if (!doctorId) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                status: "Failed",
-                message: "Please enter all required fields!"
-            });
-        }
-        // Check doctor is exist or not through doctorId...
-        const Doctor = await Models.DoctorModel.findOne({ _id: doctorId });
-        if (!Doctor || Doctor === null) {
-            return res.status(StatusCodes.NOT_FOUND).json({
-                status: "Failed",
-                message: "Doctor not found!"
-            });
-        }
-        // Update doctor verification status...
-        if (isVerify) {
-            await Models.DoctorModel.updateOne({ _id: doctorId }, { isVerified: isVerify });
-            const emailData = {
-                to: Doctor.email,
-                subject: "Your Medicon Account is Now Verified 🎉",
-                html: `
+      const { doctorId, isVerified } = req.body;
+
+      // Validate required fields
+      if (!doctorId) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          status: "Failed",
+          message: "Doctor ID is required!",
+        });
+      }
+
+      // Find and update the doctor
+      const updatedDoctor = await Models.DoctorModel.findByIdAndUpdate(
+        doctorId,
+        { isVerified },
+        { new: true }
+      ).select("-password");
+
+      if (!updatedDoctor) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          status: "Failed",
+          message: `Doctor with ID ${doctorId} not found!`,
+        });
+      }
+
+      if (isVerified) {
+        const emailData = {
+          to: updatedDoctor.email,
+          subject: "Your Medicon Account is Now Verified 🎉",
+          html: `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -79,7 +86,7 @@ const verifyDoctorController = async (req, res) => {
             <body>
                 <div class="container">
                     <div class="content">
-                        <h1>🎉 Congratulations, Dr. ${Doctor.name}!</h1>
+                        <h1>🎉 Congratulations, Dr. ${updatedDoctor.name}!</h1>
                         <p>Your Medicon account has been successfully verified by our admin team.</p>
                         <p>You can now start consulting with patients, managing appointments, and providing expert healthcare services.</p>
                         <p>🚀 <strong>Next Steps:</strong></p>
@@ -98,24 +105,28 @@ const verifyDoctorController = async (req, res) => {
                     </div>
                 </div>
             </body>
-            </html>`
-            };
-            await sendMail(emailData, (error, info) => {
-                if (error) {
-                    console.log("Mail Sending Error: " + error);
-                } else {
-                    console.log("Mail Sent: " + info);
-                }
-            });
-        }
-        return res.status(StatusCodes.OK).json({
-            status: "Success",
-            message: "Doctor verification status updated successfully!"
+            </html>`,
+        };
+        await sendMail(emailData, (error, info) => {
+          if (error) {
+            console.log("Mail Sending Error: " + error);
+          } else {
+            console.log("Mail Sent: " + info);
+          }
         });
+      }
+      return res.status(StatusCodes.OK).json({
+        status: "OK",
+        message: isVerified
+          ? "Doctor verified successfully!"
+          : "Doctor rejected successfully!",
+        data: updatedDoctor,
+      });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            status: "Failed",
-            message: "Internal Server Error!"
+            status: 'Failed',
+            message: "Server error occurred!",
+            error: error.message
         });
     }
 };

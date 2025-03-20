@@ -14,61 +14,116 @@ const AdminDoctorVerification = () => {
 
   const fetchUnverifiedDoctors = async () => {
     try {
+      const adminToken = localStorage.getItem("admintoken");
+      if (!adminToken) {
+        setError("Admin authentication required");
+        return;
+      }
+
       const response = await axiosInstance.get("/api/v1/doctors", {
         params: { isVerified: false },
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
       });
-      setDoctors(response.data.data);
+
+      if (response.data && response.data.data) {
+        // Additional check to filter out any verified doctors
+        const unverifiedDoctors = response.data.data.filter(
+          (doctor) => !doctor.isVerified
+        );
+        setDoctors(unverifiedDoctors);
+      } else {
+        setError("No data received from server");
+      }
       setLoading(false);
     } catch (error) {
       console.error("Error fetching unverified doctors:", error);
-      setError("Failed to fetch unverified doctors");
+      setError(
+        error.response?.data?.message || "Failed to fetch unverified doctors"
+      );
       setLoading(false);
     }
   };
 
   const handleVerify = async (doctorId) => {
     try {
-      const response = await axiosInstance.post("/api/v1/verifyDoctor", {
-        doctorId,
-        isVerified: true,
-      });
+      const adminToken = localStorage.getItem("admintoken");
+      if (!adminToken) {
+        toast.error("Admin authentication required");
+        return;
+      }
 
-      if (response.status === 200) {
+      const response = await axiosInstance.post(
+        "/api/v1/verifyDoctor",
+        {
+          doctorId,
+          isVerified: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
+      );
+
+      if (response.data && response.data.status === "OK") {
         // Remove the verified doctor from the list
         setDoctors(doctors.filter((doctor) => doctor._id !== doctorId));
-        toast.success("Doctor verified successfully!");
+        toast.success(response.data.message || "Doctor verified successfully!");
+      } else {
+        toast.error(response.data?.message || "Failed to verify doctor");
       }
     } catch (error) {
       console.error("Error verifying doctor:", error);
-      toast.error("Failed to verify doctor");
+      toast.error(error.response?.data?.message || "Failed to verify doctor");
     }
   };
 
   const handleReject = async (doctorId) => {
     try {
-      const response = await axiosInstance.post("/api/v1/verifyDoctor", {
-        doctorId,
-        isVerified: false,
-      });
+      const adminToken = localStorage.getItem("admintoken");
+      if (!adminToken) {
+        toast.error("Admin authentication required");
+        return;
+      }
 
-      if (response.status === 200) {
+      const response = await axiosInstance.post(
+        "/api/v1/verifyDoctor",
+        {
+          doctorId,
+          isVerified: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
+      );
+
+      if (response.data && response.data.status === "OK") {
         // Remove the rejected doctor from the list
         setDoctors(doctors.filter((doctor) => doctor._id !== doctorId));
-        alert("Doctor rejected successfully!");
+        toast.success(response.data.message || "Doctor rejected successfully!");
+      } else {
+        toast.error(response.data?.message || "Failed to reject doctor");
       }
     } catch (error) {
       console.error("Error rejecting doctor:", error);
-      alert("Failed to reject doctor");
+      toast.error(error.response?.data?.message || "Failed to reject doctor");
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (loading) return <div className="text-center py-4">Loading...</div>;
+  if (error)
+    return <div className="text-red-500 text-center py-4">{error}</div>;
 
   return (
     <div className="space-y-4">
       {doctors.length === 0 ? (
-        <p className="text-gray-500">No unverified doctors found.</p>
+        <p className="text-gray-500 text-center py-4">
+          No unverified doctors found.
+        </p>
       ) : (
         doctors.map((doctor) => (
           <div
