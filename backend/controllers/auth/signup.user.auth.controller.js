@@ -8,8 +8,8 @@ import sendMail from "../../services/sendMail.js";
 
 const userSignUpController = async (req, res) => {
     try {
-        let { name, email, phonenumber, password, geoLocation } = req.body;
-        if (!name || !email || !phonenumber || !password) {
+        let { name, email, phonenumber, password, geoLocation, secNumber } = req.body;
+        if (!name || !email || !phonenumber || !password || !secNumber) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 status: "Failed",
                 message: "Please enter all required fields!"
@@ -49,7 +49,8 @@ const userSignUpController = async (req, res) => {
             phonenumber: phonenumber,
             password: hashed_password,
             profilepic: profileimage_url,
-            geoLocation: geoLocation
+            geoLocation: geoLocation,
+            secNumber: secNumber
         });
 
         const emailData = {
