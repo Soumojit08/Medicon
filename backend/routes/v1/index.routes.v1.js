@@ -75,7 +75,7 @@ router.post(
  * Permission: Doctor
  */
 router.get(
-  "/getSchedule",
+  "/getSchedule/:id",
   // (req, res, next) => {
   //   console.log("Route: /api/v1/getSchedule - Request received");
   //   next();

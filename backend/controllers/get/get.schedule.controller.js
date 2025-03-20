@@ -3,37 +3,40 @@ import Schedule from "../../models/Schedule.model.js";
 
 const getDoctorSchedule = async function (req, res, next) {
   try {
-    // console.log("Controller: Fetching doctor schedule...");
-    const doctorId = req.query.doctorId || req.user?.id || req.doctor?._id;
+    const doctorId = req.params.id;
 
     if (!doctorId) {
-      // console.log("Controller: Doctor ID not found in request!");
-      return res.status(StatusCodes.UNAUTHORIZED).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         status: "Failed",
-        message: "Doctor ID not found in request",
+        message: "Doctor ID is required",
       });
     }
 
-    // console.log("Controller: Doctor ID:", doctorId);
     const schedule = await Schedule.findOne({ doctorId });
 
     if (!schedule) {
-      // console.log("Controller: No schedule found for doctor ID:", doctorId);
+      // Return empty schedules array instead of 404
       return res.status(StatusCodes.OK).json({
         status: "Success",
-        message: "No schedule found",
-        data: null,
+        message: "No schedule found for the specified doctor",
+        data: { schedules: [] },
       });
     }
 
-    // console.log("Controller: Schedule fetched successfully for doctor ID:", doctorId);
+    // Format the data to match the expected structure in the frontend
+    // Assuming the schedule model has a 'schedules' field that's an array
+    // If not, we need to transform the data accordingly
+    const formattedData = {
+      schedules: schedule.schedules || [],
+    };
+
     return res.status(StatusCodes.OK).json({
       status: "Success",
       message: "Schedule fetched successfully",
-      data: schedule,
+      data: formattedData,
     });
   } catch (err) {
-    // console.error("Controller: Error fetching schedule:", err);
+    console.error("Error fetching schedule:", err);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       status: "Failed",
       message: "Error fetching schedule",
