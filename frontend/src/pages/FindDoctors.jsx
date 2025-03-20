@@ -14,17 +14,15 @@ import toast from "react-hot-toast";
 
 const FindDoctors = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState(
-    searchParams.get("search") || ""
-  );
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
   const [selectedSpecialization, setSelectedSpecialization] = useState(
     searchParams.get("specialization") || ""
   );
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sortBy, setSortBy] = useState("rating"); // rating, experience, name
-  const [sortOrder, setSortOrder] = useState("desc"); // asc, desc
+  const [sortBy, setSortBy] = useState("rating");
+  const [sortOrder, setSortOrder] = useState("desc");
   const [filters, setFilters] = useState({
     experience: "",
     rating: "",
@@ -88,14 +86,6 @@ const FindDoctors = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (searchTerm) params.set("search", searchTerm);
-    if (selectedSpecialization)
-      params.set("specialization", selectedSpecialization);
-    setSearchParams(params);
-  }, [searchTerm, selectedSpecialization, setSearchParams]);
 
   const handleBookAppointment = (doctorId) => {
     const userToken = localStorage.getItem("usertoken");
@@ -173,7 +163,7 @@ const FindDoctors = () => {
             {/* Filter Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-200 transition-colors"
+              className="flex items-center px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
             >
               <Filter className="w-5 h-5 mr-2" />
               Filters
@@ -298,157 +288,33 @@ const FindDoctors = () => {
           )}
         </div>
 
-        {/* Active Filters */}
-        {(searchTerm ||
-          selectedSpecialization ||
-          Object.values(filters).some(Boolean)) && (
-          <div className="mb-6 flex flex-wrap gap-2">
-            {searchTerm && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
-                Search: {searchTerm}
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="ml-2 hover:text-blue-900"
-                >
-                  ×
-                </button>
-              </span>
-            )}
-            {selectedSpecialization && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
-                Specialization: {selectedSpecialization}
-                <button
-                  onClick={() => setSelectedSpecialization("")}
-                  className="ml-2 hover:text-blue-900"
-                >
-                  ×
-                </button>
-              </span>
-            )}
-            {Object.entries(filters).map(([key, value]) =>
-              value ? (
-                <span
-                  key={key}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
-                >
-                  {key}: {value}
-                  <button
-                    onClick={() => setFilters({ ...filters, [key]: "" })}
-                    className="ml-2 hover:text-blue-900"
-                  >
-                    ×
-                  </button>
-                </span>
-              ) : null
-            )}
-          </div>
-        )}
-
-        {/* Sort Controls */}
-        <div className="mb-6 flex items-center space-x-4">
-          <span className="text-sm text-gray-600">Sort by:</span>
-          <button
-            onClick={() => toggleSort("rating")}
-            className={`flex items-center px-3 py-1 rounded-md text-sm ${
-              sortBy === "rating"
-                ? "bg-blue-100 text-blue-800"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            <Star className="w-4 h-4 mr-1" />
-            Rating
-            {sortBy === "rating" && <ArrowUpDown className="w-4 h-4 ml-1" />}
-          </button>
-          <button
-            onClick={() => toggleSort("experience")}
-            className={`flex items-center px-3 py-1 rounded-md text-sm ${
-              sortBy === "experience"
-                ? "bg-blue-100 text-blue-800"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            <Clock className="w-4 h-4 mr-1" />
-            Experience
-            {sortBy === "experience" && (
-              <ArrowUpDown className="w-4 h-4 ml-1" />
-            )}
-          </button>
-          <button
-            onClick={() => toggleSort("name")}
-            className={`flex items-center px-3 py-1 rounded-md text-sm ${
-              sortBy === "name"
-                ? "bg-blue-100 text-blue-800"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            Name
-            {sortBy === "name" && <ArrowUpDown className="w-4 h-4 ml-1" />}
-          </button>
-        </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && !loading && (
-          <div className="text-red-500 text-center py-4">{error}</div>
-        )}
-
         {/* Doctors Grid */}
         {!loading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {doctors.map((doctor) => (
               <div
                 key={doctor._id}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
               >
-                <div className="relative">
-                  <img
-                    src={
-                      doctor.profilepic || "https://via.placeholder.com/400x200"
-                    }
-                    alt={doctor.name}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full text-sm font-medium text-blue-600 shadow">
-                    {doctor.experience} years exp.
-                  </div>
-                </div>
-
+                <img
+                  src={
+                    doctor.profilepic || "https://via.placeholder.com/400x300"
+                  }
+                  alt={doctor.name}
+                  className="w-full h-64 object-cover"
+                />
                 <div className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-800 mb-1">
-                        Dr. {doctor.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {doctor.specialization.join(", ")}
-                      </p>
-                    </div>
-                    <div className="flex items-center">
-                      <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                      <span className="ml-1 text-sm font-medium text-gray-600">
-                        {doctor.rating || "4.5"}
-                      </span>
-                    </div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-1">
+                    Dr. {doctor.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {doctor.specialization.join(", ")}
+                  </p>
+                  <div className="flex items-center text-gray-600 mb-4">
+                    <MapPin className="w-4 h-4 mr-2" />
+                    <span className="text-sm">{doctor.address}</span>
                   </div>
-
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-gray-600">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      <span className="text-sm">{doctor.address}</span>
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <Clock className="w-4 h-4 mr-2" />
-                      <span className="text-sm">Next available: Today</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
                     <div className="text-green-600 text-sm font-medium">
                       ₹{doctor.consultationFee || "500"} per visit
                     </div>
@@ -463,6 +329,18 @@ const FindDoctors = () => {
               </div>
             ))}
           </div>
+        )}
+
+        {/* Loading State */}
+        {loading && (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="text-red-500 text-center py-4">{error}</div>
         )}
 
         {/* No Results */}

@@ -2,6 +2,7 @@ import React from "react";
 import HomeSearch from "../components/HomeSearch";
 import { Heart, Calendar, Video, Clock, Star, Shield } from "lucide-react";
 import RotatingText from "../components/RotatingText";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const features = [
@@ -114,6 +115,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };
