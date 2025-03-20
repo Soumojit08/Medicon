@@ -6,7 +6,7 @@ import configs from "../../configs/index.configs.js";
 
 const userLoginController = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, geoLocation } = req.body;
         if (!email || !password) {
             // return res.render('errorpage', { errorMessage: getReasonPhrase(StatusCodes.BAD_REQUEST) });
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -15,46 +15,65 @@ const userLoginController = async (req, res) => {
             });
         }
 
-        // Check if user or not...
+        // Check if user exists
         const User = await Models.UserModel.findOne({ email: email });
-        if (User && User !== null) {
-            // Check Password...
-            const hashed_password = User.password;
-            const isPasswordMatch = await bcrypt.compare(password, hashed_password);
-            if (isPasswordMatch) {
-                const playLoad = {
-                  _id: User._id,
-                  name: User.name,
-                  email: User.email,
-                  role: "user",
-                  profilepic: User.profilepic,
-                  phonenumber: User.phonenumber,
-                };
-                const token = await JWT.sign(playLoad, configs.JWT_SECRET, {
-                  expiresIn: "1h",
-                });
-
-                return res.status(StatusCodes.OK).json({
-                  status: "OK",
-                  message: "Successfully logged in",
-                  token: token,
-                  data: {
-                    _id: playLoad._id,
-                    name: playLoad.name,
-                    email: playLoad.email,
-                    role: playLoad.role,
-                    profilepic: playLoad.profilepic,
-                    phonenumber: playLoad.phonenumber,
-                  },
-                });
-            }
-
-            return res.status(StatusCodes.UNAUTHORIZED).json({
-                status: 'Failed',
-                message: "Unauthorized",
-            });
+        if (!User) {
+          return res.status(StatusCodes.UNAUTHORIZED).json({
+            status: "Failed",
+            message: "Invalid credentials",
+          });
         }
+
+        // Validate password
+        const isPasswordMatch = await bcrypt.compare(password, User.password);
+        if (!isPasswordMatch) {
+          return res.status(StatusCodes.UNAUTHORIZED).json({
+            status: "Failed",
+            message: "Invalid credentials",
+          });
+        }
+
+        // Update user's location if provided and valid
+        if (geoLocation) {
+          const [longitude, latitude] = geoLocation.split(",").map(Number);
+          if (
+            !isNaN(latitude) &&
+            !isNaN(longitude) &&
+            latitude >= -90 &&
+            latitude <= 90 &&
+            longitude >= -180 &&
+            longitude <= 180
+          ) {
+            User.geoLocation = {
+              type: "Point",
+              coordinates: [longitude, latitude],
+            };
+            await User.save();
+          }
+        }
+
+        const playLoad = {
+          _id: User._id,
+          name: User.name,
+          email: User.email,
+          role: "user",
+          profilepic: User.profilepic,
+          phonenumber: User.phonenumber,
+          geoLocation: User.geoLocation,
+        };
+
+        const token = await JWT.sign(playLoad, configs.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+
+        return res.status(StatusCodes.OK).json({
+          status: "OK",
+          message: "Successfully logged in",
+          token: token,
+          data: playLoad,
+        });
     } catch (error) {
+        console.error("Login Error:", error);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             status: 'Failed',
             message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)

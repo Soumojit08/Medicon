@@ -8,55 +8,84 @@ import sendMail from "../../services/sendMail.js";
 
 const userSignUpController = async (req, res) => {
     try {
-        let { name, email, phonenumber, password, geoLocation, secNumber } = req.body;
-        if (!name || !email || !phonenumber || !password || !secNumber) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                status: "Failed",
-                message: "Please enter all required fields!"
-            });
-        }
+      let { name, email, phonenumber, password, geoLocation, secNumber } =
+        req.body;
 
-        // Check user is exist or not through email...
-        const User = await Models.UserModel.findOne({ email: email });
-        if (User && User !== null) {
-            return res.status(StatusCodes.CONFLICT).json({
-                status: "Failed",
-                message: "User is already exist!"
-            });
-        }
-
-        // Hash the password...
-        const hashed_password = await bcrypt.hash(password, Number(configs.SALT));
-
-        // Save profile image...
-        let profileimage_url = "";
-        if (req.file) {
-            try {
-                let uploadImageUrl = await clodinary.uploader.upload(req.file.path);
-                fs.unlinkSync(req.file.path);
-                profileimage_url = uploadImageUrl.secure_url;
-            } catch (error) {
-                return res.status(StatusCodes.BAD_REQUEST).json({
-                    status: 'Failed',
-                    message: "Something Went Wrong in Cloudinary!"
-                });
-            }
-        }
-
-        let newUser = new Models.UserModel({
-            name: name,
-            email: email,
-            phonenumber: phonenumber,
-            password: hashed_password,
-            profilepic: profileimage_url,
-            geoLocation: geoLocation,
-            secNumber: secNumber
+      // Validate required fields
+      if (
+        !name ||
+        !email ||
+        !phonenumber ||
+        !password ||
+        !secNumber ||
+        !geoLocation
+      ) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          status: "Failed",
+          message: "Please enter all required fields including location!",
         });
+      }
 
-        const emailData = {
-            to: email,
-            subject: "Welcome to Medicon - Your Smart Health Companion",
-            html: `
+      // Validate and convert geolocation to GeoJSON format
+      const [latitude, longitude] = geoLocation.split(",").map(Number);
+      if (
+        isNaN(latitude) ||
+        isNaN(longitude) ||
+        latitude < -90 ||
+        latitude > 90 ||
+        longitude < -180 ||
+        longitude > 180
+      ) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          status: "Failed",
+          message: "Invalid location format. Please enable location services.",
+        });
+      }
+
+      // Check user is exist or not through email...
+      const User = await Models.UserModel.findOne({ email: email });
+      if (User && User !== null) {
+        return res.status(StatusCodes.CONFLICT).json({
+          status: "Failed",
+          message: "User already exists!",
+        });
+      }
+
+      // Hash the password...
+      const hashed_password = await bcrypt.hash(password, Number(configs.SALT));
+
+      // Save profile image...
+      let profileimage_url = "";
+      if (req.file) {
+        try {
+          let uploadImageUrl = await clodinary.uploader.upload(req.file.path);
+          fs.unlinkSync(req.file.path);
+          profileimage_url = uploadImageUrl.secure_url;
+        } catch (error) {
+          return res.status(StatusCodes.BAD_REQUEST).json({
+            status: "Failed",
+            message: "Something Went Wrong in Cloudinary!",
+          });
+        }
+      }
+
+      let newUser = new Models.UserModel({
+        name: name,
+        email: email,
+        phonenumber: phonenumber,
+        password: hashed_password,
+        profilepic: profileimage_url,
+        geoLocation: {
+          type: "Point",
+          coordinates: [longitude, latitude], // MongoDB expects [longitude, latitude]
+        },
+        secNumber: secNumber,
+      });
+
+      const emailData = {
+        to: email,
+        subject: "Welcome to Medicon - Your Smart Health Companion",
+        html: `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -129,24 +158,25 @@ const userSignUpController = async (req, res) => {
                     </div>
                 </div>
             </body>
-            </html>`
-        };
+            </html>`,
+      };
 
-        await sendMail(emailData, (error, info) => {
-            if (error) {
-                console.log("Mail Sending Error: " + error);
-            } else {
-                console.log("Mail Sent: " + info);
-            }
-        });
+      await sendMail(emailData, (error, info) => {
+        if (error) {
+          console.log("Mail Sending Error: " + error);
+        } else {
+          console.log("Mail Sent: " + info);
+        }
+      });
 
-        await newUser.save();
-        return res.status(StatusCodes.CREATED).json({
-            status: "OK",
-            message: "Successfully Signed Up!",
-            data: newUser
-        });
+      await newUser.save();
+      return res.status(StatusCodes.CREATED).json({
+        status: "OK",
+        message: "Successfully Signed Up!",
+        data: newUser,
+      });
     } catch (error) {
+        console.error("Signup Error:", error);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             status: 'Failed',
             message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)

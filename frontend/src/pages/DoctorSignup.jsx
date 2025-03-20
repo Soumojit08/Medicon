@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { User, AlertCircle } from "lucide-react";
 import axiosInstance from "../libs/axios";
+import { toast } from "react-hot-toast";
 
 function DoctorSignup() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ function DoctorSignup() {
     profileimage: null,
     registrationId: "",
     specialization: [],
+    latitude: "",
+    longitude: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -40,6 +43,25 @@ function DoctorSignup() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+
+    // Get user's location
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+
+      setFormData((prev) => ({
+        ...prev,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      }));
+      
+    } catch (error) {
+      console.error("Error getting location:", error);
+      toast.error("Please enable location services to continue");
+      setIsLoading(false);
+      return;
+    }
 
     const form = new FormData();
     for (const key in formData) {

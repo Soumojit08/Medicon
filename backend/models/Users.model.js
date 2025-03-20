@@ -1,34 +1,48 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
     phonenumber: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     profilepic: {
-        type: String
+      type: String,
     },
     geoLocation: {
-        type: String
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
     secNumber: {
-        type: Number,
-        required: true
-    }
-}, { timestamps: true });
+      type: Number,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+// Add geospatial index for location-based queries
+UserSchema.index({ geoLocation: "2dsphere" });
 
 const User = mongoose.model('User', UserSchema);
 
