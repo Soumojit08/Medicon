@@ -40,6 +40,11 @@ const DoctorDashboard = () => {
           profilepic: response.data.data.profilepic || "",
           registrationId: response.data.data.registrationId || "",
           specialization: response.data.data.specialization || [],
+          consultationFee: response.data.data.consultationFee || "",
+          experience: response.data.data.experience || "",
+          education: response.data.data.education || "",
+          facts: response.data.data.facts || "",
+          isVerified: response.data.data.isVerified || false,
         });
       } else {
         console.warn("Doctor data is missing in response");

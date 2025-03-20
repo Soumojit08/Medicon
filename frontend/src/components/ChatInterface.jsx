@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import AIbot from "../assets/robo.svg";
 import { X, Send, Maximize, Minimize } from "lucide-react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import axios from "axios";
 
 const ChatInterface = () => {
@@ -54,9 +53,9 @@ const ChatInterface = () => {
     setIsMinimized(!isMinimized);
   };
 
-  useEffect(() => {
-    generateContent();
-  }, []);
+  // useEffect(() => {
+  //   generateContent();
+  // }, []);
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
@@ -121,7 +120,7 @@ const ChatInterface = () => {
                   }}
                 />
               </div>
-              <span className="font-medium">AI Assistant</span>
+              <span className="font-medium">ORION</span>
             </div>
             <div className="flex space-x-3">
               <button
