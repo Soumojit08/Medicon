@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  Contact,
   HomeIcon,
   Settings,
   Menu,
@@ -9,7 +8,6 @@ import {
   Stethoscope,
   ShieldCheck,
   X,
-  Bell,
   Search,
   Calendar,
 } from "lucide-react";
@@ -21,7 +19,6 @@ const Navbar = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [role, setRole] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const checkAuth = () => {
@@ -47,15 +44,7 @@ const Navbar = () => {
   useEffect(() => {
     checkAuth();
     setIsOpen(false);
-    setShowNotifications(false);
   }, [location.pathname]);
-
-  useEffect(() => {
-    checkAuth();
-    const handleStorageChange = () => checkAuth();
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("doctortoken");
@@ -173,6 +162,15 @@ const Navbar = () => {
                 </Link>
               ))}
 
+            {/* SOS Button */}
+            <a
+              href="tel:108"
+              className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
+            >
+              <ShieldCheck className="w-4 h-4 mr-2" />
+              SOS
+            </a>
+
             {/* Auth Button */}
             {isAuth ? (
               <button
@@ -229,6 +227,15 @@ const Navbar = () => {
                     {link.name}
                   </Link>
                 ))}
+
+              {/* SOS Button */}
+              <a
+                href="tel:108"
+                className="flex items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
+              >
+                <ShieldCheck className="w-5 h-5 mr-3" />
+                SOS
+              </a>
 
               {isAuth ? (
                 <button
