@@ -94,11 +94,25 @@ const FindDoctors = () => {
 
   const handleBookAppointment = (doctorId) => {
     const userToken = localStorage.getItem("usertoken");
+
     if (!userToken) {
       toast.error("Please login to book an appointment");
+      window.location.href = "/userLogin"; // Redirect to the user login page
       return;
     }
-    window.location.href = `/book-appointment/${doctorId}`;
+
+    // Decode the token to extract the user ID
+    try {
+      const payload = JSON.parse(atob(userToken.split(".")[1])); // Decode JWT payload
+      const userId = payload._id; // Assuming the user ID is stored as `_id` in the token
+
+      // Redirect to the patient dashboard with the user ID
+      window.location.href = `/patientDashboard/${userId}`;
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      toast.error("Invalid session. Please log in again.");
+      window.location.href = "/userLogin"; // Redirect to login if token is invalid
+    }
   };
 
   const clearFilters = () => {
