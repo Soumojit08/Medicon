@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Footer from "../components/Footer";
 import DashboardHeader from "../components/DashboardHeader";
 import DashboardStats from "../components/DashboardStats";
@@ -7,15 +7,18 @@ import MedicalRecords from "../components/MedicalRecords";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../libs/axios";
 import { toast } from "react-hot-toast";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const PatientDashboard = () => {
   const { id: userId } = useParams();
   const [user, setUser] = useState({});
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   // Check if user is authenticated
@@ -58,7 +61,7 @@ const PatientDashboard = () => {
         const response = await axiosInstance.get("/api/v1/doctors", {
           params: { isVerified: true },
         });
-        console.log("Fetched Doctors:", response.data.data); // Debugging log
+        console.log("Fetched Doctors:", response.data.data);
         setDoctors(response.data.data || []);
       } catch (error) {
         console.error("Error fetching doctors:", error);
@@ -77,8 +80,8 @@ const PatientDashboard = () => {
       return;
     }
 
-    console.log("Selected Doctor ID:", selectedDoctor); // Debugging log
-    console.log("Selected Date:", date); // Debugging log
+    console.log("Selected Doctor ID:", selectedDoctor);
+    console.log("Selected Date:", date);
 
     setIsLoading(true);
     try {
@@ -106,6 +109,20 @@ const PatientDashboard = () => {
     setIsDropdownOpen(false);
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <div className="flex-grow px-4 sm:px-6 md:px-10 lg:px-20">
@@ -114,17 +131,17 @@ const PatientDashboard = () => {
           <DashboardHeader user={user} />
 
           {/* Appointment Booking Section */}
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full mx-auto mt-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          <div className="bg-white p-10 rounded-lg shadow-lg w-full mx-auto mt-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
               Book an Appointment
             </h2>
-            <form onSubmit={handleBooking} className="space-y-6">
+            <form onSubmit={handleBooking} className="space-y-8">
               {/* Doctor Selection */}
               <div>
                 <label className="block text-lg font-semibold text-gray-800 mb-3">
                   Select Doctor
                 </label>
-                <div className="relative">
+                <div className="relative" ref={dropdownRef}>
                   <button
                     type="button"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -150,7 +167,7 @@ const PatientDashboard = () => {
                               "https://via.placeholder.com/50"
                             }
                             alt={doctor.name}
-                            className="w-10 h-10 rounded-full border border-gray-300"
+                            className="w-12 h-12 rounded-full border border-gray-300"
                           />
                           <div>
                             <p className="text-lg font-semibold text-gray-800">
@@ -171,15 +188,15 @@ const PatientDashboard = () => {
 
               {/* Date Picker */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-lg font-semibold text-gray-800 mb-3">
                   Select Date
                 </label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                <DatePicker
+                  selected={date}
+                  onChange={(date) => setDate(date)}
+                  className="w-full px-5 py-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-blue-500 text-lg bg-white hover:bg-gray-50 transition"
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="Choose a date"
                 />
               </div>
 
@@ -188,7 +205,11 @@ const PatientDashboard = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition"
+                  className={`w-full px-5 py-4 rounded-lg text-lg font-semibold text-white transition ${
+                    isLoading
+                      ? "bg-blue-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  }`}
                 >
                   {isLoading ? "Booking..." : "Book Appointment"}
                 </button>
