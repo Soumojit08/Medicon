@@ -5,14 +5,9 @@ const AppointmentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  isAvailable: {
-    type: Boolean,
-    required: true,
-  },
   timeSlots: [
     {
       startTime: { type: String, required: true },
-      endTime: { type: String, required: true },
     },
   ],
   status: {
