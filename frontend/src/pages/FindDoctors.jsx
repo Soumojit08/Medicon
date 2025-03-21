@@ -8,13 +8,19 @@ import {
   Clock,
   ArrowUpDown,
   X,
+  BadgeCheck,
+  Calendar,
+  Award,
+  User,
 } from "lucide-react";
 import axiosInstance from "../libs/axios";
 import toast from "react-hot-toast";
 
 const FindDoctors = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || ""
+  );
   const [selectedSpecialization, setSelectedSpecialization] = useState(
     searchParams.get("specialization") || ""
   );
@@ -64,7 +70,6 @@ const FindDoctors = () => {
       setLoading(true);
       const response = await axiosInstance.get("/api/v1/doctors", {
         params: {
-          isVerified: true,
           search: searchTerm,
           specialization: selectedSpecialization,
           sortBy,
@@ -115,41 +120,53 @@ const FindDoctors = () => {
     }
   };
 
+  // Function to get random rating for demo
+  const getRandomRating = () => {
+    return (Math.floor(Math.random() * 20) + 30) / 10; // Generates a number between 3.0 and 5.0
+  };
+
+  // Function to get random experience for demo
+  const getRandomExperience = () => {
+    return Math.floor(Math.random() * 15) + 3; // Generates a number between 3 and 18
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">Find Your Perfect Doctor</h1>
-          <p className="text-blue-100 mb-8">
-            Search from our network of qualified and verified healthcare
-            professionals
+      <div className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">
+            Find Your Perfect Doctor
+          </h1>
+          <p className="text-blue-100 text-lg max-w-2xl mx-auto mb-8">
+            Connect with top healthcare professionals and receive the care you
+            deserve
           </p>
+          <div className="max-w-3xl mx-auto relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search by name, specialization, or location"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white placeholder:text-gray-100 text-gray-100"
+            />
+          </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         {/* Search and Filter Controls */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8 transition-all duration-300 hover:shadow-lg">
           <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by name, specialization, or location"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
             {/* Specialization Filter */}
             <div className="md:w-64">
               <select
                 value={selectedSpecialization}
                 onChange={(e) => setSelectedSpecialization(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">All Specializations</option>
                 {specializations.map((spec) => (
@@ -160,19 +177,51 @@ const FindDoctors = () => {
               </select>
             </div>
 
+            {/* Sort Controls */}
+            <div className="flex space-x-2">
+              <button
+                onClick={() => toggleSort("rating")}
+                className={`flex items-center px-3 py-2 rounded-lg ${
+                  sortBy === "rating"
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-gray-100 text-gray-700"
+                }`}
+              >
+                <Star className="w-4 h-4 mr-1" />
+                Rating
+                {sortBy === "rating" && (
+                  <ArrowUpDown className="w-4 h-4 ml-1" />
+                )}
+              </button>
+              <button
+                onClick={() => toggleSort("experience")}
+                className={`flex items-center px-3 py-2 rounded-lg ${
+                  sortBy === "experience"
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-zinc-200 text-gray-700"
+                }`}
+              >
+                <Award className="w-4 h-4 mr-1" />
+                Experience
+                {sortBy === "experience" && (
+                  <ArrowUpDown className="w-4 h-4 ml-1" />
+                )}
+              </button>
+            </div>
+
             {/* Filter Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+              className="flex items-center px-4 py-2 bg-indigo-100 rounded-lg hover:bg-indigo-200 transition-colors text-indigo-700"
             >
               <Filter className="w-5 h-5 mr-2" />
-              Filters
+              {showFilters ? "Hide Filters" : "Show Filters"}
             </button>
           </div>
 
           {/* Advanced Filters */}
           {showFilters && (
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="mt-6 pt-6 border-t border-gray-200 animate-fadeIn">
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -183,7 +232,7 @@ const FindDoctors = () => {
                     onChange={(e) =>
                       setFilters({ ...filters, experience: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Any Experience</option>
                     {experienceOptions.map((option) => (
@@ -203,7 +252,7 @@ const FindDoctors = () => {
                     onChange={(e) =>
                       setFilters({ ...filters, rating: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Any Rating</option>
                     {ratingOptions.map((option) => (
@@ -223,7 +272,7 @@ const FindDoctors = () => {
                     onChange={(e) =>
                       setFilters({ ...filters, availability: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Any Availability</option>
                     {availabilityOptions.map((option) => (
@@ -243,7 +292,7 @@ const FindDoctors = () => {
                     onChange={(e) =>
                       setFilters({ ...filters, gender: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Any Gender</option>
                     {genderOptions.map((option) => (
@@ -263,7 +312,7 @@ const FindDoctors = () => {
                     onChange={(e) =>
                       setFilters({ ...filters, location: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Any Distance</option>
                     {locationOptions.map((option) => (
@@ -278,7 +327,7 @@ const FindDoctors = () => {
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-gray-600 hover:text-gray-800 flex items-center"
+                  className="text-sm text-gray-600 hover:text-gray-800 flex items-center bg-gray-100 px-3 py-1 rounded-lg hover:bg-gray-200 transition-colors"
                 >
                   <X className="w-4 h-4 mr-1" />
                   Clear Filters
@@ -288,73 +337,145 @@ const FindDoctors = () => {
           )}
         </div>
 
+        {/* Results Summary */}
+        {!loading && !error && doctors.length > 0 && (
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-gray-800">
+              {doctors.length} Doctor{doctors.length !== 1 ? "s" : ""} Found
+            </h2>
+          </div>
+        )}
+
         {/* Doctors Grid */}
         {!loading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {doctors.map((doctor) => (
-              <div
-                key={doctor._id}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-              >
-                <img
-                  src={
-                    doctor.profilepic || "https://via.placeholder.com/400x300"
-                  }
-                  alt={doctor.name}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-1">
-                    Dr. {doctor.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-2">
-                    {doctor.specialization.join(", ")}
-                  </p>
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span className="text-sm">{doctor.address}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {doctors.map((doctor) => {
+              const rating = doctor.rating || getRandomRating();
+              const experience = doctor.experience || getRandomExperience();
+
+              return (
+                <div
+                  key={doctor._id}
+                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+                >
+                  <div className="relative">
+                    <img
+                      src={
+                        doctor.profilepic ||
+                        "https://via.placeholder.com/300x200"
+                      }
+                      alt={doctor.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    {doctor.isVerified && (
+                      <div className="absolute top-3 right-3 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                        <BadgeCheck className="w-3 h-3 mr-1" />
+                        Verified
+                      </div>
+                    )}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-green-600 text-sm font-medium">
-                      ₹{doctor.consultationFee || "500"} per visit
+
+                  <div className="p-5">
+                    <h2 className="text-lg font-semibold text-blue-700">
+                      {doctor.name.includes("Dr.")
+                        ? doctor.name
+                        : `Dr. ${doctor.name}`}
+                    </h2>
+
+                    <p className="text-sm text-indigo-600 font-medium mt-1">
+                      {doctor.specialization.join(", ")}
+                    </p>
+
+                    <div className="mt-4 grid grid-cols-2 gap-y-2 text-sm">
+                      <div className="flex items-center text-gray-600">
+                        <Star className="w-4 h-4 mr-1 text-yellow-500" />
+                        <span>{rating.toFixed(1)}/5</span>
+                      </div>
+
+                      <div className="flex items-center text-gray-600">
+                        <Award className="w-4 h-4 mr-1 text-blue-500" />
+                        <span>{experience} Years</span>
+                      </div>
+
+                      <div className="flex items-center text-gray-600 col-span-2">
+                        <MapPin className="w-4 h-4 mr-1 text-gray-500 flex-shrink-0" />
+                        <span className="truncate">
+                          {doctor.address || "Mumbai, India"}
+                        </span>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => handleBookAppointment(doctor._id)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
-                    >
-                      Book Appointment
-                    </button>
+
+                    <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                      <div className="text-green-600 font-semibold">
+                        ₹{doctor.consultationFee || "500"}
+                      </div>
+
+                      <button
+                        onClick={() => handleBookAppointment(doctor._id)}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center"
+                      >
+                        <Calendar className="w-4 h-4 mr-1" />
+                        Book Appointment
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
         {/* Loading State */}
         {loading && (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+              <div
+                className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-500 absolute top-0 left-0"
+                style={{ animationDirection: "reverse", opacity: 0.7 }}
+              ></div>
+            </div>
           </div>
         )}
 
         {/* Error State */}
         {error && !loading && (
-          <div className="text-red-500 text-center py-4">{error}</div>
+          <div className="text-center py-16 bg-white rounded-xl shadow-md">
+            <div className="text-red-500 mb-4">
+              <X className="w-14 h-14 mx-auto" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">
+              Something went wrong
+            </h3>
+            <p className="text-gray-600 max-w-md mx-auto">{error}</p>
+            <button
+              onClick={fetchDoctors}
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
         )}
 
         {/* No Results */}
         {!loading && !error && doctors.length === 0 && (
-          <div className="text-center py-12">
+          <div className="text-center py-16 bg-white rounded-xl shadow-md">
             <div className="text-gray-400 mb-4">
-              <Search className="w-12 h-12 mx-auto" />
+              <Search className="w-16 h-16 mx-auto" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-xl font-medium text-gray-900 mb-2">
               No doctors found
             </h3>
-            <p className="text-gray-600">
-              Try adjusting your search or filter criteria
+            <p className="text-gray-600 max-w-md mx-auto">
+              Try adjusting your search or filter criteria to find the right
+              doctor for your needs.
             </p>
+            <button
+              onClick={clearFilters}
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Clear All Filters
+            </button>
           </div>
         )}
       </div>
