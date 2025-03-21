@@ -3,6 +3,8 @@ import HomeSearch from "../components/HomeSearch";
 import { Heart, Calendar, Video, Clock, Star, Shield } from "lucide-react";
 import RotatingText from "../components/RotatingText";
 import Footer from "../components/Footer";
+import ChatInterface from "../components/ChatInterface";
+
 
 const Home = () => {
   const features = [
@@ -40,7 +42,7 @@ const Home = () => {
     <div className="min-h-screen">
       {/* Hero Section with Search */}
       <HomeSearch />
-
+      <ChatInterface/>
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
