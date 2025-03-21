@@ -121,40 +121,47 @@ const PatientDashboard = () => {
             <form onSubmit={handleBooking} className="space-y-6">
               {/* Doctor Selection */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-lg font-semibold text-gray-800 mb-3">
                   Select Doctor
                 </label>
                 <div className="relative">
                   <button
                     type="button"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between"
+                    className="w-full px-5 py-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-blue-500 flex items-center justify-between text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 transition"
                   >
                     {selectedDoctor
                       ? doctors.find((doctor) => doctor._id === selectedDoctor)
                           ?.name
                       : "Select a doctor"}
-                    <span className="ml-2">&#9662;</span>
+                    <span className="ml-3 text-gray-500">&#9662;</span>
                   </button>
                   {isDropdownOpen && (
-                    <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-2 max-h-60 overflow-y-auto">
+                    <ul className="absolute z-20 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-2 max-h-80 overflow-y-auto">
                       {doctors.map((doctor) => (
                         <li
                           key={doctor._id}
                           onClick={() => handleDoctorSelect(doctor._id)}
-                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          className="flex items-center gap-4 px-5 py-4 hover:bg-blue-50 cursor-pointer transition"
                         >
                           <img
-                            src={doctor.profilepic}
+                            src={
+                              doctor.profilepic ||
+                              "https://via.placeholder.com/50"
+                            }
                             alt={doctor.name}
-                            className="w-6 h-6 rounded-full"
+                            className="w-10 h-10 rounded-full border border-gray-300"
                           />
-                          <span>
-                            {doctor.name.toLowerCase().includes("dr.")
-                              ? doctor.name
-                              : `Dr. ${doctor.name}`}{" "}
-                            - {doctor.specialization.join(", ")}
-                          </span>
+                          <div>
+                            <p className="text-lg font-semibold text-gray-800">
+                              {doctor.name.toLowerCase().includes("dr.")
+                                ? doctor.name
+                                : `Dr. ${doctor.name}`}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {doctor.specialization.join(", ")}
+                            </p>
+                          </div>
                         </li>
                       ))}
                     </ul>
