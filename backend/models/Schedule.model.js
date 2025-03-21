@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+const slotSchema = new mongoose.Schema({
+  start: { type: String, required: true }, 
+  end: { type: String, required: true },   
+});
+
+const dayScheduleSchema = new mongoose.Schema({
+  enabled: { type: Boolean, default: false }, 
+  slots: [slotSchema], 
+});
+
 const scheduleSchema = new mongoose.Schema({
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -7,31 +17,16 @@ const scheduleSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  schedules: [
-    {
-      day: {
-        type: String,
-        required: true,
-        enum: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-        ],
-      },
-      startTime: {
-        type: String,
-        required: true,
-      },
-      endTime: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  schedules: {
+    Monday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
+    Tuesday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
+    Wednesday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
+    Thursday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
+    Friday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
+    Saturday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
+    Sunday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
+  },
+  lastUpdated: { type: Date, default: Date.now },
 });
 
 const Schedule = mongoose.model("Schedule", scheduleSchema);
