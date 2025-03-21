@@ -183,4 +183,15 @@ router.post("/verifyDoctor", Middlewares.AdminAuth, controllers.VerifyDoctor);
  */
 router.get("/nearby-doctors", getNearbyDoctors);
 
+/**
+ * Upload Medical Certificate
+ * Path: /api/v1/upload-medical-certificate
+ * Permission: User
+ */
+router.post(
+  "/upload-medical-certificate",
+  Middlewares.UploadFile.upload("files", 5), // Call upload function properly
+  controllers.UploadMedicalCertificate
+);
+
 export default router;
