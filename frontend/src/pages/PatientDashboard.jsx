@@ -15,6 +15,7 @@ const PatientDashboard = () => {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [date, setDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   // Check if user is authenticated
@@ -100,14 +101,17 @@ const PatientDashboard = () => {
     }
   };
 
+  const handleDoctorSelect = (doctorId) => {
+    setSelectedDoctor(doctorId);
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <div className="flex-grow px-4 sm:px-6 md:px-10 lg:px-20">
         <div className="container mx-auto py-4 space-y-6">
+          {/* Header */}
           <DashboardHeader user={user} />
-          <DashboardStats />
-          <AppointmentsSection />
-          <MedicalRecords />
 
           {/* Appointment Booking Section */}
           <div className="bg-white p-8 rounded-lg shadow-lg w-full mx-auto mt-8">
@@ -120,19 +124,42 @@ const PatientDashboard = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Doctor
                 </label>
-                <select
-                  value={selectedDoctor}
-                  onChange={(e) => setSelectedDoctor(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                >
-                  <option value="">Select a doctor</option>
-                  {doctors.map((doctor) => (
-                    <option key={doctor._id} value={doctor._id}>
-                      Dr. {doctor.name} - {doctor.specialization.join(", ")}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between"
+                  >
+                    {selectedDoctor
+                      ? doctors.find((doctor) => doctor._id === selectedDoctor)
+                          ?.name
+                      : "Select a doctor"}
+                    <span className="ml-2">&#9662;</span>
+                  </button>
+                  {isDropdownOpen && (
+                    <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-2 max-h-60 overflow-y-auto">
+                      {doctors.map((doctor) => (
+                        <li
+                          key={doctor._id}
+                          onClick={() => handleDoctorSelect(doctor._id)}
+                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          <img
+                            src={doctor.profilepic}
+                            alt={doctor.name}
+                            className="w-6 h-6 rounded-full"
+                          />
+                          <span>
+                            {doctor.name.toLowerCase().includes("dr.")
+                              ? doctor.name
+                              : `Dr. ${doctor.name}`}{" "}
+                            - {doctor.specialization.join(", ")}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
 
               {/* Date Picker */}
@@ -161,6 +188,11 @@ const PatientDashboard = () => {
               </div>
             </form>
           </div>
+
+          {/* Other Sections */}
+          <DashboardStats />
+          <AppointmentsSection />
+          <MedicalRecords />
         </div>
       </div>
       <Footer />

@@ -51,7 +51,7 @@ const DashboardHeader = ({ user }) => {
                 </p>
               </div>
             </div>
-
+            {/* 
             <form onSubmit={handleSearch} className="hidden md:block">
               <div className="relative">
                 <input
@@ -66,7 +66,7 @@ const DashboardHeader = ({ user }) => {
                   size={20}
                 />
               </div>
-            </form>
+            </form> */}
           </div>
 
           <div className="flex items-center space-x-4">
