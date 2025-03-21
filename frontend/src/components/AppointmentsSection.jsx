@@ -234,12 +234,6 @@ const AppointmentsSection = () => {
           <p className="text-gray-500">No appointments found</p>
         </div>
       )}
-
-      <div className="mt-6 text-center">
-        <button className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition-colors">
-          Book New Appointment
-        </button>
-      </div>
     </div>
   );
 };

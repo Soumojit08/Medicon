@@ -1,46 +1,39 @@
 import { StatusCodes } from "http-status-codes";
 import Schedule from "../../models/Schedule.model.js";
 
-const getDoctorSchedule = async function (req, res, next) {
+const getDoctorSchedule = async (req, res) => {
   try {
     const doctorId = req.params.id;
+    const { date } = req.query;
 
-    if (!doctorId) {
+    if (!doctorId || !date) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         status: "Failed",
-        message: "Doctor ID is required",
+        message: "Doctor ID and date are required.",
       });
     }
 
     const schedule = await Schedule.findOne({ doctorId });
 
     if (!schedule) {
-      // Return empty schedules array instead of 404
       return res.status(StatusCodes.OK).json({
         status: "Success",
-        message: "No schedule found for the specified doctor",
+        message: "No schedule found for the specified doctor.",
         data: { schedules: [] },
       });
     }
 
-    // Format the data to match the expected structure in the frontend
-    // Assuming the schedule model has a 'schedules' field that's an array
-    // If not, we need to transform the data accordingly
-    const formattedData = {
-      schedules: schedule.schedules || [],
-    };
-
+    const availableSlots = schedule.schedules[date] || [];
     return res.status(StatusCodes.OK).json({
       status: "Success",
-      message: "Schedule fetched successfully",
-      data: formattedData,
+      message: "Schedule fetched successfully.",
+      data: { schedules: availableSlots },
     });
-  } catch (err) {
-    console.error("Error fetching schedule:", err);
+  } catch (error) {
+    console.error("Error fetching schedule:", error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       status: "Failed",
-      message: "Error fetching schedule",
-      error: err.message,
+      message: "Error fetching schedule.",
     });
   }
 };

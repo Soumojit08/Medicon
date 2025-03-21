@@ -1,20 +1,20 @@
 import mongoose from "mongoose";
 
-const AppointmentSchema = mongoose.Schema({
-  day: {
-    type: String,
+const AppointmentSchema = new mongoose.Schema({
+  doctorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Doctor",
     required: true,
   },
-  isAvailable: {
-    type: Boolean,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
-  timeSlots: [
-    {
-      startTime: { type: String, required: true },
-      endTime: { type: String, required: true },
-    },
-  ],
+  date: {
+    type: Date,
+    required: true,
+  },
   status: {
     type: String,
     enum: ["pending", "confirmed", "completed", "cancelled"],
