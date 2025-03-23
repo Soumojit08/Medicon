@@ -5,6 +5,10 @@ import configs from "./configs/index.configs.js";
 import Db_Connect from "./services/connectDb.js";
 import apiRoutes from "./routes/v1/index.routes.v1.js";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc"; // Corrected import
+import swaggerOptions from "./services/swaggerOptions.js";
+import path from "path";
 
 const app = express();
 
@@ -13,7 +17,7 @@ const db_URI =
   configs.ENV === "development" ? configs.DB_URI : configs.MONGODB_URI;
 Db_Connect(db_URI);
 
-//Middleware
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -29,7 +33,10 @@ app.use(
   })
 );
 
-// Apis entry point...
+const swaggerDocs = swaggerJSDoc(swaggerOptions); // Correct usage
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// APIs entry point...
 app.use("/api/v1", apiRoutes);
 
 app.listen(configs.PORT, (err) => {
