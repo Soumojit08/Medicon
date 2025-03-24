@@ -8,7 +8,14 @@ const swaggerOptions = {
                 name: 'Medicon'
             },
         },
-        servers: ["http://localhost:3000"]
+        servers: [
+            {
+                url: "http://localhost:3000",
+            },
+            {
+                url: "https://medicon-4pta.onrender.com"
+            }
+        ]
     },
     apis: ['./routes/*.js', './index.js']
 }
