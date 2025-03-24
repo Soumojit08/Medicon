@@ -15,6 +15,7 @@ import AdminLogin from "./pages/AdminLogin";
 import FindDoctors from "./pages/FindDoctors";
 import AdminDoctorVerification from "./components/AdminDoctorVerification";
 import Home from "./pages/Home";
+import VideoCall from "./components/VideoCall";
 
 const App = () => {
   return (
@@ -45,6 +46,9 @@ const App = () => {
 
           {/* Find Doctors */}
           <Route path="/find-doctors" element={<FindDoctors />} />
+
+          {/* VideoCall  */}
+          <Route path="/video-call/:roomId" element={<VideoCall />} />
 
           {/* Error Page */}
           <Route path="*" element={<ErrorPage />} />

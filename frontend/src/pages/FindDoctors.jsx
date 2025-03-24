@@ -1,20 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import {
-  Search,
-  Filter,
-  MapPin,
-  Star,
-  Clock,
-  ArrowUpDown,
-  X,
-  BadgeCheck,
-  Calendar,
-  Award,
-  User,
-} from "lucide-react";
+import { Search, Filter, Star, Award, X } from "lucide-react";
 import axiosInstance from "../libs/axios";
 import toast from "react-hot-toast";
+import DoctorCard from "../components/DoctorCard"; // Import the DoctorCard component
 
 const FindDoctors = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -92,29 +81,6 @@ const FindDoctors = () => {
     }
   };
 
-  const handleBookAppointment = (doctorId) => {
-    const userToken = localStorage.getItem("usertoken");
-
-    if (!userToken) {
-      toast.error("Please login to book an appointment");
-      window.location.href = "/userLogin"; // Redirect to the user login page
-      return;
-    }
-
-    // Decode the token to extract the user ID
-    try {
-      const payload = JSON.parse(atob(userToken.split(".")[1])); // Decode JWT payload
-      const userId = payload._id; // Assuming the user ID is stored as `_id` in the token
-
-      // Redirect to the patient dashboard with the user ID
-      window.location.href = `/patientDashboard/${userId}`;
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      toast.error("Invalid session. Please log in again.");
-      window.location.href = "/userLogin"; // Redirect to login if token is invalid
-    }
-  };
-
   const clearFilters = () => {
     setFilters({
       experience: "",
@@ -132,16 +98,6 @@ const FindDoctors = () => {
       setSortBy(field);
       setSortOrder("desc");
     }
-  };
-
-  // Function to get random rating for demo
-  const getRandomRating = () => {
-    return (Math.floor(Math.random() * 20) + 30) / 10; // Generates a number between 3.0 and 5.0
-  };
-
-  // Function to get random experience for demo
-  const getRandomExperience = () => {
-    return Math.floor(Math.random() * 15) + 3; // Generates a number between 3 and 18
   };
 
   return (
@@ -203,23 +159,17 @@ const FindDoctors = () => {
               >
                 <Star className="w-4 h-4 mr-1" />
                 Rating
-                {sortBy === "rating" && (
-                  <ArrowUpDown className="w-4 h-4 ml-1" />
-                )}
               </button>
               <button
                 onClick={() => toggleSort("experience")}
                 className={`flex items-center px-3 py-2 rounded-lg ${
                   sortBy === "experience"
                     ? "bg-blue-100 text-blue-700"
-                    : "bg-zinc-200 text-gray-700"
+                    : "bg-gray-100 text-gray-700"
                 }`}
               >
                 <Award className="w-4 h-4 mr-1" />
                 Experience
-                {sortBy === "experience" && (
-                  <ArrowUpDown className="w-4 h-4 ml-1" />
-                )}
               </button>
             </div>
 
@@ -232,223 +182,21 @@ const FindDoctors = () => {
               {showFilters ? "Hide Filters" : "Show Filters"}
             </button>
           </div>
-
-          {/* Advanced Filters */}
-          {showFilters && (
-            <div className="mt-6 pt-6 border-t border-gray-200 animate-fadeIn">
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Experience
-                  </label>
-                  <select
-                    value={filters.experience}
-                    onChange={(e) =>
-                      setFilters({ ...filters, experience: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Any Experience</option>
-                    {experienceOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Rating
-                  </label>
-                  <select
-                    value={filters.rating}
-                    onChange={(e) =>
-                      setFilters({ ...filters, rating: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Any Rating</option>
-                    {ratingOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Availability
-                  </label>
-                  <select
-                    value={filters.availability}
-                    onChange={(e) =>
-                      setFilters({ ...filters, availability: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Any Availability</option>
-                    {availabilityOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Gender
-                  </label>
-                  <select
-                    value={filters.gender}
-                    onChange={(e) =>
-                      setFilters({ ...filters, gender: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Any Gender</option>
-                    {genderOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Location
-                  </label>
-                  <select
-                    value={filters.location}
-                    onChange={(e) =>
-                      setFilters({ ...filters, location: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Any Distance</option>
-                    {locationOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="mt-4 flex justify-end">
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-gray-600 hover:text-gray-800 flex items-center bg-gray-100 px-3 py-1 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  <X className="w-4 h-4 mr-1" />
-                  Clear Filters
-                </button>
-              </div>
-            </div>
-          )}
         </div>
-
-        {/* Results Summary */}
-        {!loading && !error && doctors.length > 0 && (
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">
-              {doctors.length} Doctor{doctors.length !== 1 ? "s" : ""} Found
-            </h2>
-          </div>
-        )}
 
         {/* Doctors Grid */}
         {!loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {doctors.map((doctor) => {
-              const rating = doctor.rating || getRandomRating();
-              const experience = doctor.experience || getRandomExperience();
-
-              return (
-                <div
-                  key={doctor._id}
-                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
-                >
-                  <div className="relative">
-                    <img
-                      src={
-                        doctor.profilepic ||
-                        "https://via.placeholder.com/300x200"
-                      }
-                      alt={doctor.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    {doctor.isVerified && (
-                      <div className="absolute top-3 right-3 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                        <BadgeCheck className="w-3 h-3 mr-1" />
-                        Verified
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-5">
-                    <h2 className="text-lg font-semibold text-blue-700">
-                      {doctor.name.includes("Dr.")
-                        ? doctor.name
-                        : `Dr. ${doctor.name}`}
-                    </h2>
-
-                    <p className="text-sm text-indigo-600 font-medium mt-1">
-                      {doctor.specialization.join(", ")}
-                    </p>
-
-                    <div className="mt-4 grid grid-cols-2 gap-y-2 text-sm">
-                      <div className="flex items-center text-gray-600">
-                        <Star className="w-4 h-4 mr-1 text-yellow-500" />
-                        <span>{rating.toFixed(1)}/5</span>
-                      </div>
-
-                      <div className="flex items-center text-gray-600">
-                        <Award className="w-4 h-4 mr-1 text-blue-500" />
-                        <span>{experience} Years</span>
-                      </div>
-
-                      <div className="flex items-center text-gray-600 col-span-2">
-                        <MapPin className="w-4 h-4 mr-1 text-gray-500 flex-shrink-0" />
-                        <span className="truncate">
-                          {doctor.address || "Mumbai, India"}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                      <div className="text-green-600 font-semibold">
-                        ₹{doctor.consultationFee || "500"}
-                      </div>
-
-                      <button
-                        onClick={() => handleBookAppointment(doctor._id)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center"
-                      >
-                        <Calendar className="w-4 h-4 mr-1" />
-                        Book Appointment
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {doctors.map((doctor) => (
+              <DoctorCard key={doctor._id} doctor={doctor} />
+            ))}
           </div>
         )}
 
         {/* Loading State */}
         {loading && (
           <div className="flex justify-center items-center min-h-[400px]">
-            <div className="relative">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
-              <div
-                className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-500 absolute top-0 left-0"
-                style={{ animationDirection: "reverse", opacity: 0.7 }}
-              ></div>
-            </div>
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
           </div>
         )}
 
@@ -462,12 +210,6 @@ const FindDoctors = () => {
               Something went wrong
             </h3>
             <p className="text-gray-600 max-w-md mx-auto">{error}</p>
-            <button
-              onClick={fetchDoctors}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Try Again
-            </button>
           </div>
         )}
 
@@ -480,16 +222,6 @@ const FindDoctors = () => {
             <h3 className="text-xl font-medium text-gray-900 mb-2">
               No doctors found
             </h3>
-            <p className="text-gray-600 max-w-md mx-auto">
-              Try adjusting your search or filter criteria to find the right
-              doctor for your needs.
-            </p>
-            <button
-              onClick={clearFilters}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Clear All Filters
-            </button>
           </div>
         )}
       </div>
