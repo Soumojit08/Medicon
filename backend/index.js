@@ -26,9 +26,11 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong!");
 });
 app.use(express.static("public"));
+
+const corsOrigin = configs.ENV === "development" ? "http://localhost:5173" : "https://medicon-4pta.onrender.com";
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: corsOrigin,
     credentials: true,
   })
 );
