@@ -12,6 +12,7 @@ const configs = {
   HASH_SECRET: process.env.HASH_SECRET,
   SALT: process.env.HASH_SALT,
   JWT_SECRET: process.env.JWT_SECRET,
+  PROD_URI: process.env.PROD_URI,
 };
 
 export default configs;
