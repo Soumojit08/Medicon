@@ -84,8 +84,10 @@ const DoctorDetailsForm = ({ doctorData }) => {
           </button>
         </div>
         <div className="grid grid-cols-1 gap-4">
-          <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
-            <label className="text-blue-600 mb-1 sm:mb-0">Specialization</label>
+          <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-lg sm:text-lg">
+            <label className="!text-blue-500 !font-medium !text-lg">
+              Specialization
+            </label>
             {isEditing ? (
               <input
                 type="text"
@@ -101,7 +103,9 @@ const DoctorDetailsForm = ({ doctorData }) => {
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
-            <label className="text-blue-600 mb-1 sm:mb-0">License No.</label>
+            <label className="!text-blue-500 !font-medium !text-lg">
+              License No.
+            </label>
             {isEditing ? (
               <input
                 type="text"
@@ -117,7 +121,9 @@ const DoctorDetailsForm = ({ doctorData }) => {
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
-            <label className="text-blue-600 mb-1 sm:mb-0">Languages</label>
+            <label className="!text-blue-500 !font-medium !text-lg">
+              Languages
+            </label>
             {isEditing ? (
               <input
                 type="text"
@@ -133,7 +139,9 @@ const DoctorDetailsForm = ({ doctorData }) => {
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
-            <label className="text-blue-600 mb-1 sm:mb-0">Education</label>
+            <label className="!text-blue-500 !font-medium !text-lg">
+              Education
+            </label>
             {isEditing ? (
               <input
                 type="text"
@@ -149,7 +157,7 @@ const DoctorDetailsForm = ({ doctorData }) => {
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
-            <label className="text-blue-600 mb-1 sm:mb-0">
+            <label className="!text-blue-500 !font-medium !text-lg">
               Consultation Fee
             </label>
             {isEditing ? (
@@ -167,7 +175,9 @@ const DoctorDetailsForm = ({ doctorData }) => {
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
-            <label className="text-blue-600 mb-1 sm:mb-0">Location</label>
+            <label className="!text-blue-500 !font-medium !text-lg">
+              Location
+            </label>
             {isEditing ? (
               <input
                 type="text"
@@ -183,7 +193,9 @@ const DoctorDetailsForm = ({ doctorData }) => {
             )}
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
-            <label className="text-blue-600 mb-1 sm:mb-0">Experience</label>
+            <label className="!text-blue-500 !font-medium !text-lg">
+              Experience
+            </label>
             {isEditing ? (
               <input
                 type="text"
