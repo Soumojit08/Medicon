@@ -33,8 +33,6 @@ const DoctorDashboard = () => {
         setDoctor({
           name: response.data.data.name || "",
           address: response.data.data.address || "",
-          education: response.data.data.education || "",
-          facts: response.data.data.facts || "",
           languages: response.data.data.languages || [],
           phonenumber: response.data.data.phonenumber || "",
           profilepic: response.data.data.profilepic || "",
