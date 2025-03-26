@@ -171,6 +171,18 @@ const Home = () => {
         </div>
       </section>
 
+      {/* review section  */}
+      <section className=" flex flex-col items-center justify-center py-16 bg-white px-6">
+        <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
+          What Our Customers Say
+        </h2>
+        <Marquee direction="left" speed={30} className="py-4">
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} {...review} />
+          ))}
+        </Marquee>
+      </section>
+
       {/* Trust Indicators */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -190,19 +202,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* review section  */}
-      <section className=" flex flex-col items-center justify-center py-16 bg-white px-6">
-        <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
-          What Our Customers Say
-        </h2>
-        <Marquee direction="left" speed={30} className="py-4">
-          {reviews.map((review) => (
-            <ReviewCard key={review.id} {...review} />
-          ))}
-        </Marquee>
-      </section>
-
       <Footer />
     </div>
   );
