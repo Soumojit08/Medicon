@@ -29,6 +29,9 @@ const doctorLoginController = async (req, res) => {
                     specialization: Doctor.specialization,
                     profileimage: Doctor.profilepic,
                     address: Doctor.address,
+                    isOnline: Doctor.isOnline,
+                    isAvailable: Doctor.isAvailable,
+                    isBusy: Doctor.isBusy,
                     role: "doctor",
                 };
                 // Create token...
@@ -48,6 +51,9 @@ const doctorLoginController = async (req, res) => {
                     isVerified: playLoad.isVerified,
                     specialization: playLoad.specialization,
                     profileimage: playLoad.profileimage,
+                    isOnline: playLoad.isOnline,
+                    isAvailable: playLoad.isAvailable,
+                    isBusy: playLoad.isBusy,
                   },
                 });
             }
