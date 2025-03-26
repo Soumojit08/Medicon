@@ -1,14 +1,38 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Video, CalendarDays, BadgeCheck } from "lucide-react";
+import { Video, CalendarDays, BadgeCheck, Circle } from "lucide-react";
 import Image from "./Image";
+import { toast } from "react-hot-toast";
 
 const DoctorCard = ({ doctor }) => {
   const navigate = useNavigate();
+  const isOnline = doctor.isOnline || false; // This will come from your backend
 
   const handleVideoCall = () => {
-    const roomId = `room_${doctor._id}`;
-    navigate(`/video-call/${roomId}`);
+    // Check if user is logged in
+    const userToken = localStorage.getItem("usertoken");
+    if (!userToken) {
+      toast.error("Please login to start a video call");
+      navigate("/userLogin");
+      return;
+    }
+
+    // Generate a unique room ID
+    const roomId = `room_${doctor._id}_${Date.now()}`;
+
+    // Send request to doctor
+    sendVideoCallRequest(doctor._id, roomId);
+  };
+
+  const sendVideoCallRequest = async (doctorId, roomId) => {
+    try {
+      // Here you would make an API call to notify the doctor
+      // For now, we'll just navigate to the video call room
+      navigate(`/video-call/${roomId}`);
+    } catch (error) {
+      console.error("Error sending video call request:", error);
+      toast.error("Failed to send video call request");
+    }
   };
 
   return (
@@ -21,6 +45,16 @@ const DoctorCard = ({ doctor }) => {
               pic={doctor.profilepic}
               className="h-full w-full object-cover"
             />
+            {/* Online status indicator */}
+            <div
+              className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white ${
+                isOnline ? "bg-green-500" : "bg-gray-400"
+              }`}
+            >
+              {isOnline && (
+                <Circle className="w-full h-full text-white animate-ping absolute" />
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -103,10 +137,15 @@ const DoctorCard = ({ doctor }) => {
         <div className="flex gap-3">
           <button
             onClick={handleVideoCall}
-            className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+            disabled={!isOnline}
+            className={`flex-1 flex items-center justify-center gap-2 ${
+              isOnline
+                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            } text-sm py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md`}
           >
             <Video size={16} />
-            <span>Video Call</span>
+            <span>{isOnline ? "Video Call" : "Offline"}</span>
           </button>
           <button className="flex-1 flex items-center justify-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm py-2.5 px-4 rounded-lg transition-all duration-200">
             <CalendarDays size={16} />
