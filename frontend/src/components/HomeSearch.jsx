@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Search, MapPin, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Particles from "./Particles"; // Import the Particles component
+import TypingText from "./TypingText"
 
 const HomeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,7 +49,7 @@ const HomeSearch = () => {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-          Find Your Preferable Doctor
+          Find Your Preferable <TypingText/>
         </h1>
         <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto">
           Connect with verified healthcare professionals near you. Book

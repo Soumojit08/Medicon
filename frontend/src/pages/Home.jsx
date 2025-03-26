@@ -4,7 +4,7 @@ import { Heart, Calendar, Video, Clock, Star, Shield } from "lucide-react";
 import RotatingText from "../components/RotatingText";
 import Footer from "../components/Footer";
 import ChatInterface from "../components/ChatInterface";
-
+import { ReviewCard, Marquee } from "../components/Marque";
 
 const Home = () => {
   const features = [
@@ -38,11 +38,84 @@ const Home = () => {
     { number: "24/7", label: "Support" },
   ];
 
+  const reviews = [
+    {
+      id: 1,
+      name: "Sarah Johnson",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
+      rating: 5,
+      review: "Amazing service and quality!",
+    },
+    {
+      id: 2,
+      name: "Michael Chen",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=michael",
+      rating: 4,
+      review: "Good experience, but could be better.",
+    },
+    {
+      id: 3,
+      name: "Emma Davis",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=emma",
+      rating: 5,
+      review: "Absolutely loved the product!",
+    },
+    {
+      id: 4,
+      name: "James Wilson",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=james",
+      rating: 4,
+      review: "Great quality, would buy again.",
+    },
+    {
+      id: 5,
+      name: "Olivia Brown",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=olivia",
+      rating: 5,
+      review: "Best purchase I've made this year!",
+    },
+    {
+      id: 6,
+      name: "Liam Smith",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=liam",
+      rating: 3,
+      review: "Decent product, met my expectations.",
+    },
+    {
+      id: 7,
+      name: "Sophia Martinez",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sophia",
+      rating: 5,
+      review: "Superb! Highly recommended.",
+    },
+    {
+      id: 8,
+      name: "William Taylor",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=william",
+      rating: 4,
+      review: "Very satisfied with my order.",
+    },
+    {
+      id: 9,
+      name: "Isabella Moore",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=isabella",
+      rating: 5,
+      review: "Loved it! Will buy again.",
+    },
+    {
+      id: 10,
+      name: "Ethan White",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=ethan",
+      rating: 4,
+      review: "Good service and fast delivery.",
+    },
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Hero Section with Search */}
       <HomeSearch />
-      <ChatInterface/>
+      <ChatInterface />
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -98,6 +171,18 @@ const Home = () => {
         </div>
       </section>
 
+      {/* review section  */}
+      <section className=" flex flex-col items-center justify-center py-16 bg-white px-6">
+        <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
+          What Our Customers Say
+        </h2>
+        <Marquee direction="left" speed={30} className="py-4">
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} {...review} />
+          ))}
+        </Marquee>
+      </section>
+
       {/* Trust Indicators */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -117,7 +202,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
