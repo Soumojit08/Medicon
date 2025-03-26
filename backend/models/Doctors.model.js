@@ -91,6 +91,18 @@ const DoctorSchema = new mongoose.Schema({
     default:
       "Each patient is a story waiting to be heard—listen with compassion, heal with expertise.",
   },
+  isOnline: {
+    type: Boolean,
+    default: false,
+  },
+  isAvailable: {
+    type: Boolean,
+    default: false,
+  },
+  isBusy: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Add geospatial index for location-based queries
