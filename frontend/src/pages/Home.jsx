@@ -191,6 +191,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* review section  */}
       <section className=" flex flex-col items-center justify-center py-16 bg-white px-6">
         <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
           What Our Customers Say
