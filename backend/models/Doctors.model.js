@@ -21,7 +21,8 @@ const DoctorSchema = new mongoose.Schema({
     },
     profilepic: {
         type: String,
-        required: false
+        required: false,
+        default: "https://th.bing.com/th/id/OIP.bxvaxfb76xs-iWKbTzc4QwHaHL?rs=1&pid=ImgDetMain"
     },
     specialization: {
         type: [String],
