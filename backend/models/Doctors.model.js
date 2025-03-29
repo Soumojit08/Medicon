@@ -21,7 +21,7 @@ const DoctorSchema = new mongoose.Schema({
   },
   profilepic: {
     type: String,
-    required: false,
+    default: "https://th.bing.com/th/id/OIP.bxvaxfb76xs-iWKbTzc4QwHaHL?rs=1&pid=ImgDetMain",
   },
   specialization: {
     type: [String],
@@ -67,7 +67,7 @@ const DoctorSchema = new mongoose.Schema({
       default: "Point",
     },
     coordinates: {
-      type: [Number],
+      type: [Number], // [longitude, latitude]
       required: true,
     },
   },
@@ -88,8 +88,7 @@ const DoctorSchema = new mongoose.Schema({
   },
   facts: {
     type: String,
-    default:
-      "Each patient is a story waiting to be heard—listen with compassion, heal with expertise.",
+    default: "Each patient is a story waiting to be heard—listen with compassion, heal with expertise.",
   },
   isOnline: {
     type: Boolean,
@@ -105,9 +104,9 @@ const DoctorSchema = new mongoose.Schema({
   },
 });
 
-// Add geospatial index for location-based queries
+// 🌐 Add geospatial index for location-based queries
 DoctorSchema.index({ geoLocation: "2dsphere" });
 
-const Doctor = mongoose.model('Doctor', DoctorSchema);
+const Doctor = mongoose.model("Doctor", DoctorSchema);
 
 export default Doctor;

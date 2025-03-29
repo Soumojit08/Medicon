@@ -11,11 +11,14 @@ const deleteUserByIdController = async (req, res) => {
             });
         }
         try {
-            await Models.UserModel.findByIdAndDelete(userid);
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                status: "OK",
-                message: "User deleted!"
-            });
+            const deletedUserData = await Models.UserModel.findByIdAndDelete(userid);
+            if(!deletedUserData) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    status: "OK",
+                    message: "User deleted!",
+                    deletedUserData
+                });
+            }
         } catch (error) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 status: 'Failed',
