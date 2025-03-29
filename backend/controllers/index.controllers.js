@@ -16,6 +16,8 @@ import userSignUpController from "./auth/signup.user.auth.controller.js";
 import doctorSignUpController from "./auth/signup.doctor.auth.controller.js";
 import getDoctorsByIdController from "./get/getDoctorById.controller.js";
 import getUserByIdController from "./get/getUserById.controller.js";
+import verifyDoctorController from "./update/verifyDoctor.controller.js";
+import UploadMedicalCertificate from "./update/uploadMedicalCertificate.controller.js";
 
 const controllers = {
   UserSignUp: userSignUpController, // SignUp Controller for user...
@@ -36,6 +38,8 @@ const controllers = {
   GetAllUsers: getAllUsers,
   DeleteDoctorById: deleteDoctorByIdController,
   DeleteUserById: deleteUserByIdController,
+  VerifyDoctor: verifyDoctorController, // Verify Doctor...
+  UploadMedicalCertificate:UploadMedicalCertificate, // Upload Medical Certificate...
 };
 
 export default controllers;

@@ -1,6 +1,7 @@
 // src/components/ManageSchedule.jsx
 import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { axiosInstance } from "../libs/axios";
 
 const ManageSchedule = () => {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -38,9 +39,23 @@ const ManageSchedule = () => {
     );
   };
 
-  const handleSave = () => {
-    console.log("Saved schedules:", schedules);
-    alert("Schedule saved successfully!");
+  const handleSave = async () => {
+    try {
+      const response = await axiosInstance.post(
+        "/updateSchedule",
+        { schedules },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = response.data;
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+      console.log("failed to update schedule");
+    }
   };
 
   const handleReset = () => {
@@ -56,7 +71,9 @@ const ManageSchedule = () => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-bold text-blue-500">Manage Weekly Schedule</h3>
+        <h3 className="text-lg font-bold text-blue-500">
+          Manage Weekly Schedule
+        </h3>
       </div>
       <div className="space-y-4">
         {schedules.map((schedule) => (
@@ -77,7 +94,7 @@ const ManageSchedule = () => {
                       )
                     )
                   }
-                  className="sr-only" // Hide the default checkbox
+                  className="sr-only peer" // Hide the default checkbox
                 />
                 <div
                   className={`w-11 h-6 rounded-full transition-colors ${
@@ -85,8 +102,8 @@ const ManageSchedule = () => {
                   }`}
                 >
                   <div
-                    className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
-                      schedule.enabled ? "translate-x-5" : "translate-x-0"
+                    className={`absolute top-1 left-0.6 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
+                      schedule.enabled ? "translate-x-5.5" : "translate-x-0.5"
                     }`}
                   ></div>
                 </div>

@@ -1,43 +1,39 @@
 import { StatusCodes } from "http-status-codes";
 import Schedule from "../../models/Schedule.model.js";
 
-const getDoctorSchedule = async function (req, res, next) {
+const getDoctorSchedule = async (req, res) => {
   try {
-    // console.log("Controller: Fetching doctor schedule...");
-    const doctorId = req.query.doctorId || req.user?.id || req.doctor?._id;
+    const doctorId = req.params.id;
+    const { date } = req.query;
 
-    if (!doctorId) {
-      // console.log("Controller: Doctor ID not found in request!");
-      return res.status(StatusCodes.UNAUTHORIZED).json({
+    if (!doctorId || !date) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
         status: "Failed",
-        message: "Doctor ID not found in request",
+        message: "Doctor ID and date are required.",
       });
     }
 
-    // console.log("Controller: Doctor ID:", doctorId);
     const schedule = await Schedule.findOne({ doctorId });
 
     if (!schedule) {
-      // console.log("Controller: No schedule found for doctor ID:", doctorId);
       return res.status(StatusCodes.OK).json({
         status: "Success",
-        message: "No schedule found",
-        data: null,
+        message: "No schedule found for the specified doctor.",
+        data: { schedules: [] },
       });
     }
 
-    // console.log("Controller: Schedule fetched successfully for doctor ID:", doctorId);
+    const availableSlots = schedule.schedules[date] || [];
     return res.status(StatusCodes.OK).json({
       status: "Success",
-      message: "Schedule fetched successfully",
-      data: schedule,
+      message: "Schedule fetched successfully.",
+      data: { schedules: availableSlots },
     });
-  } catch (err) {
-    // console.error("Controller: Error fetching schedule:", err);
+  } catch (error) {
+    console.error("Error fetching schedule:", error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       status: "Failed",
-      message: "Error fetching schedule",
-      error: err.message,
+      message: "Error fetching schedule.",
     });
   }
 };

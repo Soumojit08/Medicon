@@ -4,6 +4,7 @@ const router = express.Router();
 import controllers from "../../controllers/index.controllers.js";
 import upload from "../../middlewares/multer.middleware.js";
 import Middlewares from "../../middlewares/index.middleware.js";
+import getNearbyDoctors from "../../controllers/get/getNearbyDoctors.controller.js";
 
 /**
  * Check health...
@@ -28,14 +29,22 @@ router.get("/health", (req, res, next) => {
  * Path: /api/v1/signup-user
  * Permission: All
  */
-router.post("/signup-user", upload.single("profileimage"), controllers.UserSignUp);
+router.post(
+  "/signup-user",
+  upload.single("profileimage"),
+  controllers.UserSignUp
+);
 
 /**
  * SignUp for Doctor
  * Path: /api/v1/signup-doctor
  * Permission: All
  */
-router.post("/signup-doctor", upload.single("profileimage"), controllers.DoctorSignUp);
+router.post(
+  "/signup-doctor",
+  upload.single("profileimage"),
+  controllers.DoctorSignUp
+);
 
 /**
  * Login for user
@@ -75,7 +84,7 @@ router.post(
  * Permission: Doctor
  */
 router.get(
-  "/getSchedule",
+  "/getSchedule/:id",
   // (req, res, next) => {
   //   console.log("Route: /api/v1/getSchedule - Request received");
   //   next();
@@ -102,7 +111,7 @@ router.post(
  * Permission: User
  */
 // router.get('/doctors', Middlewares.UserAuth, controllers.GetAllDoctors);
-router.get('/doctors', controllers.GetAllDoctors); // For testing
+router.get("/doctors", controllers.GetAllDoctors); // For testing
 
 /**
  * Get all doctors by spec
@@ -110,7 +119,7 @@ router.get('/doctors', controllers.GetAllDoctors); // For testing
  * Body: specality and isVerified: true or false
  * Permission: User
  */
-router.get('/doctors/specality', controllers.GetAllDoctorsBySpec); // For testing
+router.get("/doctors/specality", controllers.GetAllDoctorsBySpec); // For testing
 // router.get('/doctors/specality', Middlewares.UserAuth('usertoken'), controllers.GetAllDoctorsBySpec);
 
 /**
@@ -119,14 +128,14 @@ router.get('/doctors/specality', controllers.GetAllDoctorsBySpec); // For testin
  * Body: N/A
  * Permission: All
  */
-router.get('/doctors/:id', controllers.GetDoctorById);
+router.get("/doctors/:id", controllers.GetDoctorById);
 
 /**
  * Book an appointment
  * Path: /api/v1/appoint/book
  * Permission: User
  */
-router.post('/appoint/book', controllers.BookAppointment);
+router.post("/appoint/book", controllers.BookAppointment);
 
 /**
  * Get all users
@@ -134,14 +143,14 @@ router.post('/appoint/book', controllers.BookAppointment);
  * Body: userid if get user by id
  * Permission: Admin
  */
-router.get('/users', controllers.GetAllUsers);
+router.get("/users", controllers.GetAllUsers);
 
 /**
  * Get User By Id
  * Path: /api/v1/users/:id
  * Permission: All
  */
-router.get('/users/:id', controllers.GetUserById);
+router.get("/users/:id", controllers.GetUserById);
 
 /**
  * Delete doctor by id
@@ -149,7 +158,7 @@ router.get('/users/:id', controllers.GetUserById);
  * Body: doctorid
  * Permission: Admin
  */
-router.delete('/doctor' ,controllers.DeleteDoctorById); // For testing
+router.delete("/doctor", controllers.DeleteDoctorById); // For testing
 
 /**
  * Delete user by id
@@ -157,6 +166,32 @@ router.delete('/doctor' ,controllers.DeleteDoctorById); // For testing
  * Body: userid
  * Permission: Admin
  */
-router.delete('/user', Middlewares.AdminAuth, controllers.DeleteUserById); // For testing
+router.delete("/user", Middlewares.AdminAuth, controllers.DeleteUserById); // For testing
+
+/**
+ * Verify doctors
+ * Path: /api/v1/verifyDoctor
+ * Body: doctorid
+ * Permission: Admin
+ */
+router.post("/verifyDoctor", Middlewares.AdminAuth, controllers.VerifyDoctor);
+
+/**
+ * Get Nearby Doctors
+ * path: /api/v1/nearby-doctors
+ * Permission: All
+ */
+router.get("/nearby-doctors", getNearbyDoctors);
+
+/**
+ * Upload Medical Certificate
+ * Path: /api/v1/upload-medical-certificate
+ * Permission: User
+ */
+router.post(
+  "/upload-medical-certificate",
+  Middlewares.UploadFile.upload("files", 5), // Call upload function properly
+  controllers.UploadMedicalCertificate
+);
 
 export default router;

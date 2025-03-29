@@ -1,15 +1,76 @@
 import mongoose from "mongoose";
 
 const DoctorSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  phonenumber: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  profilepic: {
+    type: String,
+    required: false,
+  },
+  specialization: {
+    type: [String],
+    enum: [
+      "General Physician",
+      "Cardiology",
+      "Dermatology",
+      "Endocrinology",
+      "Gastroenterology",
+      "Hematology",
+      "Neurology",
+      "Nephrology",
+      "Oncology",
+      "Ophthalmology",
+      "Orthopedics",
+      "Otolaryngology (ENT)",
+      "Pediatrics",
+      "Psychiatry",
+      "Pulmonology",
+      "Radiology",
+      "Rheumatology",
+      "Surgery",
+      "Urology",
+      "Gynecology",
+      "Dentistry",
+      "Anesthesiology",
+    ],
+    required: true,
+  },
+  registrationId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  geoLocation: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
+    coordinates: {
+      type: [Number],
+      required: true,
     },
+<<<<<<< HEAD
     phonenumber: {
         type: Number,
         required: true,
@@ -80,7 +141,45 @@ const DoctorSchema = new mongoose.Schema({
         type: String,
         default: "Each patient is a story waiting to be heard—listen with compassion, heal with expertise."
     }
+=======
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  languages: {
+    type: [String],
+    default: ["English"],
+  },
+  education: {
+    type: String,
+  },
+  consultationFee: {
+    type: Number,
+    default: 0,
+  },
+  facts: {
+    type: String,
+    default:
+      "Each patient is a story waiting to be heard—listen with compassion, heal with expertise.",
+  },
+  isOnline: {
+    type: Boolean,
+    default: false,
+  },
+  isAvailable: {
+    type: Boolean,
+    default: false,
+  },
+  isBusy: {
+    type: Boolean,
+    default: false,
+  },
+>>>>>>> 85ca1fd5be43ac107d69be98df0e25ce40f06d74
 });
+
+// Add geospatial index for location-based queries
+DoctorSchema.index({ geoLocation: "2dsphere" });
 
 const Doctor = mongoose.model('Doctor', DoctorSchema);
 

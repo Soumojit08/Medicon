@@ -33,13 +33,16 @@ const DoctorDashboard = () => {
         setDoctor({
           name: response.data.data.name || "",
           address: response.data.data.address || "",
-          education: response.data.data.education || "",
-          facts: response.data.data.facts || "",
           languages: response.data.data.languages || [],
           phonenumber: response.data.data.phonenumber || "",
           profilepic: response.data.data.profilepic || "",
           registrationId: response.data.data.registrationId || "",
           specialization: response.data.data.specialization || [],
+          consultationFee: response.data.data.consultationFee || "",
+          experience: response.data.data.experience || "",
+          education: response.data.data.education || "",
+          facts: response.data.data.facts || "",
+          isVerified: response.data.data.isVerified || false,
         });
       } else {
         console.warn("Doctor data is missing in response");
