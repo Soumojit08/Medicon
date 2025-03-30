@@ -1,5 +1,5 @@
 const swaggerOptions = {
-    swaggerDefinition: {
+    definition: {
         openapi: '3.0.0',
         info: {
             title: 'Medicon API',
@@ -7,6 +7,7 @@ const swaggerOptions = {
             contact: {
                 name: 'Medicon'
             },
+            version: '1.0.0',
         },
         servers: [
             {
@@ -17,7 +18,7 @@ const swaggerOptions = {
             }
         ]
     },
-    apis: ['./routes/*.js', './index.js']
+    apis: ['./routes/v1/*.js', './index.js']
 }
 
 export default swaggerOptions;
