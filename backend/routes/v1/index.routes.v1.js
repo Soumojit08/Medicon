@@ -7,6 +7,40 @@ import Middlewares from "../../middlewares/index.middleware.js";
 import getNearbyDoctors from "../../controllers/get/getNearbyDoctors.controller.js";
 
 /**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *         - phonenumber
+ *         - profileimage
+ *         - secNumber
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The name of the user
+ *         email:
+ *           type: string
+ *           description: The user's email address
+ *         password:
+ *           type: string
+ *           description: The user's password
+ *         phonenumber:
+ *           type: number
+ *           description: The user's phone number
+ *         profileimage:
+ *           type: string
+ *           description: URL of the user's profile image
+ *         secNumber:
+ *           type: number
+ *           description: The user's secondary phone number, which is required for emergency
+ */
+
+/**
  * Check health...
  * path: /api/v1/health
  * Permission: All
