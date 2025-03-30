@@ -11,6 +11,39 @@ import getNearbyDoctors from "../../controllers/get/getNearbyDoctors.controller.
  * path: /api/v1/health
  * Permission: All
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /health:
+ *    get:
+ *      summary: Check server health status
+ *      description: Returns the health status of the server.
+ *      responses:
+ *        200:
+ *          description: Server is up and running.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Server is Up and Running"
+ *        500:
+ *          description: Internal server error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ */
 router.get("/health", (req, res, next) => {
   try {
     res.status(StatusCodes.OK).send({
