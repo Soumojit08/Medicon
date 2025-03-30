@@ -20,6 +20,9 @@ const doctorLoginController = async (req, res) => {
             // Validate Password...
             const isValidPassword = await bcrypt.compare(password, Doctor.password);
             if (isValidPassword) {
+
+                
+
                 const playLoad = {
                     _id: Doctor._id,
                     name: Doctor.name,

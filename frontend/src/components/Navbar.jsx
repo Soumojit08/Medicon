@@ -12,6 +12,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import axiosInstance from "../libs/axios"; // Assuming axiosInstance is configured
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -46,9 +47,44 @@ const Navbar = () => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  const handleLogout = () => {
+  const handleDoctorLogout = async () => {
+    const doctorToken = localStorage.getItem("doctortoken");
+    const doctorId = localStorage.getItem("doctorId");
+
+    if (doctorToken && doctorId) {
+      try {
+        await axiosInstance.post(
+          "/api/v1/update-doctor-status",
+          {
+            doctorId,
+            isOnline: false,
+            isBusy: false,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${doctorToken}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error during doctor logout:", error);
+      }
+    }
     localStorage.removeItem("doctortoken");
+    localStorage.removeItem("doctorId");
+    setIsAuth(false);
+    setRole(null);
+    navigate("/loginDashboard");
+  };
+
+  const handleUserLogout = () => {
     localStorage.removeItem("usertoken");
+    setIsAuth(false);
+    setRole(null);
+    navigate("/loginDashboard");
+  };
+
+  const handleAdminLogout = () => {
     localStorage.removeItem("admintoken");
     setIsAuth(false);
     setRole(null);
@@ -172,15 +208,34 @@ const Navbar = () => {
             </a>
 
             {/* Auth Button */}
-            {isAuth ? (
+            {isAuth && role === "doctor" && (
               <button
-                onClick={handleLogout}
+                onClick={handleDoctorLogout}
                 className="flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
               </button>
-            ) : (
+            )}
+            {isAuth && role === "user" && (
+              <button
+                onClick={handleUserLogout}
+                className="flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </button>
+            )}
+            {isAuth && role === "admin" && (
+              <button
+                onClick={handleAdminLogout}
+                className="flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </button>
+            )}
+            {!isAuth && (
               <Link
                 to="/loginDashboard"
                 className="flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
@@ -237,10 +292,10 @@ const Navbar = () => {
                 SOS
               </a>
 
-              {isAuth ? (
+              {isAuth && role === "doctor" && (
                 <button
                   onClick={() => {
-                    handleLogout();
+                    handleDoctorLogout();
                     setIsOpen(false);
                   }}
                   className="flex w-full items-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
@@ -248,7 +303,32 @@ const Navbar = () => {
                   <LogOut className="w-5 h-5 mr-3" />
                   Logout
                 </button>
-              ) : (
+              )}
+              {isAuth && role === "user" && (
+                <button
+                  onClick={() => {
+                    handleUserLogout();
+                    setIsOpen(false);
+                  }}
+                  className="flex w-full items-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                >
+                  <LogOut className="w-5 h-5 mr-3" />
+                  Logout
+                </button>
+              )}
+              {isAuth && role === "admin" && (
+                <button
+                  onClick={() => {
+                    handleAdminLogout();
+                    setIsOpen(false);
+                  }}
+                  className="flex w-full items-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                >
+                  <LogOut className="w-5 h-5 mr-3" />
+                  Logout
+                </button>
+              )}
+              {!isAuth && (
                 <Link
                   to="/loginDashboard"
                   className="flex w-full items-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"

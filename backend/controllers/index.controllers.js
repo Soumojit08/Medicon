@@ -18,6 +18,9 @@ import getDoctorsByIdController from "./get/getDoctorById.controller.js";
 import getUserByIdController from "./get/getUserById.controller.js";
 import verifyDoctorController from "./update/verifyDoctor.controller.js";
 import UploadMedicalCertificate from "./update/uploadMedicalCertificate.controller.js";
+import doctorLogoutController from "./auth/logout.doctor.controller.js";
+import videoCallRequestController from "./videocall/videoCallRequest.controller.js";
+import updateDoctorStatusController from "./update/update.onlineStatus.controller.js";
 
 const controllers = {
   UserSignUp: userSignUpController, // SignUp Controller for user...
@@ -39,7 +42,10 @@ const controllers = {
   DeleteDoctorById: deleteDoctorByIdController,
   DeleteUserById: deleteUserByIdController,
   VerifyDoctor: verifyDoctorController, // Verify Doctor...
-  UploadMedicalCertificate:UploadMedicalCertificate, // Upload Medical Certificate...
+  DoctorLogout: doctorLogoutController, // Doctor Logout..
+  UploadMedicalCertificate: UploadMedicalCertificate, // Upload Medical Certificate...
+  VideoCallRequest: videoCallRequestController, //Video call request
+  UpdateDoctorStatus: updateDoctorStatusController,
 };
 
 export default controllers;
