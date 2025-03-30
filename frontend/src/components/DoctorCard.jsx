@@ -6,7 +6,31 @@ import { toast } from "react-hot-toast";
 
 const DoctorCard = ({ doctor }) => {
   const navigate = useNavigate();
-  const isOnline = doctor.isOnline || false; // This will come from your backend
+  const isOnline = doctor.isOnline 
+  
+  const handleVideoCallStatus = async (isBusy) => {
+    const doctorToken = localStorage.getItem("doctortoken");
+    const doctorId = localStorage.getItem("doctorId");
+
+    if (doctorToken && doctorId) {
+      try {
+        await axiosInstance.post(
+          "/api/v1/update-doctor-status",
+          {
+            doctorId,
+            isBusy,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${doctorToken}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error updating busy status:", error);
+      }
+    }
+  };
 
   const handleVideoCall = () => {
     // Check if user is logged in

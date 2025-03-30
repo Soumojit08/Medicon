@@ -23,6 +23,7 @@ function DoctorLogin() {
     setIsLoading(true);
 
     try {
+      // First API call - Login
       const response = await axiosInstance.post(
         "/api/v1/login-doctor",
         formData,
@@ -34,22 +35,58 @@ function DoctorLogin() {
         }
       );
 
-      console.log("API Response:", response.data); // 🔍 Debugging
-
+      console.log("Login Response:", response.data);
       const data = response.data;
-      const doctorId = data.data._id; // Corrected extraction
+      const doctorId = data.data._id;
 
       if (response.status === 200) {
-        toast.success("Login Successful");
-        localStorage.setItem("doctortoken", data.token);
-        navigate(`/doctorDashboard/${doctorId}`); //  doctorId is correctly passed
+        try {
+          // Second API call - Update online status
+          const statusResponse = await axiosInstance.post(
+            "/api/v1/update-doctor-status",
+            {
+              doctorId,
+              isOnline: true,
+              isBusy: false,
+            }
+          );
+
+          console.log("Status Update Response:", statusResponse.data);
+
+          // Verify the update by fetching the doctor's current status
+          const verifyResponse = await axiosInstance.get(
+            `/api/v1/doctors/${doctorId}`
+          );
+          console.log("Doctor's Current Status:", {
+            isOnline: verifyResponse.data.data.isOnline,
+            isBusy: verifyResponse.data.data.isBusy,
+          });
+
+          if (statusResponse.data.status === "OK") {
+            toast.success("Login Successful");
+            localStorage.setItem("doctortoken", data.token);
+            localStorage.setItem("doctorId", doctorId);
+            navigate(`/doctorDashboard/${doctorId}`);
+          } else {
+            console.warn("Online status not updated:", statusResponse.data);
+            toast.warning("Logged in but status update failed");
+            navigate(`/doctorDashboard/${doctorId}`);
+          }
+        } catch (statusError) {
+          console.error(
+            "Error updating online status:",
+            statusError.response?.data || statusError
+          );
+          // Continue with login even if status update fails
+          toast.warning("Logged in but status update failed");
+          navigate(`/doctorDashboard/${doctorId}`);
+        }
       } else {
-        console.error("Login failed:", data);
         toast.error("Login Failed");
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      toast("An error occurred during login.");
+      console.error("Login Error:", error.response?.data || error);
+      toast.error(error.response?.data?.message || "An error occurred during login");
     } finally {
       setIsLoading(false);
     }

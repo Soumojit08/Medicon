@@ -113,6 +113,18 @@ router.post(
 // router.get('/doctors', Middlewares.UserAuth, controllers.GetAllDoctors);
 router.get("/doctors", controllers.GetAllDoctors); // For testing
 
+//logout for doctor route
+router.post("/logout-doctor", Middlewares.DoctorAuth, controllers.DoctorLogout);
+
+//video call 
+router.post(
+  "/video-call/request",
+  Middlewares.DoctorAuth,
+  controllers.VideoCallRequest
+);
+
+router.post("/update-doctor-status", controllers.UpdateDoctorStatus)
+
 /**
  * Get all doctors by spec
  * Path: /api/v1/doctors/specality
