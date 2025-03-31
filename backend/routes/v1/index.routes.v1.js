@@ -32,12 +32,122 @@ import getNearbyDoctors from "../../controllers/get/getNearbyDoctors.controller.
  *         phonenumber:
  *           type: number
  *           description: The user's phone number
- *         profileimage:
+ *         profilepic:
  *           type: string
  *           description: URL of the user's profile image
  *         secNumber:
  *           type: number
  *           description: The user's secondary phone number, which is required for emergency
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Doctor:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - phonenumber
+ *         - password
+ *         - specialization
+ *         - registrationId
+ *         - address
+ *         - geoLocation
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Name of the doctor.
+ *           example: Dr. John Doe
+ *         email:
+ *           type: string
+ *           description: Email address of the doctor.
+ *           example: johndoe@hospital.com
+ *         phonenumber:
+ *           type: integer
+ *           description: Phone number of the doctor.
+ *           example: 1234567890
+ *         password:
+ *           type: string
+ *           description: Password for the doctor's account.
+ *           example: password123
+ *         profilepic:
+ *           type: string
+ *           description: URL of the doctor's profile picture.
+ *           example: https://example.com/profile.jpg
+ *         specialization:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of specializations.
+ *           example: ["Cardiology", "Dermatology"]
+ *         registrationId:
+ *           type: string
+ *           description: Unique registration ID of the doctor.
+ *           example: D12345
+ *         address:
+ *           type: string
+ *           description: Address of the doctor.
+ *           example: 123 Health Street, Wellness City
+ *         geoLocation:
+ *           type: object
+ *           description: Geographical coordinates of the doctor's location.
+ *           properties:
+ *             type:
+ *               type: string
+ *               enum: ["Point"]
+ *               example: "Point"
+ *             coordinates:
+ *               type: array
+ *               items:
+ *                 type: number
+ *               description: Coordinates in [longitude, latitude] format.
+ *               example: [88.3639, 22.5726]
+ *         isVerified:
+ *           type: boolean
+ *           description: Indicates if the doctor is verified.
+ *           example: true
+ *         languages:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Languages spoken by the doctor.
+ *           example: ["English", "Hindi"]
+ *         education:
+ *           type: string
+ *           description: Educational qualifications of the doctor.
+ *           example: MBBS, MD - Cardiology
+ *         consultationFee:
+ *           type: number
+ *           description: Consultation fee of the doctor.
+ *           example: 500
+ *         facts:
+ *           type: string
+ *           description: A motivational or informative quote from the doctor.
+ *           example: "Each patient is a story waiting to be heard—listen with compassion, heal with expertise."
+ *         isOnline:
+ *           type: boolean
+ *           description: Indicates if the doctor is currently online.
+ *           example: true
+ *         isAvailable:
+ *           type: boolean
+ *           description: Indicates if the doctor is available for consultation.
+ *           example: true
+ *         isBusy:
+ *           type: boolean
+ *           description: Indicates if the doctor is currently busy.
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp of the doctor's record creation.
+ *           example: 2025-03-30T14:00:00.000Z
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp of the last update.
+ *           example: 2025-03-30T14:00:00.000Z
  */
 
 /**
