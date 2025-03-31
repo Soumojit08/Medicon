@@ -96,6 +96,144 @@ router.get("/health", (req, res, next) => {
  * Path: /api/v1/signup-user
  * Permission: All
  */
+
+/**
+ * @swagger
+ * /api/user/signup:
+ *   post:
+ *     summary: User Signup
+ *     description: Register a new user with basic details and geolocation.
+ *     tags:
+ *       - User
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the user.
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 description: User's email address.
+ *                 example: johndoe@example.com
+ *               phonenumber:
+ *                 type: integer
+ *                 description: User's phone number.
+ *                 example: 1234567890
+ *               password:
+ *                 type: string
+ *                 description: User's password.
+ *                 example: strongpassword123
+ *               geoLocation:
+ *                 type: string
+ *                 description: Geolocation in the format "latitude,longitude".
+ *                 example: "22.5726,88.3639"
+ *               secNumber:
+ *                 type: integer
+ *                 description: Secondary contact number.
+ *                 example: 9876543210
+ *               profilepic:
+ *                 type: string
+ *                 format: binary
+ *                 description: User's profile picture.
+ *     responses:
+ *       201:
+ *         description: Successfully Signed Up!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: Successfully Signed Up!
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: 641a1f9b9e24dc001c3c423f
+ *                     name:
+ *                       type: string
+ *                       example: John Doe
+ *                     email:
+ *                       type: string
+ *                       example: johndoe@example.com
+ *                     phonenumber:
+ *                       type: integer
+ *                       example: 1234567890
+ *                     profilepic:
+ *                       type: string
+ *                       example: "https://example.com/profile.jpg"
+ *                     geoLocation:
+ *                       type: object
+ *                       properties:
+ *                         type:
+ *                           type: string
+ *                           example: Point
+ *                         coordinates:
+ *                           type: array
+ *                           items:
+ *                             type: number
+ *                           example: [88.3639, 22.5726]
+ *                     secNumber:
+ *                       type: integer
+ *                       example: 9876543210
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: 2025-03-30T14:00:00.000Z
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: 2025-03-30T14:00:00.000Z
+ *       400:
+ *         description: Bad Request - Missing required fields or invalid data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Please enter all required fields including location!
+ *       409:
+ *         description: Conflict - User already exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: User already exists!
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Internal Server Error
+ */
 router.post(
   "/signup-user",
   upload.single("profileimage"),
