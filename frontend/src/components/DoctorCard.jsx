@@ -4,10 +4,10 @@ import { Video, CalendarDays, BadgeCheck, Circle } from "lucide-react";
 import Image from "./Image";
 import { toast } from "react-hot-toast";
 
-const DoctorCard = ({ doctor }) => {
+const DoctorCard = ({ doctor, user }) => {
   const navigate = useNavigate();
-  const isOnline = doctor.isOnline 
-  
+  const isOnline = doctor.isOnline;
+
   const handleVideoCallStatus = async (isBusy) => {
     const doctorToken = localStorage.getItem("doctortoken");
     const doctorId = localStorage.getItem("doctorId");
@@ -35,6 +35,7 @@ const DoctorCard = ({ doctor }) => {
   const handleVideoCall = () => {
     // Check if user is logged in
     const userToken = localStorage.getItem("usertoken");
+
     if (!userToken) {
       toast.error("Please login to start a video call");
       navigate("/userLogin");
@@ -44,8 +45,24 @@ const DoctorCard = ({ doctor }) => {
     // Generate a unique room ID
     const roomId = `room_${doctor._id}_${Date.now()}`;
 
-    // Send request to doctor
-    sendVideoCallRequest(doctor._id, roomId);
+    // Log the doctor and user details
+    console.log("Navigating to VideoCall with:", {
+      doctorId: doctor._id,
+      doctorName: doctor.name,
+      patientId: user._id,
+      patientName: user.name,
+    });
+
+    // Navigate to the VideoCall component with doctor and patient details
+    navigate(`/video-call/${roomId}`, {
+      state: {
+        doctor,
+        patient: {
+          id: user._id,
+          name: user.name,
+        },
+      },
+    });
   };
 
   const sendVideoCallRequest = async (doctorId, roomId) => {

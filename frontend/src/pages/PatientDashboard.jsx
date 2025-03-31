@@ -36,6 +36,7 @@ const PatientDashboard = () => {
       const response = await axiosInstance.get(`/api/v1/users/${userId}`);
       if (response.data && response.data.data) {
         setUser({
+          _id: response.data.data._id || "",
           name: response.data.data.name || "",
           phonenumber: response.data.data.phonenumber || "",
           profilepic: response.data.data.profilepic || "",
@@ -88,8 +89,9 @@ const PatientDashboard = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* {console.log("user in patient dashboard :", user)} */}
                 {doctors.map((doctor) => (
-                  <DoctorCard key={doctor._id} doctor={doctor} />
+                  <DoctorCard key={doctor._id} doctor={doctor} user={user} />
                 ))}
               </div>
             )}
