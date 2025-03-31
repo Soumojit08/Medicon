@@ -7,27 +7,21 @@ import { PhoneOff } from "lucide-react";
 const VideoCall = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { state } = useLocation(); // Access the passed state
+  const { state } = useLocation();
   const meetingContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
-  const hasInitialized = useRef(false);
 
-  // Extract doctor and patient details from state
   const { doctor, patient } = state || {};
 
   useEffect(() => {
-    // Log the received doctor and patient details
-    console.log("Received in VideoCall component:", {
-      doctorId: doctor?._id,
-      doctorName: doctor?.name,
-      patientId: patient?.id,
-      patientName: patient?.name,
-    });
+    console.log("Received in VideoCall component:", { doctor, patient });
 
-    if (hasInitialized.current) return; // Prevent re-initialization
-    hasInitialized.current = true;
-
-    if (!roomId || !doctor || !patient) {
+    if (!roomId || !doctor || !patient || !patient.id || !patient.name) {
+      console.error("Missing data for video call:", {
+        roomId,
+        doctor,
+        patient,
+      });
       toast.error("Missing data for video call");
       navigate("/patientDashboard");
       return;
@@ -35,19 +29,28 @@ const VideoCall = () => {
 
     const initializeVideoCall = async () => {
       try {
-        // Generate ZEGOCLOUD token
-        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
-          1943313691, // Replace with your appID
-          "da2ec159e961a89c0185687e37abeea9ce7af5cafe9af29f5c3b288573068ae7", // Replace with your appSign
+        const userId = patient.id || `guest_${Date.now()}`;
+        const userName = patient.name || "Guest";
+
+        console.log("Token Generation Parameters:", {
+          appID: 1943313691,
+          appSign:
+            "da2ec159e961a89c0185687e37abeea9ce7af5cafe9af29f5c3b288573068ae7",
           roomId,
-          patient.id, // Use patient ID as userId
-          patient.name // Use patient name as userName
+          userId,
+          userName,
+        });
+
+        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+          1943313691,
+          "da2ec159e961a89c0185687e37abeea9ce7af5cafe9af29f5c3b288573068ae7",
+          roomId,
+          userId,
+          userName
         );
 
-        // Create ZEGO instance
         const zp = ZegoUIKitPrebuilt.create(kitToken);
 
-        // Join room
         zp.joinRoom({
           container: meetingContainerRef.current,
           sharedLinks: [
@@ -71,14 +74,14 @@ const VideoCall = () => {
 
         setIsLoading(false);
       } catch (error) {
-        console.error("Error starting the meeting:", error);
-        toast.error("Failed to join video call");
+        console.error("Error joining room:", error);
+        toast.error("Failed to join the room. Please try again.");
         navigate("/patientDashboard");
       }
     };
 
     initializeVideoCall();
-  }, []); // Empty dependency array ensures this runs only once
+  }, [roomId, doctor, patient, navigate]);
 
   if (isLoading) {
     return (
