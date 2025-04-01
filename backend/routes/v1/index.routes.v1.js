@@ -355,6 +355,162 @@ router.post(
  * Path: /api/v1/signup-doctor
  * Permission: All
  */
+
+/**
+ * @swagger
+ * /api/v1/signup-doctor:
+ *   post:
+ *     summary: Doctor Signup
+ *     description: Register a new doctor with basic details and geolocation.
+ *     tags:
+ *       - Doctor
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the doctor.
+ *                 example: Dr. John Doe
+ *               email:
+ *                 type: string
+ *                 description: Doctor's email address.
+ *                 example: johndoe@example.com
+ *               phonenumber:
+ *                 type: integer
+ *                 description: Doctor's phone number.
+ *                 example: 1234567890
+ *               password:
+ *                 type: string
+ *                 description: Doctor's password.
+ *                 example: strongpassword123
+ *               specialization:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: List of specializations.
+ *                 example: ["Cardiology", "Dermatology"]
+ *               registrationId:
+ *                 type: string
+ *                 description: Unique registration ID of the doctor.
+ *                 example: D12345
+ *               address:
+ *                 type: string
+ *                 description: Address of the doctor.
+ *                 example: 123 Health Street, Wellness City
+ *               geoLocation:
+ *                 type: string
+ *                 description: Geolocation in the format "latitude,longitude".
+ *                 example: "22.5726,88.3639"
+ *               profilepic:
+ *                 type: string
+ *                 format: binary
+ *                 description: Doctor's profile picture.
+ *     responses:
+ *       201:
+ *         description: Successfully Signed Up!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: Successfully Signed Up!
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: 641a1f9b9e24dc001c3c423f
+ *                     name:
+ *                       type: string
+ *                       example: Dr. John Doe
+ *                     email:
+ *                       type: string
+ *                       example: johndoe@example.com
+ *                     phonenumber:
+ *                       type: integer
+ *                       example: 1234567890
+ *                     profilepic:
+ *                       type: string
+ *                       example: "https://example.com/profile.jpg"
+ *                     specialization:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       example: ["Cardiology", "Dermatology"]
+ *                     registrationId:
+ *                       type: string
+ *                       example: D12345
+ *                     address:
+ *                       type: string
+ *                       example: 123 Health Street, Wellness City
+ *                     geoLocation:
+ *                       type: object
+ *                       properties:
+ *                         type:
+ *                           type: string
+ *                           example: Point
+ *                         coordinates:
+ *                           type: array
+ *                           items:
+ *                             type: number
+ *                           example: [88.3639, 22.5726]
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: 2025-03-30T14:00:00.000Z
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: 2025-03-30T14:00:00.000Z
+ *       400:
+ *         description: Bad Request - Missing required fields or invalid data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Please enter all required fields including location!
+ *       409:
+ *         description: Conflict - Doctor already exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Doctor already exists!
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Internal Server Error
+ */
 router.post(
   "/signup-doctor",
   upload.single("profileimage"),
@@ -366,12 +522,148 @@ router.post(
  * Path: /api/v1/login-user
  * Permission: All
  */
+
+/**
+ * @swagger
+ * /api/v1/login-user:
+ *   post:
+ *     summary: User Login
+ *     description: Authenticate a user and return a JWT token.
+ *     tags:
+ *       - User
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email address.
+ *                 example: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 description: User's password.
+ *                 example: strongpassword123
+ *     responses:
+ *       200:
+ *         description: Successfully Logged In!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: Successfully Logged In!
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       401:
+ *         description: Unauthorized - Invalid credentials.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Invalid email or password!
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Internal Server Error
+ */
 router.post("/login-user", controllers.UserLogin);
 
 /**
  * Login for doctor
  * Path: /api/v1/login-doctor
  * Permission: All
+ */
+
+/**
+ * @swagger
+ * /api/v1/login-doctor:
+ *   post:
+ *     summary: Doctor Login
+ *     description: Authenticate a doctor and return a JWT token.
+ *     tags:
+ *       - Doctor
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Doctor's email address.
+ *                 example: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 description: Doctor's password.
+ *                 example: strongpassword123
+ *     responses:
+ *       200:
+ *         description: Successfully Logged In!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: Successfully Logged In!
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       401:
+ *         description: Unauthorized - Invalid credentials.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Invalid email or password!
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: Failed
+ *                 message:
+ *                   type: string
+ *                   example: Internal Server Error
  */
 router.post("/login-doctor", controllers.DoctorLogin);
 
