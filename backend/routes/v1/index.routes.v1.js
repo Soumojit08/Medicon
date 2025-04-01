@@ -151,6 +151,36 @@ import getNearbyDoctors from "../../controllers/get/getNearbyDoctors.controller.
  */
 
 /**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Admin:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The name of the admin.
+ *           example: "John Doe"
+ *         email:
+ *           type: string
+ *           description: The email of the admin (must be unique).
+ *           example: "admin@example.com"
+ *         password:
+ *           type: string
+ *           description: The password of the admin (hashed for security).
+ *           example: "admin123"
+ *         role:
+ *           type: string
+ *           description: The role of the admin, default is "admin".
+ *           example: "admin"
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ */
+
+
+/**
  * Check health...
  * path: /api/v1/health
  * Permission: All
@@ -672,6 +702,115 @@ router.post("/login-doctor", controllers.DoctorLogin);
  * Path: /api/v1/login-admin
  * Permission: All
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /admin/login:
+ *    post:
+ *      summary: Admin Login
+ *      description: Allows an admin to log in by providing their email and password. If successful, returns a JWT token.
+ *      tags:
+ *       - Admin
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                  type: string
+ *                  description: The email of the admin.
+ *                  example: "admin@example.com"
+ *                password:
+ *                  type: string
+ *                  description: The password of the admin.
+ *                  example: "admin123"
+ *      responses:
+ *        200:
+ *          description: Successfully logged in.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Successfully logged in"
+ *                  token:
+ *                    type: string
+ *                    description: The JWT token for the authenticated admin.
+ *                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YzYyY2QyMS1jZGQ0LTQ2ODktODZlZC1kNTJlZmZmZDk3M2UiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIn0.-8hXf9yjpH1Z2r52QwJ_VjwA3ROjxLIsXbSH13XU0Mw"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      name:
+ *                        type: string
+ *                        example: "Admin"
+ *                      email:
+ *                        type: string
+ *                        example: "admin@example.com"
+ *                      role:
+ *                        type: string
+ *                        example: "admin"
+ *        400:
+ *          description: All fields are required.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "All fields are required!"
+ *        401:
+ *          description: Unauthorized due to incorrect password.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Unauthorized"
+ *        409:
+ *          description: Conflict, admin with the provided email does not exist.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Conflict"
+ *        500:
+ *          description: Internal server error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ */
+
 router.post("/login-admin", controllers.AdminLogin);
 
 /**
@@ -679,6 +818,124 @@ router.post("/login-admin", controllers.AdminLogin);
  * Path: /api/v1/updateSchedule
  * Permission: Doctor
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/updateSchedule:
+ *    post:
+ *      summary: Update Doctor's Schedule
+ *      description: Allows an authenticated doctor to update their schedule.
+ *      security:
+ *        - BearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                schedules:
+ *                  type: array
+ *                  description: List of the doctor's updated schedule times.
+ *                  items:
+ *                    type: string
+ *                    format: date-time
+ *                    example: "2025-04-01T09:00:00Z"
+ *      responses:
+ *        200:
+ *          description: Schedule updated successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Success"
+ *                  message:
+ *                    type: string
+ *                    example: "Schedule updated successfully"
+ *                  data:
+ *                    $ref: '#/components/schemas/Schedule'
+ *        400:
+ *          description: Schedule data is required.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Schedule data is required"
+ *        401:
+ *          description: Doctor ID not found in request.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor ID not found in request"
+ *        404:
+ *          description: Failed to update schedule.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Failed to update schedule"
+ *        500:
+ *          description: Error updating schedule.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Error updating schedule"
+ *                  error:
+ *                    type: string
+ *                    example: "Database error message"
+ * components:
+ *   schemas:
+ *     Schedule:
+ *       type: object
+ *       properties:
+ *         doctorId:
+ *           type: string
+ *           description: The ID of the doctor.
+ *           example: "60b8d8c0d7b9a93449b1536d"
+ *         schedules:
+ *           type: array
+ *           description: List of scheduled times.
+ *           items:
+ *             type: string
+ *             format: date-time
+ *             example: "2025-04-01T09:00:00Z"
+ *         lastUpdated:
+ *           type: string
+ *           format: date-time
+ *           description: The date when the schedule was last updated.
+ *           example: "2025-04-01T08:00:00Z"
+ */
+
 router.post(
   "/updateSchedule",
   Middlewares.DoctorAuth,
@@ -690,6 +947,106 @@ router.post(
  * Path: /api/v1/getSchedule
  * Permission: Doctor
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/getSchedule/{id}:
+ *    get:
+ *      summary: Get Doctor's Schedule
+ *      description: Fetches the available schedule for a specified doctor on a given date.
+ *      tags:
+ *        - Doctor
+ *      security:
+ *        - BearerAuth: []
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: The ID of the doctor.
+ *          schema:
+ *            type: string
+ *            example: "60b8d8c0d7b9a93449b1536d"
+ *        - name: date
+ *          in: query
+ *          required: true
+ *          description: The date for which the schedule is being requested (format: YYYY-MM-DD).
+ *          schema:
+ *            type: string
+ *            example: "2025-04-01"
+ *      responses:
+ *        200:
+ *          description: Successfully fetched the schedule.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Success"
+ *                  message:
+ *                    type: string
+ *                    example: "Schedule fetched successfully."
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      schedules:
+ *                        type: array
+ *                        description: A list of available slots for the specified date.
+ *                        items:
+ *                          type: string
+ *                          example: "2025-04-01T09:00:00Z"
+ *        400:
+ *          description: Doctor ID and date are required.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor ID and date are required."
+ *        404:
+ *          description: No schedule found for the specified doctor.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Success"
+ *                  message:
+ *                    type: string
+ *                    example: "No schedule found for the specified doctor."
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      schedules:
+ *                        type: array
+ *                        description: An empty array as no schedule is found.
+ *                        items:
+ *                          type: string
+ *                          example: []
+ *        500:
+ *          description: Error fetching schedule.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Error fetching schedule."
+ */
+
 router.get(
   "/getSchedule/:id",
   // (req, res, next) => {
