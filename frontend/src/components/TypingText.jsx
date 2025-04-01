@@ -61,7 +61,7 @@ function TypingText({
   }, [controls]);
 
   return (
-    <span className="text-4xl md:text-6xl text-white">
+    <span className="text-2xl md:text-6xl text-white">
       {currentText}
       <motion.span animate={controls}>|</motion.span>
     </span>
