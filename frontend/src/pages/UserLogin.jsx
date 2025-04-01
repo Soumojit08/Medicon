@@ -40,8 +40,9 @@ function UserLogin() {
       const userId = data.data._id;
 
       if (response.status === 200) {
-        toast.success("Login successful");
         localStorage.setItem("usertoken", data.token);
+        localStorage.setItem("userId", userId);
+        toast.success("Login successful");
         navigate(`/patientDashboard/${userId}`);
       } else {
         setError(response.data.message || "Login Failed");

@@ -79,6 +79,7 @@ const Navbar = () => {
 
   const handleUserLogout = () => {
     localStorage.removeItem("usertoken");
+    localStorage.removeItem("userId");
     setIsAuth(false);
     setRole(null);
     navigate("/loginDashboard");
