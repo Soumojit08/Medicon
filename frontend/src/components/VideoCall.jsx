@@ -7,111 +7,110 @@ import axiosInstance from "../libs/axios";
 const VideoCall = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { state } = useLocation(); // Access the passed state
-  const videoContainerRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null); // State to store user data
-
-  const appId = 1506791970; // Replace with your actual appId
-  const serverSecret = "9b64224b2e9a099575e998495f402395"; // Replace with your actual serverSecret
-
-  // Extract doctor details from state
+  const { state } = useLocation();
   const { doctor } = state || {};
+  const [isLoading, setIsLoading] = useState(true);
+  const zegoRef = useRef(null);
+
+  const appId = 1506791970;
+  const serverSecret = "9b64224b2e9a099575e998495f402395";
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userId = localStorage.getItem("userId"); // Retrieve userId from localStorage
-        if (!userId) {
-          toast.error("User ID is missing. Please log in again.");
-          navigate("/userLogin");
-          return;
-        }
-
-        const response = await axiosInstance.get(`/api/v1/users/${userId}`);
-        if (response.data && response.data.data) {
-          setUser(response.data.data); // Set user data
-        } else {
-          console.error("User data is missing in response");
-          toast.error("Failed to fetch user data. Please try again.");
-          navigate("/patientDashboard");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        toast.error("Failed to fetch user data. Please try again.");
-        navigate("/patientDashboard");
-      }
-    };
-
-    fetchUserData();
-  }, [navigate]);
-
-  useEffect(() => {
-    if (!roomId || !doctor || !user) {
-      console.error("Missing data for video call:", { roomId, doctor, user });
-      return;
-    }
+    let mounted = true;
 
     const initializeVideoCall = async () => {
       try {
-        // Generate a unique token for the user
+        const userId = localStorage.getItem("userId");
+        if (!userId || !roomId || !doctor) {
+          toast.error("Missing required data for video call");
+          navigate("/patientDashboard");
+          return;
+        }
+
+        // Get user data
+        const response = await axiosInstance.get(`/api/v1/users/${userId}`);
+        const userData = response.data?.data;
+
+        if (!userData) {
+          toast.error("Failed to fetch user data");
+          navigate("/patientDashboard");
+          return;
+        }
+
+        // Generate token and initialize call
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
           appId,
           serverSecret,
           roomId,
-          user._id, // Use the user's ID as the unique identifier
-          user.name // Use the user's name
+          userData._id,
+          userData.name
         );
 
-        const zp = ZegoUIKitPrebuilt.create(kitToken);
+        // Only create and join room if not already done
+        if (!zegoRef.current && mounted) {
+          const zp = ZegoUIKitPrebuilt.create(kitToken);
+          zegoRef.current = zp;
 
-        zp.joinRoom({
-          container: videoContainerRef.current,
-          scenario: {
-            mode: ZegoUIKitPrebuilt.OneONoneCall, // Correct mode for 1-on-1 calls
-          },
-        });
+          // Join room with ZegoCloud's default UI
+          zp.joinRoom({
+            container: document.querySelector("#video-container"),
+            scenario: {
+              mode: ZegoUIKitPrebuilt.OneONoneCall,
+            },
+            showPreJoinView: true,
+            showLeavingView: true,
+            onLeave: () => {
+              zegoRef.current = null;
+              navigate("/patientDashboard");
+            },
+            showUserList: true,
+            turnOnMicrophoneWhenJoining: true,
+            turnOnCameraWhenJoining: true,
+            showMyCameraToggleButton: true,
+            showMyMicrophoneToggleButton: true,
+            showAudioVideoSettingsButton: true,
+            showScreenSharingButton: true,
+            showTextChat: true,
+            showUserList: true,
+            maxUsers: 2,
+            layout: "Grid",
+            showLayoutButton: true,
+            showSetupScreen: true,
+          });
+        }
 
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       } catch (error) {
-        console.error("Error initializing video call:", error);
-        toast.error("Failed to join the room. Please try again.");
-        navigate("/patientDashboard");
+        console.error("Error in video call:", error);
+        if (mounted) {
+          toast.error("Failed to initialize video call");
+          navigate("/patientDashboard");
+        }
       }
     };
 
     initializeVideoCall();
-  }, [roomId, doctor, user, navigate]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-400">Joining video call...</p>
-        </div>
-      </div>
-    );
-  }
+    // Cleanup function
+    return () => {
+      mounted = false;
+      if (zegoRef.current) {
+        zegoRef.current.destroy();
+        zegoRef.current = null;
+      }
+    };
+  }, [roomId, doctor, navigate]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 via-blue-600 to-blue-400 p-6">
-      <h1 className="text-white text-2xl font-bold mb-6 shadow-md">
-        🔹 Room: {roomId}
-      </h1>
-      <h2 className="text-white text-lg mb-4">
-        Connected with Dr. {doctor.name}
-      </h2>
-      <div
-        ref={videoContainerRef}
-        className="w-full max-w-4xl h-[500px] bg-black rounded-lg shadow-lg overflow-hidden flex items-center justify-center"
-      ></div>
-      <button
-        onClick={() => navigate("/patientDashboard")}
-        className="mt-6 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg shadow-md transition-all"
-      >
-        End Call
-      </button>
+    <div className="relative min-h-screen bg-zinc-100">
+      {isLoading ? (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+        </div>
+      ) : null}
+      <div id="video-container" className="h-screen w-full" />
     </div>
   );
 };
