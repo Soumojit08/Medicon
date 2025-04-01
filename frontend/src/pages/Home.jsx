@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HomeSearch from "../components/HomeSearch";
 import { Heart, Calendar, Video, Clock, Star, Shield } from "lucide-react";
 import RotatingText from "../components/RotatingText";
@@ -110,6 +110,10 @@ const Home = () => {
       review: "Good service and fast delivery.",
     },
   ];
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   return (
     <div className="min-h-screen">
