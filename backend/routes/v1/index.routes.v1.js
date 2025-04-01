@@ -179,6 +179,186 @@ import getNearbyDoctors from "../../controllers/get/getNearbyDoctors.controller.
  *         - password
  */
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     MedicalCertificate:
+ *       type: object
+ *       properties:
+ *         userId:
+ *           type: string
+ *           description: The ID of the user uploading the medical certificate.
+ *           example: "605c72ef153207001f6470e3"
+ *         files:
+ *           type: array
+ *           items:
+ *             type: string
+ *             description: The URL(s) of the uploaded medical certificate file(s) (from Cloudinary).
+ *             example: "https://res.cloudinary.com/demo/image/upload/v1598362898/medicon/medical-cert_abc123.jpg"
+ *       required:
+ *         - userId
+ *         - files
+ * 
+ * paths:
+ *   /api/v1/upload-medical-certificate:
+ *     post:
+ *       summary: "Upload Medical Certificate"
+ *       description: "Allows the user to upload medical certificates."
+ *       tags:
+ *         - "User"
+ *       consumes:
+ *         - "multipart/form-data"
+ *       parameters:
+ *         - in: formData
+ *           name: files
+ *           description: Medical certificate files to upload (Max 5 files)
+ *           required: true
+ *           type: array
+ *           items:
+ *             type: file
+ *         - in: body
+ *           name: userId
+ *           description: "The user ID who is uploading the certificate."
+ *           required: true
+ *           schema:
+ *             $ref: '#/components/schemas/MedicalCertificate'
+ *       responses:
+ *         201:
+ *           description: "Medical certificates uploaded successfully"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: true
+ *                   message:
+ *                     type: string
+ *                     example: "Medical certificates uploaded successfully"
+ *                   data:
+ *                     $ref: '#/components/schemas/MedicalCertificate'
+ *         400:
+ *           description: "No files uploaded"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: "No files uploaded"
+ *         500:
+ *           description: "Internal server error"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: "Internal server error"
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Appointment:
+ *       type: object
+ *       properties:
+ *         doctorId:
+ *           type: string
+ *           description: The ID of the doctor for the appointment.
+ *           example: "605c72ef153207001f6470e3"
+ *         userId:
+ *           type: string
+ *           description: The ID of the user booking the appointment.
+ *           example: "605c72ef153207001f6470e4"
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time of the appointment.
+ *           example: "2025-04-01T14:30:00Z"
+ *         status:
+ *           type: string
+ *           enum:
+ *             - pending
+ *             - confirmed
+ *             - completed
+ *             - cancelled
+ *           description: The status of the appointment.
+ *           example: "pending"
+ *       required:
+ *         - doctorId
+ *         - userId
+ *         - date
+ *         - status
+ * 
+ * paths:
+ *   /api/v1/appointments:
+ *     post:
+ *       summary: "Book an appointment"
+ *       description: "Create a new appointment with a doctor."
+ *       tags:
+ *         - "Appointment"
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Appointment'
+ *       responses:
+ *         201:
+ *           description: "Appointment created successfully"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: true
+ *                   message:
+ *                     type: string
+ *                     example: "Appointment booked successfully"
+ *                   data:
+ *                     $ref: '#/components/schemas/Appointment'
+ *         400:
+ *           description: "Invalid input data"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: "Invalid appointment data"
+ *         500:
+ *           description: "Internal server error"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: "Internal server error"
+ */
+
 
 /**
  * Check health...
@@ -1062,6 +1242,140 @@ router.get(
  * Path: /api/v1/updateDetails
  * Permission: Doctor
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/updateDetails:
+ *    post:
+ *      summary: Update Doctor's Details
+ *      description: Updates the details of a doctor. Only accessible by authenticated doctors.
+ *      tags:
+ *       - Doctor
+ *      security:
+ *        - BearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                  example: "Dr. John Doe"
+ *                consultationFee:
+ *                  type: number
+ *                  example: 500
+ *                experience:
+ *                  type: number
+ *                  example: 10
+ *                education:
+ *                  type: string
+ *                  example: "MBBS, MD"
+ *                specialization:
+ *                  type: array
+ *                  items:
+ *                    type: string
+ *                  example: ["Cardiology", "Internal Medicine"]
+ *                languages:
+ *                  type: array
+ *                  items:
+ *                    type: string
+ *                  example: ["English", "Hindi"]
+ *      responses:
+ *        200:
+ *          description: Doctor details updated successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Success"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor details updated successfully"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      name:
+ *                        type: string
+ *                        example: "Dr. John Doe"
+ *                      consultationFee:
+ *                        type: number
+ *                        example: 500
+ *                      experience:
+ *                        type: number
+ *                        example: 10
+ *                      education:
+ *                        type: string
+ *                        example: "MBBS, MD"
+ *                      specialization:
+ *                        type: array
+ *                        items:
+ *                          type: string
+ *                        example: ["Cardiology", "Internal Medicine"]
+ *                      languages:
+ *                        type: array
+ *                        items:
+ *                          type: string
+ *                        example: ["English", "Hindi"]
+ *        400:
+ *          description: Bad request due to invalid input data.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Invalid consultation fee value"
+ *        401:
+ *          description: Unauthorized access.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor ID not found in request"
+ *        404:
+ *          description: Doctor not found.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor not found"
+ *        500:
+ *          description: Internal server error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal server error"
+ */
+
 router.post(
   "/updateDetails",
   Middlewares.DoctorAuth, // Protected for Doctors
@@ -1074,20 +1388,312 @@ router.post(
  * Body: isVerified: true or false
  * Permission: User
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/doctors:
+ *    get:
+ *      summary: Get all doctors
+ *      description: Fetches a list of doctors. Supports searching by specialization and filtering by verification status.
+ *      tags:
+ *        - Doctor
+ *      parameters:
+ *        - in: query
+ *          name: search
+ *          schema:
+ *            type: string
+ *          description: Search for doctors by specialization (case-insensitive).
+ *        - in: body
+ *          name: isVerified
+ *          schema:
+ *            type: boolean
+ *          description: Filter doctors by verification status.
+ *      responses:
+ *        200:
+ *          description: A list of doctors.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "All Doctors"
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        _id:
+ *                          type: string
+ *                          example: "6123456789abcdef01234567"
+ *                        name:
+ *                          type: string
+ *                          example: "Dr. John Doe"
+ *                        specialization:
+ *                          type: string
+ *                          example: "Cardiology"
+ *                        isVerified:
+ *                          type: boolean
+ *                          example: true
+ *        500:
+ *          description: Internal Server Error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error!"
+ */
+
 // router.get('/doctors', Middlewares.UserAuth, controllers.GetAllDoctors);
 router.get("/doctors", controllers.GetAllDoctors); // For testing
 
 //logout for doctor route
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/logout-doctor:
+ *    post:
+ *      summary: Doctor Logout
+ *      description: Logs out the doctor and sets their status to offline and not busy.
+ *      tags:
+ *        - Doctor
+ *      security:
+ *        - bearerAuth: []
+ *      responses:
+ *        200:
+ *          description: Successfully logged out.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Successfully logged out"
+ *        404:
+ *          description: Doctor not found.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor not found"
+ *        500:
+ *          description: Internal Server Error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ */
 router.post("/logout-doctor", Middlewares.DoctorAuth, controllers.DoctorLogout);
 
 //video call 
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/video-call/request:
+ *    post:
+ *      summary: Video Call Request
+ *      description: Updates the doctor's availability for video calls.
+ *      tags:
+ *        - Video Call
+ *      security:
+ *        - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                doctorId:
+ *                  type: string
+ *                  description: The ID of the doctor.
+ *                  example: "641e4c8e8e3b4a7d9f3c67c2"
+ *                isBusy:
+ *                  type: boolean
+ *                  description: The busy status of the doctor.
+ *                  example: true
+ *      responses:
+ *        200:
+ *          description: Doctor status updated successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor is now busy"
+ *        400:
+ *          description: Bad request due to missing or invalid parameters.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor ID and isBusy status are required"
+ *        404:
+ *          description: Doctor not found.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor not found"
+ *        500:
+ *          description: Internal Server Error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ */
+
 router.post(
   "/video-call/request",
   Middlewares.DoctorAuth,
   controllers.VideoCallRequest
 );
 
-router.post("/update-doctor-status", controllers.UpdateDoctorStatus)
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/update-doctor-status:
+ *    post:
+ *      summary: Update Doctor Status
+ *      description: Update the online and busy status of a doctor.
+ *      tags:
+ *        - Doctor
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                doctorId:
+ *                  type: string
+ *                  description: The ID of the doctor.
+ *                  example: "641e4c8e8e3b4a7d9f3c67c2"
+ *                isOnline:
+ *                  type: boolean
+ *                  description: The online status of the doctor.
+ *                  example: true
+ *                isBusy:
+ *                  type: boolean
+ *                  description: The busy status of the doctor.
+ *                  example: false
+ *      responses:
+ *        200:
+ *          description: Doctor status updated successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor status updated successfully"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      isOnline:
+ *                        type: boolean
+ *                        example: true
+ *                      isBusy:
+ *                        type: boolean
+ *                        example: false
+ *        400:
+ *          description: Bad request due to missing doctor ID.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor ID is required"
+ *        404:
+ *          description: Doctor not found.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor not found"
+ *        500:
+ *          description: Internal Server Error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ */
+
+router.post("/update-doctor-status", controllers.UpdateDoctorStatus);
 
 /**
  * Get all doctors by spec
@@ -1095,6 +1701,74 @@ router.post("/update-doctor-status", controllers.UpdateDoctorStatus)
  * Body: specality and isVerified: true or false
  * Permission: User
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/doctors/specality:
+ *    get:
+ *      summary: Get All Doctors by Specialization
+ *      description: Retrieve a list of doctors filtered by specialization and verification status.
+ *      tags:
+ *        - Doctor
+ *      parameters:
+ *        - in: query
+ *          name: specialization
+ *          schema:
+ *            type: string
+ *          required: true
+ *          description: The specialization of the doctors.
+ *          example: "Cardiologist"
+ *        - in: query
+ *          name: isVerified
+ *          schema:
+ *            type: boolean
+ *          required: false
+ *          description: Filter by verified doctors.
+ *          example: true
+ *      responses:
+ *        200:
+ *          description: List of doctors by specialization.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        _id:
+ *                          type: string
+ *                          example: "641e4c8e8e3b4a7d9f3c67c2"
+ *                        name:
+ *                          type: string
+ *                          example: "Dr. John Doe"
+ *                        specialization:
+ *                          type: string
+ *                          example: "Cardiologist"
+ *                        isVerified:
+ *                          type: boolean
+ *                          example: true
+ *        500:
+ *          description: Internal Server Error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error!"
+ */
+
 router.get("/doctors/specality", controllers.GetAllDoctorsBySpec); // For testing
 // router.get('/doctors/specality', Middlewares.UserAuth('usertoken'), controllers.GetAllDoctorsBySpec);
 
@@ -1104,6 +1778,81 @@ router.get("/doctors/specality", controllers.GetAllDoctorsBySpec); // For testin
  * Body: N/A
  * Permission: All
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/doctors/{id}:
+ *    get:
+ *      summary: Get Doctor by ID
+ *      description: Retrieve a doctor's details by their unique ID.
+ *      tags:
+ *        - Doctor
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
+ *          required: true
+ *          description: Unique ID of the doctor.
+ *          example: "641e4c8e8e3b4a7d9f3c67c2"
+ *      responses:
+ *        200:
+ *          description: Details of the doctor with the specified ID.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor with id: 641e4c8e8e3b4a7d9f3c67c2"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      _id:
+ *                        type: string
+ *                        example: "641e4c8e8e3b4a7d9f3c67c2"
+ *                      name:
+ *                        type: string
+ *                        example: "Dr. John Doe"
+ *                      specialization:
+ *                        type: string
+ *                        example: "Cardiologist"
+ *                      isVerified:
+ *                        type: boolean
+ *                        example: true
+ *        400:
+ *          description: Invalid ID or bad request.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Invalid id!"
+ *        500:
+ *          description: Internal Server Error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ */
+
 router.get("/doctors/:id", controllers.GetDoctorById);
 
 /**
@@ -1111,6 +1860,113 @@ router.get("/doctors/:id", controllers.GetDoctorById);
  * Path: /api/v1/appoint/book
  * Permission: User
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/appoint/book:
+ *    post:
+ *      summary: Book an appointment
+ *      description: Book an appointment with a doctor.
+ *      tags:
+ *        - Appointment
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                doctorId:
+ *                  type: string
+ *                  description: Unique ID of the doctor.
+ *                  example: "641e4c8e8e3b4a7d9f3c67c2"
+ *                userId:
+ *                  type: string
+ *                  description: Unique ID of the user.
+ *                  example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                date:
+ *                  type: string
+ *                  format: date-time
+ *                  description: Appointment date and time in ISO format.
+ *                  example: "2025-04-05T10:00:00.000Z"
+ *      responses:
+ *        201:
+ *          description: Appointment booked successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Appointment booked successfully!"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      _id:
+ *                        type: string
+ *                        example: "642e5d1e8e3b4a7d9f4d1234"
+ *                      doctorId:
+ *                        type: string
+ *                        example: "641e4c8e8e3b4a7d9f3c67c2"
+ *                      userId:
+ *                        type: string
+ *                        example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                      date:
+ *                        type: string
+ *                        format: date-time
+ *                        example: "2025-04-05T10:00:00.000Z"
+ *                      status:
+ *                        type: string
+ *                        example: "pending"
+ *        400:
+ *          description: Missing required fields.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor ID, user ID, and date are required."
+ *        404:
+ *          description: Doctor or user not found.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor not found."
+ *        500:
+ *          description: Internal Server Error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "An error occurred while booking the appointment."
+ *                  error:
+ *                    type: string
+ *                    example: "Error details for debugging."
+ */
+
 router.post("/appoint/book", controllers.BookAppointment);
 
 /**
@@ -1119,6 +1975,76 @@ router.post("/appoint/book", controllers.BookAppointment);
  * Body: userid if get user by id
  * Permission: Admin
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/users:
+ *    get:
+ *      summary: Get all users or a specific user by ID
+ *      description: Retrieve all users or a specific user by providing the user ID.
+ *      tags:
+ *        - User
+ *      parameters:
+ *        - in: query
+ *          name: userid
+ *          schema:
+ *            type: string
+ *          description: Unique ID of the user to retrieve
+ *          example: "641e4c8e8e3b4a7d9f3c68f3"
+ *      responses:
+ *        200:
+ *          description: Successfully retrieved users
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        _id:
+ *                          type: string
+ *                          example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                        name:
+ *                          type: string
+ *                          example: "John Doe"
+ *                        email:
+ *                          type: string
+ *                          example: "john.doe@example.com"
+ *        400:
+ *          description: Invalid user ID
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Please enter a valid user id!"
+ *        500:
+ *          description: Internal Server Error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ */
+
 router.get("/users", controllers.GetAllUsers);
 
 /**
@@ -1126,6 +2052,78 @@ router.get("/users", controllers.GetAllUsers);
  * Path: /api/v1/users/:id
  * Permission: All
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/users/{id}:
+ *    get:
+ *      summary: Get user by ID
+ *      description: Retrieve a user by their unique ID.
+ *      tags:
+ *        - User
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Unique ID of the user
+ *          example: "641e4c8e8e3b4a7d9f3c68f3"
+ *      responses:
+ *        200:
+ *          description: Successfully retrieved user
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "User with id: 641e4c8e8e3b4a7d9f3c68f3"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      _id:
+ *                        type: string
+ *                        example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                      name:
+ *                        type: string
+ *                        example: "John Doe"
+ *                      email:
+ *                        type: string
+ *                        example: "john.doe@example.com"
+ *        400:
+ *          description: Invalid user ID
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Invalid Id!"
+ *        500:
+ *          description: Internal Server Error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ */
+
 router.get("/users/:id", controllers.GetUserById);
 
 /**
@@ -1134,6 +2132,91 @@ router.get("/users/:id", controllers.GetUserById);
  * Body: doctorid
  * Permission: Admin
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/doctor:
+ *    delete:
+ *      summary: Delete a doctor by ID
+ *      description: Delete a doctor from the database using their unique doctor ID.
+ *      tags:
+ *        - Doctor
+ *      parameters:
+ *        - in: body
+ *          name: doctorid
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Unique ID of the doctor to be deleted
+ *          example: "641e4c8e8e3b4a7d9f3c68f3"
+ *      responses:
+ *        200:
+ *          description: Successfully deleted the doctor
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor deleted successfully!"
+ *                  deletedDoctor:
+ *                    type: object
+ *                    properties:
+ *                      _id:
+ *                        type: string
+ *                        example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                      name:
+ *                        type: string
+ *                        example: "Dr. John Doe"
+ *                      specialization:
+ *                        type: string
+ *                        example: "Cardiology"
+ *        400:
+ *          description: Missing doctor ID
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Please provide the doctor's ID!"
+ *        404:
+ *          description: Doctor not found
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor with ID 641e4c8e8e3b4a7d9f3c68f3 not found!"
+ *        500:
+ *          description: Internal Server Error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Server error occurred!"
+ */
+
 router.delete("/doctor", controllers.DeleteDoctorById); // For testing
 
 /**
@@ -1142,6 +2225,91 @@ router.delete("/doctor", controllers.DeleteDoctorById); // For testing
  * Body: userid
  * Permission: Admin
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/user:
+ *    delete:
+ *      summary: Delete a user by ID
+ *      description: Delete a user from the database using their unique user ID.
+ *      tags:
+ *        - User
+ *      parameters:
+ *        - in: body
+ *          name: userid
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Unique ID of the user to be deleted
+ *          example: "641e4c8e8e3b4a7d9f3c68f3"
+ *      responses:
+ *        200:
+ *          description: Successfully deleted the user
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "User deleted!"
+ *                  deletedUserData:
+ *                    type: object
+ *                    properties:
+ *                      _id:
+ *                        type: string
+ *                        example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                      name:
+ *                        type: string
+ *                        example: "John Doe"
+ *                      email:
+ *                        type: string
+ *                        example: "john.doe@example.com"
+ *        400:
+ *          description: Missing user ID or invalid ID
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Please provide the user id!"
+ *        404:
+ *          description: User not found
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "User with ID 641e4c8e8e3b4a7d9f3c68f3 not found!"
+ *        500:
+ *          description: Internal Server Error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Server error occurred!"
+ */
+
 router.delete("/user", Middlewares.AdminAuth, controllers.DeleteUserById); // For testing
 
 /**
@@ -1150,6 +2318,101 @@ router.delete("/user", Middlewares.AdminAuth, controllers.DeleteUserById); // Fo
  * Body: doctorid
  * Permission: Admin
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/verifyDoctor:
+ *    post:
+ *      summary: Verify or reject a doctor
+ *      description: Admin can verify or reject a doctor based on their unique doctor ID.
+ *      tags:
+ *        - Doctor
+ *      parameters:
+ *        - in: body
+ *          name: doctorId
+ *          required: true
+ *          schema:
+ *            type: string
+ *            description: The unique ID of the doctor to verify or reject
+ *            example: "641e4c8e8e3b4a7d9f3c68f3"
+ *        - in: body
+ *          name: isVerified
+ *          required: true
+ *          schema:
+ *            type: boolean
+ *            description: `true` to verify the doctor, `false` to reject the doctor.
+ *            example: true
+ *      responses:
+ *        200:
+ *          description: Doctor successfully verified or rejected
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor verified successfully!"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      _id:
+ *                        type: string
+ *                        example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                      name:
+ *                        type: string
+ *                        example: "Dr. John Doe"
+ *                      email:
+ *                        type: string
+ *                        example: "john.doe@example.com"
+ *                      isVerified:
+ *                        type: boolean
+ *                        example: true
+ *        400:
+ *          description: Missing doctor ID or invalid data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor ID is required!"
+ *        404:
+ *          description: Doctor not found
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Doctor with ID 641e4c8e8e3b4a7d9f3c68f3 not found!"
+ *        500:
+ *          description: Internal Server Error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Server error occurred!"
+ */
+
 router.post("/verifyDoctor", Middlewares.AdminAuth, controllers.VerifyDoctor);
 
 /**
@@ -1157,6 +2420,108 @@ router.post("/verifyDoctor", Middlewares.AdminAuth, controllers.VerifyDoctor);
  * path: /api/v1/nearby-doctors
  * Permission: All
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/nearby-doctors:
+ *    get:
+ *      summary: Get nearby verified doctors
+ *      description: Returns a list of verified doctors within a specified distance from the user's location.
+ *      tags:
+ *        - Doctor
+ *      parameters:
+ *        - in: query
+ *          name: latitude
+ *          required: true
+ *          schema:
+ *            type: number
+ *            format: float
+ *            description: Latitude of the user's location.
+ *            example: 12.9716
+ *        - in: query
+ *          name: longitude
+ *          required: true
+ *          schema:
+ *            type: number
+ *            format: float
+ *            description: Longitude of the user's location.
+ *            example: 77.5946
+ *        - in: query
+ *          name: maxDistance
+ *          required: false
+ *          schema:
+ *            type: integer
+ *            description: Maximum distance (in meters) to search for doctors. Default is 10,000 meters (10 km).
+ *            example: 5000
+ *      responses:
+ *        200:
+ *          description: List of nearby verified doctors
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "Nearby doctors found successfully"
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        _id:
+ *                          type: string
+ *                          example: "641e4c8e8e3b4a7d9f3c68f3"
+ *                        name:
+ *                          type: string
+ *                          example: "Dr. John Doe"
+ *                        email:
+ *                          type: string
+ *                          example: "john.doe@example.com"
+ *                        geoLocation:
+ *                          type: object
+ *                          properties:
+ *                            coordinates:
+ *                              type: array
+ *                              items:
+ *                                type: number
+ *                              example: [-77.5946, 12.9716]
+ *                        distance:
+ *                          type: number
+ *                          format: float
+ *                          example: 3.5
+ *        400:
+ *          description: Missing location coordinates
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Location coordinates are required"
+ *        500:
+ *          description: Internal server error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Error finding nearby doctors"
+ */
+
 router.get("/nearby-doctors", getNearbyDoctors);
 
 /**
@@ -1164,6 +2529,101 @@ router.get("/nearby-doctors", getNearbyDoctors);
  * Path: /api/v1/upload-medical-certificate
  * Permission: User
  */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/upload-medical-certificate:
+ *    post:
+ *      summary: Upload medical certificates
+ *      description: Allows users to upload medical certificates to their profile.
+ *      tags:
+ *        - User
+ *      security:
+ *        - BearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          multipart/form-data:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                files:
+ *                  type: array
+ *                  items:
+ *                    type: string
+ *                    format: binary
+ *                  description: Medical certificate files to upload (max 5 files).
+ *                  example: [file1.jpg, file2.pdf]
+ *      responses:
+ *        201:
+ *          description: Medical certificates uploaded successfully
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *                  message:
+ *                    type: string
+ *                    example: "Medical certificates uploaded successfully"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      userId:
+ *                        type: string
+ *                        example: "642f74adf0a2d69a10bff0f8"
+ *                      files:
+ *                        type: array
+ *                        items:
+ *                          type: string
+ *                        example: ["https://res.cloudinary.com/yourapp/image/upload/v1/abc123.jpg"]
+ *        400:
+ *          description: No files uploaded
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: false
+ *                  message:
+ *                    type: string
+ *                    example: "No files uploaded"
+ *        401:
+ *          description: Unauthorized, user not authenticated
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: false
+ *                  message:
+ *                    type: string
+ *                    example: "Unauthorized"
+ *        500:
+ *          description: Internal server error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: false
+ *                  message:
+ *                    type: string
+ *                    example: "Internal server error"
+ *                  error:
+ *                    type: string
+ *                    example: "File upload failed"
+ */
+
 router.post(
   "/upload-medical-certificate",
   Middlewares.UploadFile.upload("files", 5), // Call upload function properly
