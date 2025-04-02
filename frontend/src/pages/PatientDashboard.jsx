@@ -100,7 +100,7 @@ const PatientDashboard = () => {
           {/* Other Sections */}
           <DashboardStats />
           <AppointmentsSection />
-          <MedicalRecords />
+          <MedicalRecords userId={userId} />
         </div>
       </div>
       <Footer />
