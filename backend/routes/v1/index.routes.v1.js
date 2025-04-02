@@ -4,7 +4,6 @@ const router = express.Router();
 import controllers from "../../controllers/index.controllers.js";
 import upload from "../../middlewares/multer.middleware.js";
 import Middlewares from "../../middlewares/index.middleware.js";
-import getNearbyDoctors from "../../controllers/get/getNearbyDoctors.controller.js";
 
 /**
  * @swagger
@@ -2522,7 +2521,7 @@ router.post("/verifyDoctor", Middlewares.AdminAuth, controllers.VerifyDoctor);
  *                    example: "Error finding nearby doctors"
  */
 
-router.get("/nearby-doctors", getNearbyDoctors);
+router.get("/nearby-doctors", controllers.GetNearbyDoctors);
 
 /**
  * Upload Medical Certificate
