@@ -45,8 +45,10 @@ const userauthmiddleware = async (req, res, next) => {
             });
         }
 
+        // console.log(userPayload);
+
         req.user = {
-            id: userPayload._id,
+            _id: userPayload._id,
             role: userPayload.role,
         };
 

@@ -8,7 +8,8 @@ const UploadMedicalCertificate = async (req, res) => {
     }
 
     // 🔹 2️⃣ Extract user ID (Assuming it's coming from authentication)
-    const userId = req.user.id; // `req.user` should be set by auth middleware
+    const userId = req.user._id; // `req.user` should be set by auth middleware
+    // console.log(userId)
 
     // 🔹 3️⃣ Extract file URLs from Cloudinary
     const fileUrls = req.files.map((file) => file.path); // Cloudinary provides the path
