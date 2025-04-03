@@ -2625,6 +2625,7 @@ router.get("/nearby-doctors", controllers.GetNearbyDoctors);
 
 router.post(
   "/upload-medical-certificate",
+  Middlewares.UserAuth,
   Middlewares.UploadFile.upload("files", 5), // Call upload function properly
   controllers.UploadMedicalCertificate
 );
