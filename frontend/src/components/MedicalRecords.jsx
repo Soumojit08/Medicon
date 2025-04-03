@@ -9,19 +9,23 @@ const MedicalRecords = ({ userId, userToken }) => {
   const [records, setRecords] = useState([]);
   const fileInputRef = useRef(null);
 
-  // Fetch existing records
-  // useEffect(() => {
-  //   if (userId) {
-  //     fetchMedicalRecords();
-  //   }
-  // }, [userId]);
+  //  Fetch existing records
+  useEffect(() => {
+    if (userId) {
+      fetchMedicalRecords();
+    }
+  }, [userId]);
 
   const fetchMedicalRecords = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/medical-certificates/${userId}`,
+        `/api/v1/get-medical-certificate`,
         {
           withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userToken}`,
+          },
         }
       );
 
