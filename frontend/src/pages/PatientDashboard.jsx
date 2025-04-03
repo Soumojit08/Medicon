@@ -14,11 +14,13 @@ const PatientDashboard = () => {
   const [user, setUser] = useState({});
   const [doctors, setDoctors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [usrtoken, setUsrtoken] = useState();
   const navigate = useNavigate();
 
   // Check if user is authenticated
   useEffect(() => {
     const userToken = localStorage.getItem("usertoken");
+    setUsrtoken(userToken);
     if (!userToken) {
       navigate("/loginDashboard");
     }
@@ -100,7 +102,7 @@ const PatientDashboard = () => {
           {/* Other Sections */}
           <DashboardStats />
           <AppointmentsSection />
-          <MedicalRecords userId={userId} />
+          <MedicalRecords userId={userId} userToken={usrtoken} />
         </div>
       </div>
       <Footer />

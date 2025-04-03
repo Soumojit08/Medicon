@@ -3,7 +3,7 @@ import { Newspaper } from "lucide-react";
 import toast from "react-hot-toast";
 import axiosInstance from "../libs/axios";
 
-const MedicalRecords = ({ userId }) => {
+const MedicalRecords = ({ userId, userToken }) => {
   const [files, setFiles] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [records, setRecords] = useState([]);
@@ -72,6 +72,7 @@ const MedicalRecords = ({ userId }) => {
           withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userToken}`,
           },
         }
       );
