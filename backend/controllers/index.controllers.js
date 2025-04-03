@@ -22,6 +22,7 @@ import doctorLogoutController from "./auth/logout.doctor.controller.js";
 import videoCallRequestController from "./videocall/videoCallRequest.controller.js";
 import updateDoctorStatusController from "./update/update.onlineStatus.controller.js";
 import getNearbyDoctors from "./get/getNearbyDoctors.controller.js";
+import getCertificateController from "./get/getCertificates.controller.js";
 
 const controllers = {
   UserSignUp: userSignUpController, // SignUp Controller for user...
@@ -48,6 +49,7 @@ const controllers = {
   VideoCallRequest: videoCallRequestController, //Video call request
   UpdateDoctorStatus: updateDoctorStatusController,
   GetNearbyDoctors: getNearbyDoctors, // Get nearby doctors
+  GetMedicalCertificates: getCertificateController, // Get logged-In user's medical certificates
 };
 
 export default controllers;
