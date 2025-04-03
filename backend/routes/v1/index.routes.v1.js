@@ -2630,4 +2630,107 @@ router.post(
   controllers.UploadMedicalCertificate
 );
 
+/**
+ * Get User's Medical Certificates
+ * Path: /api/v1/get-medical-certificate
+ * Permission: User
+ * Authheader: user token
+ */
+
+/**
+ * @swagger
+ * paths:
+ *  /api/v1/get-medical-certificate:
+ *    get:
+ *      summary: Get User's Medical Certificates
+ *      description: Retrieve all medical certificates of the authenticated user.
+ *      tags:
+ *        - Medical Certificate
+ *      security:
+ *        - bearerAuth: []
+ *      responses:
+ *        200:
+ *          description: User's medical certificates retrieved successfully.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "OK"
+ *                  message:
+ *                    type: string
+ *                    example: "63cd230397a8812e9ff34192's Certificates!"
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      _id:
+ *                        type: string
+ *                        example: "63cd230397a8812e9ff34192"
+ *                      userId:
+ *                        type: string
+ *                        example: "63cd230397a8812e9ff34192"
+ *                      files:
+ *                        type: array
+ *                        items:
+ *                          type: string
+ *                          example: "https://res.cloudinary.com/example/image/upload/v1679345678/sample.pdf"
+ *                      createdAt:
+ *                        type: string
+ *                        format: date-time
+ *                        example: "2023-02-13T14:56:29.735Z"
+ *                      updatedAt:
+ *                        type: string
+ *                        format: date-time
+ *                        example: "2023-02-13T14:56:29.735Z"
+ *        400:
+ *          description: Bad request - User ID is missing.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Bad Request"
+ *        404:
+ *          description: No certificates found.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "No Certificate Found!"
+ *        500:
+ *          description: Internal server error.
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  status:
+ *                    type: string
+ *                    example: "Failed"
+ *                  message:
+ *                    type: string
+ *                    example: "Internal Server Error"
+ * components:
+ *  securitySchemes:
+ *    bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+
+router.get("/get-medical-certificate", Middlewares.UserAuth, controllers.GetMedicalCertificates);
+
 export default router;
