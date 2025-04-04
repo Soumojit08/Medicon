@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Newspaper } from "lucide-react";
+import { Newspaper, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import axiosInstance from "../libs/axios";
 
@@ -9,7 +9,6 @@ const MedicalRecords = ({ userId, userToken }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [records, setRecords] = useState([]);
   const fileInputRef = useRef(null);
-  const [value, setValue] = useState([]);
 
   useEffect(() => {
     if (userId && userToken) {
@@ -29,15 +28,9 @@ const MedicalRecords = ({ userId, userToken }) => {
         }
       );
 
-      console.log("Fetch Records Response:", response.data);
-
-      if (
-        response.data &&
-        (response.data.success || response.data.status === "OK")
-      ) {
+      if (response.data && response.data.status === "OK") {
         const files = response.data.data?.files || [];
         setRecords(files);
-        setValue(response.data.data);
         if (files.length === 0) {
           toast.info("No records found");
         }
@@ -56,10 +49,10 @@ const MedicalRecords = ({ userId, userToken }) => {
     const selectedFiles = e.target.files;
     setFiles(selectedFiles);
 
-    // Initialize names for each file
+    // Initialize with original file names
     const names = {};
     Array.from(selectedFiles).forEach((file, index) => {
-      names[index] = ""; // Empty string as default
+      names[index] = file.name;
     });
     setFileNames(names);
   };
@@ -70,10 +63,6 @@ const MedicalRecords = ({ userId, userToken }) => {
       [index]: value,
     }));
   };
-
-  // const triggerFileInput = () => {
-  //   fileInputRef.current.click();
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,13 +79,7 @@ const MedicalRecords = ({ userId, userToken }) => {
       return;
     }
 
-    if (!userId || !userToken) {
-      toast.error("Authorization required");
-      return;
-    }
-
     setIsLoading(true);
-
     const formData = new FormData();
     formData.append("userId", userId);
 
@@ -118,23 +101,14 @@ const MedicalRecords = ({ userId, userToken }) => {
         }
       );
 
-      // Log the response to see its structure
-      console.log("Upload Response:", response.data);
-
-      if (
-        response.data &&
-        (response.data.success || response.data.status === "OK")
-      ) {
+      if (response.data && response.data.success) {
         toast.success("Medical records uploaded successfully");
         setFiles(null);
         setFileNames({});
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-        // Wait a brief moment before fetching updated records
-        setTimeout(() => {
-          fetchMedicalRecords();
-        }, 500);
+        fetchMedicalRecords();
       } else {
         toast.error(response.data?.message || "Failed to upload files");
       }
@@ -151,6 +125,7 @@ const MedicalRecords = ({ userId, userToken }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* File Selection Section */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Medical Records</h2>
           <div className="flex items-center space-x-2">
@@ -160,17 +135,19 @@ const MedicalRecords = ({ userId, userToken }) => {
               onChange={handleFileChange}
               className="hidden"
               ref={fileInputRef}
+              accept=".pdf"
             />
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}
-              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md"
+              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
             >
               Select Files
             </button>
           </div>
         </div>
 
+        {/* File Upload Form */}
         {files && (
           <div className="mb-4 p-4 bg-gray-50 rounded-lg">
             <p className="font-semibold mb-2">Selected files:</p>
@@ -196,13 +173,14 @@ const MedicalRecords = ({ userId, userToken }) => {
               disabled={isLoading}
               className={`mt-4 w-full ${
                 isLoading ? "bg-blue-400" : "bg-blue-600"
-              } text-white px-4 py-2 rounded-md`}
+              } text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:hover:bg-blue-400`}
             >
               {isLoading ? "Uploading..." : "Upload"}
             </button>
           </div>
         )}
 
+        {/* Display Records */}
         <div className="space-y-4">
           {records.length > 0 ? (
             records.map((record, index) => (
@@ -216,26 +194,24 @@ const MedicalRecords = ({ userId, userToken }) => {
                       <h3 className="text-lg font-bold">{record.filename}</h3>
                       <p className="text-gray-600">
                         Uploaded on{" "}
-                        {new Date(value.updatedAt).toLocaleDateString()}
+                        {new Date(record.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
                   <div className="flex space-x-2">
                     <a
-                      href={record.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-white border border-blue-500 text-blue-500 px-4 py-2 rounded-md"
-                    >
-                      View
-                    </a>
-                    <a
-                      href={record.url}
-                      download={record.name}
-                      className="bg-white border border-blue-500 text-blue-500 px-4 py-2 rounded-md"
+                      href={record.fileURL}
+                      download={record.fileName}
+                      className="bg-white border border-blue-500 text-blue-500 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors"
                     >
                       Download
                     </a>
+                    <button
+                      disabled={true}
+                      className="bg-red-600 px-4 text-white py-2 rounded-md"
+                    >
+                      <Trash2 />
+                    </button>
                   </div>
                 </div>
               </div>

@@ -11,13 +11,19 @@ const UploadMedicalCertificate = async (req, res) => {
     const userId = req.user._id; // `req.user` should be set by auth middleware
 
     // 🔹 3️⃣ Extract file details (filename and secure_url)
-    const fileDetails = req.files.map((file) => {
+    const fileDetails = req.files.map((file, index) => {
       if (!file.mimetype.includes("pdf")) {
         throw new Error("Only PDF files are allowed");
       }
+
+      // Get the custom filename from the array of filenames
+      const customFilename = Array.isArray(req.body.filenames)
+        ? req.body.filenames[index]
+        : req.body.filenames;
+
       return {
-        filename: req.body.filename || file.originalname, // Use provided filename or fallback to original name
-        fileURL: file.secure_url || file.path, // Fallback to `file.path` if `secure_url` is unavailable
+        filename: customFilename || file.originalname, // Use custom filename or fallback to original
+        fileURL: file.secure_url || file.path,
       };
     });
 
