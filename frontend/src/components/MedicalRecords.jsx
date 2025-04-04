@@ -134,9 +134,9 @@ const MedicalRecords = ({ userId, userToken }) => {
 
   // Extract filename from URL
   const getFileName = (url) => {
-    if (!url) return "Unnamed Document";
-    const parts = url.split("/");
-    return parts[parts.length - 1].substring(0, 20) + "...";
+    // if (!url) return "Unnamed Document";
+    // const parts = url.split("/");
+    // return parts[parts.length - 1].substring(0, 20) + "...";
   };
 
   return (

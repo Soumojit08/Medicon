@@ -86,7 +86,7 @@ const DoctorCard = ({ doctor, user }) => {
               pic={doctor.profilepic}
               className="h-full w-full object-cover"
             />
-            {/* Online status indicator */}
+            {/* Online status indicator
             <div
               className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white ${
                 isOnline ? "bg-green-500" : "bg-gray-400"
@@ -95,7 +95,7 @@ const DoctorCard = ({ doctor, user }) => {
               {isOnline && (
                 <Circle className="w-full h-full text-white animate-ping absolute" />
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
