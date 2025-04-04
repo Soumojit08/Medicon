@@ -1,4 +1,4 @@
-import MedicalCertificate from "../../models/MedicalCertificate.model.js";// Import model
+import MedicalCertificate from "../../models/MedicalCertificate.model.js"; // Import model
 
 const UploadMedicalCertificate = async (req, res) => {
   try {
@@ -9,23 +9,30 @@ const UploadMedicalCertificate = async (req, res) => {
 
     // 🔹 2️⃣ Extract user ID (Assuming it's coming from authentication)
     const userId = req.user._id; // `req.user` should be set by auth middleware
-    // console.log(userId)
 
-    // 🔹 3️⃣ Extract file URLs from Cloudinary
-    const fileUrls = req.files.map((file) => file.path); // Cloudinary provides the path
+    // 🔹 3️⃣ Extract file details (filename and secure_url)
+    const fileDetails = req.files.map((file) => {
+      if (!file.mimetype.includes("pdf")) {
+        throw new Error("Only PDF files are allowed");
+      }
+      return {
+        filename: req.body.filename || file.originalname, // Use provided filename or fallback to original name
+        fileURL: file.secure_url || file.path, // Fallback to `file.path` if `secure_url` is unavailable
+      };
+    });
 
     // 🔹 4️⃣ Check if user already has medical certificates
     let userCertificates = await MedicalCertificate.findOne({ userId });
 
     if (userCertificates) {
       // If already exists, update it by pushing new files
-      userCertificates.files.push(...fileUrls);
+      userCertificates.files.push(...fileDetails);
       await userCertificates.save();
     } else {
       // If not exists, create a new record
       userCertificates = new MedicalCertificate({
         userId,
-        files: fileUrls,
+        files: fileDetails,
       });
       await userCertificates.save();
     }

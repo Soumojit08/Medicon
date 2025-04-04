@@ -8,8 +8,14 @@ const medicalCertificateSchema = new mongoose.Schema({
   },
   files: [
     {
-      type: String, // Cloudinary file URL
-      required: true,
+      filename: {
+        type: String,
+        required: true,
+      },
+      fileURL: {
+        type: String,
+        required: true,
+      },
     },
   ],
 }, { timestamps: true });
