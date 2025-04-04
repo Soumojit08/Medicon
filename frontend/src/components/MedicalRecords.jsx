@@ -27,10 +27,19 @@ const MedicalRecords = ({ userId, userToken }) => {
         }
       );
 
-      if (response.data && response.data.status === "OK") {
-        setRecords(response.data.data?.files || []);
+      console.log("Fetch Records Response:", response.data);
+
+      if (
+        response.data &&
+        (response.data.success || response.data.status === "OK")
+      ) {
+        const files = response.data.data?.files || [];
+        setRecords(files);
+        if (files.length === 0) {
+          toast.info("No records found");
+        }
       } else {
-        toast.error("No records found");
+        toast.error(response.data?.message || "Failed to fetch records");
       }
     } catch (error) {
       console.error("Error fetching medical records:", error);
@@ -83,12 +92,24 @@ const MedicalRecords = ({ userId, userToken }) => {
         }
       );
 
-      if (response.data && response.data.status === "OK") {
+      // Log the response to see its structure
+      console.log("Upload Response:", response.data);
+
+      if (
+        response.data &&
+        (response.data.success || response.data.status === "OK")
+      ) {
         toast.success("Medical records uploaded successfully");
         setFiles(null);
-        fileInputRef.current.value = "";
-        // Fetch updated records
-        fetchMedicalRecords();
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        // Wait a brief moment before fetching updated records
+        setTimeout(() => {
+          fetchMedicalRecords();
+        }, 500);
+      } else {
+        toast.error(response.data?.message || "Failed to upload files");
       }
     } catch (error) {
       console.error("Error uploading files:", error);
