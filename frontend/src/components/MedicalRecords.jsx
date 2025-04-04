@@ -24,6 +24,9 @@ const MedicalRecords = ({ userId, userToken }) => {
             Authorization: `Bearer ${userToken}`,
           },
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${userToken}`, // Include the user token in the Authorization header
+          },
         }
       );
 
