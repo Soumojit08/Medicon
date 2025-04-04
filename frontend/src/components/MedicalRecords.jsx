@@ -9,19 +9,22 @@ const MedicalRecords = ({ userId, userToken }) => {
   const [records, setRecords] = useState([]);
   const fileInputRef = useRef(null);
 
-  // Fetch existing records
-  // useEffect(() => {
-  //   if (userId) {
-  //     fetchMedicalRecords();
-  //   }
-  // }, [userId]);
+  // Fetch existing records when the component mounts
+  useEffect(() => {
+    if (userId) {
+      fetchMedicalRecords();
+    }
+  }, [userId]);
 
   const fetchMedicalRecords = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/medical-certificates/${userId}`,
+        `/api/v1/get-medical-certificate`,
         {
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${userToken}`, // Include the user token in the Authorization header
+          },
         }
       );
 
@@ -82,7 +85,7 @@ const MedicalRecords = ({ userId, userToken }) => {
         setFiles(null);
         fileInputRef.current.value = "";
         // Refresh the records list
-        // fetchMedicalRecords();
+        fetchMedicalRecords();
       }
     } catch (error) {
       console.error("Error uploading files:", error);
