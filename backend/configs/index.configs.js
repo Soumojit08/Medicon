@@ -13,6 +13,9 @@ const configs = {
   SALT: process.env.HASH_SALT,
   JWT_SECRET: process.env.JWT_SECRET,
   PROD_URI: process.env.PROD_URI,
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT,
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 };
 
 export default configs;

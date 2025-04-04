@@ -8,7 +8,8 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc"; // Corrected import
 import swaggerOptions from "./services/swaggerOptions.js";
-import path from "path";
+import redis from "./Redis/client.js";
+import connectRedis from "./Redis/connectRedis.js";
 
 const app = express();
 
@@ -16,6 +17,8 @@ const app = express();
 const db_URI =
   configs.ENV === "development" ? configs.DB_URI : configs.MONGODB_URI;
 Db_Connect(db_URI);
+
+connectRedis();
 
 // Middleware
 app.use(express.json());
