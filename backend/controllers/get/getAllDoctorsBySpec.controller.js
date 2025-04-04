@@ -34,7 +34,7 @@ const getAllDoctorsBySpec = async (req, res, next) => {
         const doctors = await Models.DoctorModel.find(query).select("-password");
 
         // Store the result in Redis cache with a 1-hour expiration
-        await redis.set(redisKey, JSON.stringify(doctors), "EX", 3600);
+        await redis.set(redisKey, JSON.stringify(doctors), "EX", 300);
 
         return res.status(StatusCodes.OK).json({
             status: 'OK',
