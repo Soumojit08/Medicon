@@ -78,7 +78,7 @@ We appreciate the efforts of everyone who has contributed to this project! ❤�
   <tr>
     <td align="center">
       <a href="https://github.com/Soumojit08">
-        <img src="https://avatars.githubusercontent.com/u/12345678?v=4" width="100px;" alt="Soumojit"/>
+        <img src="https://avatars.githubusercontent.com/u/143273716?v=4" width="100px;" alt="Soumojit"/>
         <br />
         <sub><b>Soumojit</b></sub>
       </a>
@@ -86,19 +86,19 @@ We appreciate the efforts of everyone who has contributed to this project! ❤�
       💻 🚀
     </td>
     <td align="center">
-      <a href="https://github.com/Contributor2">
-        <img src="https://avatars.githubusercontent.com/u/87654321?v=4" width="100px;" alt="Contributor2"/>
+      <a href="https://github.com/Samiran2004">
+        <img src="https://avatars.githubusercontent.com/u/130337647?v=4" width="100px;" alt="Zephyrus"/>
         <br />
-        <sub><b>Contributor2</b></sub>
+        <sub><b>Zephyrus</b></sub>
       </a>
       <br />
       🐛 📖
     </td>
     <td align="center">
       <a href="https://github.com/Contributor3">
-        <img src="https://avatars.githubusercontent.com/u/11223344?v=4" width="100px;" alt="Contributor3"/>
+        <img src="https://avatars.githubusercontent.com/u/175795918?v=4" width="100px;" alt="Contributor3"/>
         <br />
-        <sub><b>Contributor3</b></sub>
+        <sub><b>SUBRATA BAG</b></sub>
       </a>
       <br />
       🔧 💡
