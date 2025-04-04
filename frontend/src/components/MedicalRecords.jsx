@@ -28,6 +28,8 @@ const MedicalRecords = ({ userId, userToken }) => {
         }
       );
 
+      console.log(response.data.data.files);
+
       if (response.data && response.data.status === "OK") {
         const files = response.data.data?.files || [];
         setRecords(files);
@@ -122,6 +124,31 @@ const MedicalRecords = ({ userId, userToken }) => {
     }
   };
 
+  const deleteFile = async (fileId) => {
+    try {
+      const response = await axiosInstance.delete(
+        "/api/v1/delete-medical-certificate",
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+          data: { fileId },
+          withCredentials: true,
+        }
+      );
+
+      if (response.data && response.data.status === "OK") {
+        toast.success("File deleted successfully");
+        fetchMedicalRecords();
+      } else {
+        toast.error(response.data?.message || "Failed to delete file");
+      }
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      toast.error(error.response?.data?.message || "Failed to delete file");
+    }
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -207,8 +234,9 @@ const MedicalRecords = ({ userId, userToken }) => {
                       Download
                     </a>
                     <button
-                      disabled={true}
-                      className="bg-red-600 px-4 text-white py-2 rounded-md"
+                      type="button"
+                      onClick={() => deleteFile(record._id)}
+                      className="bg-red-600 px-4 text-white py-2 rounded-md hover:bg-red-700 transition-colors"
                     >
                       <Trash2 />
                     </button>
