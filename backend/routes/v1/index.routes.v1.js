@@ -2740,6 +2740,93 @@ router.get("/get-medical-certificate", Middlewares.UserAuth, controllers.GetMedi
  * Permission: User
  * Authheader: user token
  */
+
+/**
+ * @swagger
+ * /api/v1/delete-medical-certificate:
+ *   delete:
+ *     summary: Delete a medical certificate file
+ *     description: Deletes a specific medical certificate file from Cloudinary and the database.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fileId:
+ *                 type: string
+ *                 example: "67ef4ab0b64a34d178dbfd43"
+ *     responses:
+ *       200:
+ *         description: File successfully deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "OK"
+ *                 message:
+ *                   type: string
+ *                   example: "File successfully deleted"
+ *       400:
+ *         description: Bad request (Missing fileId)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "fileId is required"
+ *       401:
+ *         description: Unauthorized request (Missing or invalid token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       404:
+ *         description: File not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "File not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ */
+
 router.delete("/delete-medical-certificate", Middlewares.UserAuth, controllers.DeleteMedicalCertificate);
 
 export default router;
