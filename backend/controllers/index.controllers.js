@@ -39,7 +39,7 @@ const controllers = {
   UpdateDoctorSchedule: updateDoctorSchedule,
   GetDoctorSchedule: getDoctorSchedule, // Get Doctor's Schedule...
   GetAllDoctors: getAllDoctors,
-  GetAllDoctorsBySpec: getAllDoctorsBySpec,
+  GetAllDoctorsBySpec: getAllDoctorsBySpec, // Get All Doctors by Specialization...
   BookAppointment: bookAppointment,
   GetAllUsers: getAllUsers,
   DeleteDoctorById: deleteDoctorByIdController,
