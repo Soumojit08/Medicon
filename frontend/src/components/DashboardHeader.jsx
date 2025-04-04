@@ -12,6 +12,7 @@ import {
   User,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import UserImage from "./UserImage";
 
 const DashboardHeader = ({ user }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -37,10 +38,8 @@ const DashboardHeader = ({ user }) => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
-                <span className="text-blue-600 text-xl font-medium">
-                  {user?.name?.charAt(0)?.toUpperCase() || "U"}
-                </span>
+              <div className="w-20 h-20 border-4 border-blue-500 rounded-full bg-blue-50 flex items-center justify-center overflow-hidden">
+                <UserImage pic={user.profilepic} className="object-cover overflow-hidden"/>
               </div>
               <div>
                 <h1 className="text-xl font-semibold text-gray-800">
