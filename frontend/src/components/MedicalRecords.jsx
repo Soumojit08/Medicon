@@ -9,28 +9,34 @@ const MedicalRecords = ({ userId, userToken }) => {
   const [records, setRecords] = useState([]);
   const fileInputRef = useRef(null);
 
-  // Fetch existing records
-  // useEffect(() => {
-  //   if (userId) {
-  //     fetchMedicalRecords();
-  //   }
-  // }, [userId]);
+  useEffect(() => {
+    if (userId && userToken) {
+      fetchMedicalRecords();
+    }
+  }, [userId, userToken]);
 
   const fetchMedicalRecords = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/medical-certificates/${userId}`,
+        "/api/v1/get-medical-certificate",
         {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
           withCredentials: true,
         }
       );
 
-      if (response.status === 200) {
-        setRecords(response.data.data.files || []);
+      if (response.data && response.data.status === "OK") {
+        setRecords(response.data.data?.files || []);
+      } else {
+        toast.error("No records found");
       }
     } catch (error) {
       console.error("Error fetching medical records:", error);
-      toast.error("Failed to load medical records");
+      toast.error(
+        error.response?.data?.message || "Failed to load medical records"
+      );
     }
   };
 
@@ -50,8 +56,8 @@ const MedicalRecords = ({ userId, userToken }) => {
       return;
     }
 
-    if (!userId) {
-      toast.error("User ID is required");
+    if (!userId || !userToken) {
+      toast.error("Authorization required");
       return;
     }
 
@@ -60,29 +66,29 @@ const MedicalRecords = ({ userId, userToken }) => {
     const formData = new FormData();
     formData.append("userId", userId);
 
-    for (let i = 0; i < files.length; i++) {
-      formData.append("files", files[i]);
-    }
+    Array.from(files).forEach((file) => {
+      formData.append("files", file);
+    });
 
     try {
       const response = await axiosInstance.post(
         "/api/v1/upload-medical-certificate",
         formData,
         {
-          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userToken}`,
           },
+          withCredentials: true,
         }
       );
 
-      if (response.status === 201) {
+      if (response.data && response.data.status === "OK") {
         toast.success("Medical records uploaded successfully");
         setFiles(null);
         fileInputRef.current.value = "";
-        // Refresh the records list
-        // fetchMedicalRecords();
+        // Fetch updated records
+        fetchMedicalRecords();
       }
     } catch (error) {
       console.error("Error uploading files:", error);
