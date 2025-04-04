@@ -2634,7 +2634,8 @@ router.post(
  * Get User's Medical Certificates
  * Path: /api/v1/get-medical-certificate
  * Permission: User
- * Authheader: user token
+ * Authheader: user token,
+ * Body: filename
  */
 
 /**
@@ -2732,5 +2733,13 @@ router.post(
  */
 
 router.get("/get-medical-certificate", Middlewares.UserAuth, controllers.GetMedicalCertificates);
+
+/**
+ * Delete User's Medical Certificate
+ * Path: /api/v1/delete-medical-certificate
+ * Permission: User
+ * Authheader: user token
+ */
+router.delete("/delete-medical-certificate", Middlewares.UserAuth, controllers.DeleteMedicalCertificate);
 
 export default router;
