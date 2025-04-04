@@ -7,7 +7,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "medical_certificates", // Cloudinary folder name
-    resource_type: "auto", // Auto-detect file type (pdf, images, etc.)
+    resource_type: "raw", // Auto-detect file type (pdf, images, etc.)
   },
 });
 
