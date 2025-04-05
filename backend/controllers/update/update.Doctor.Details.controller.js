@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
+import redis from "../../Redis/client.js";
 
 const updateDoctorDetailsController = async (req, res, next) => {
   try {
@@ -74,6 +75,12 @@ const updateDoctorDetailsController = async (req, res, next) => {
         message: "Doctor not found",
       });
     }
+
+    // Generate a unique Redis key for the doctor's details
+    const redisKey = `doctorDetails:${doctorId}`;
+
+    // Cache the updated doctor details with a 5 min expiration
+    await redis.set(redisKey, JSON.stringify(updatedDoctorDetails), "EX", 300);
 
     return res.status(StatusCodes.OK).json({
       status: "Success",
