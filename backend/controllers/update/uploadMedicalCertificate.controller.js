@@ -1,4 +1,5 @@
 import MedicalCertificate from "../../models/MedicalCertificate.model.js"; // Import model
+import redis from "../../Redis/client.js"; // Import Redis client
 
 const UploadMedicalCertificate = async (req, res) => {
   try {
@@ -43,7 +44,11 @@ const UploadMedicalCertificate = async (req, res) => {
       await userCertificates.save();
     }
 
-    // 🔹 5️⃣ Return success response
+    // 🔹 5️⃣ Update the cache with the new certificates
+    const redisKey = `certificates:${userId}`;
+    await redis.set(redisKey, JSON.stringify(userCertificates), "EX", 3600); // Cache for 1 hour
+
+    // 🔹 6️⃣ Return success response
     return res.status(201).json({
       success: true,
       message: "Medical certificates uploaded successfully",

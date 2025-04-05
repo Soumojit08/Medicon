@@ -1,5 +1,6 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
+import redis from "../../Redis/client.js";
 
 const deleteDoctorByIdController = async (req, res) => {
     try {
@@ -23,6 +24,10 @@ const deleteDoctorByIdController = async (req, res) => {
             });
         }
 
+        // Invalidate the cache for the deleted doctor
+        const redisKey = `doctorDetails:${doctorid}`;
+        await redis.del(redisKey);
+
         return res.status(StatusCodes.OK).json({
             status: 'OK',
             message: "Doctor deleted successfully!",
@@ -30,6 +35,7 @@ const deleteDoctorByIdController = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Error deleting doctor:", error);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             status: 'Failed',
             message: "Server error occurred!",

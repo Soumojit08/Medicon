@@ -1,6 +1,7 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
 import cloudinary from "cloudinary";
+import redis from "../../Redis/client.js";
 
 const deleteMedicalCertificateController = async (req, res) => {
     try {
@@ -49,12 +50,22 @@ const deleteMedicalCertificateController = async (req, res) => {
             { $pull: { files: { _id: fileId } } }
         );
 
+        // Update the cache for the user's certificates
+        const redisKey = `certificates:${userId}`;
+        const updatedCertificates = await Models.MedicalCertificateModel.findOne({ userId });
+        if (updatedCertificates) {
+            await redis.set(redisKey, JSON.stringify(updatedCertificates), "EX", 3600); // Cache for 1 hour
+        } else {
+            // If no certificates remain, invalidate the cache
+            await redis.del(redisKey);
+        }
+
         return res.status(StatusCodes.OK).json({
             status: 'OK',
             message: "File successfully deleted",
         });
     } catch (error) {
-        // console.error(error);
+        console.error("Error deleting medical certificate:", error);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             status: "Failed",
             message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
