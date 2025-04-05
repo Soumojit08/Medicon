@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import Schedule from "../../models/Schedule.model.js";
+import redis from "../../Redis/client.js";
 
 const updateDoctorSchedule = async function (req, res, next) {
   try {
@@ -25,6 +26,7 @@ const updateDoctorSchedule = async function (req, res, next) {
       lastUpdated: new Date(),
     };
 
+    // Update the schedule in the database
     const updatedSchedule = await Schedule.findOneAndUpdate(
       { doctorId },
       scheduleData,
@@ -42,6 +44,12 @@ const updateDoctorSchedule = async function (req, res, next) {
       });
     }
 
+    // Generate a unique Redis key for the doctor's schedule
+    const redisKey = `schedule:${doctorId}`;
+
+    // Cache the updated schedule with a 1-hour expiration
+    await redis.set(redisKey, JSON.stringify(updatedSchedule), "EX", 300);
+
     return res.status(StatusCodes.OK).json({
       status: "Success",
       message: "Schedule updated successfully",
@@ -58,4 +66,3 @@ const updateDoctorSchedule = async function (req, res, next) {
 };
 
 export default updateDoctorSchedule;
-  
