@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
+import redis from "../../Redis/client.js";
 
 const getNearbyDoctors = async (req, res) => {
   try {
@@ -9,6 +10,19 @@ const getNearbyDoctors = async (req, res) => {
       return res.status(StatusCodes.BAD_REQUEST).json({
         status: "Failed",
         message: "Location coordinates are required",
+      });
+    }
+
+    // Generate a unique Redis key based on location and radius
+    const redisKey = `nearbyDoctors:${latitude}:${longitude}:${maxDistance}`;
+
+    // Check if data is present in Redis cache
+    const cachedDoctors = await redis.get(redisKey);
+    if (cachedDoctors) {
+      return res.status(StatusCodes.OK).json({
+        status: "OK",
+        message: "Nearby doctors found successfully (from cache)",
+        data: JSON.parse(cachedDoctors),
       });
     }
 
@@ -45,6 +59,9 @@ const getNearbyDoctors = async (req, res) => {
     // Sort by distance
     doctorsWithDistance.sort((a, b) => a.distance - b.distance);
 
+    // Store the result in Redis cache with a 5-minute expiration
+    await redis.set(redisKey, JSON.stringify(doctorsWithDistance), "EX", 300);
+
     return res.status(StatusCodes.OK).json({
       status: "OK",
       message: "Nearby doctors found successfully",
@@ -67,9 +84,9 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
