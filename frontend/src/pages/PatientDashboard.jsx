@@ -80,8 +80,11 @@ const PatientDashboard = () => {
           {/* Header */}
           <DashboardHeader user={user} />
 
+          {/* Other Sections */}
+          <DashboardStats />
+
           {/* Doctors Grid */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               Available Doctors
             </h2>
@@ -99,8 +102,6 @@ const PatientDashboard = () => {
             )}
           </div>
 
-          {/* Other Sections */}
-          <DashboardStats />
           <AppointmentsSection />
           <MedicalRecords userId={userId} userToken={usrtoken} />
         </div>

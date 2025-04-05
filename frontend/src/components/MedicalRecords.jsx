@@ -8,6 +8,7 @@ const MedicalRecords = ({ userId, userToken }) => {
   const [fileNames, setFileNames] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [records, setRecords] = useState([]);
+  const [value, setValue] = useState([])
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -28,7 +29,8 @@ const MedicalRecords = ({ userId, userToken }) => {
         }
       );
 
-      console.log(response.data.data.files);
+      console.log(response.data.data);
+      setValue(response.data.data)
 
       if (response.data && response.data.status === "OK") {
         const files = response.data.data?.files || [];
@@ -221,7 +223,7 @@ const MedicalRecords = ({ userId, userToken }) => {
                       <h3 className="text-lg font-bold">{record.filename}</h3>
                       <p className="text-gray-600">
                         Uploaded on{" "}
-                        {new Date(record.createdAt).toLocaleDateString()}
+                        {new Date(value.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>

@@ -63,7 +63,6 @@ const VideoCall = () => {
               zegoRef.current = null;
               navigate("/patientDashboard");
             },
-            showUserList: true,
             turnOnMicrophoneWhenJoining: true,
             turnOnCameraWhenJoining: true,
             showMyCameraToggleButton: true,
