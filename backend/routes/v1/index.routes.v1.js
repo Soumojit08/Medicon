@@ -1232,7 +1232,7 @@ router.get(
   //   console.log("Route: /api/v1/getSchedule - Request received");
   //   next();
   // },
-  Middlewares.DoctorAuth,
+  // Middlewares.DoctorAuth,
   controllers.GetDoctorSchedule
 );
 
