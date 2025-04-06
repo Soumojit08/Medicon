@@ -111,7 +111,7 @@ const DoctorCard = ({ doctor, user }) => {
             />
           )}
         </h2>
-        <p className="text-blue-600 text-sm font-medium bg-blue-50 rounded-full py-1 px-3 inline-block">
+        <p className="text-blue-600 text-sm font-medium bg-blue-50 rounded-full py-1 px-3 inline-flex">
           {doctor.specialization}
         </p>
       </div>
@@ -181,14 +181,14 @@ const DoctorCard = ({ doctor, user }) => {
             disabled={!isOnline}
             className={`flex-1 flex items-center justify-center gap-2 ${
               isOnline
-                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             } text-sm py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md`}
           >
             <Video size={16} />
             <span>{isOnline ? "Video Call" : "Offline"}</span>
           </button>
-          <button className="flex-1 flex items-center justify-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm py-2.5 px-4 rounded-lg transition-all duration-200">
+          <button className="cursor-pointer flex-1 flex items-center justify-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm py-2.5 px-4 rounded-lg transition-all duration-200">
             <CalendarDays size={16} />
             <span>Book</span>
           </button>

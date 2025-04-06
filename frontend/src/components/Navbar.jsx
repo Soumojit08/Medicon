@@ -212,7 +212,7 @@ const Navbar = () => {
             {isAuth && role === "doctor" && (
               <button
                 onClick={handleDoctorLogout}
-                className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -221,7 +221,7 @@ const Navbar = () => {
             {isAuth && role === "user" && (
               <button
                 onClick={handleUserLogout}
-                className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -230,7 +230,7 @@ const Navbar = () => {
             {isAuth && role === "admin" && (
               <button
                 onClick={handleAdminLogout}
-                className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -239,7 +239,7 @@ const Navbar = () => {
             {!isAuth && (
               <Link
                 to="/loginDashboard"
-                className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 <UserCircle className="w-4 h-4 mr-2" />
                 Login
@@ -287,7 +287,7 @@ const Navbar = () => {
               {/* SOS Button */}
               <a
                 href="tel:108"
-                className="flex items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
+                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
               >
                 <ShieldCheck className="w-5 h-5 mr-3" />
                 SOS
@@ -299,7 +299,7 @@ const Navbar = () => {
                     handleDoctorLogout();
                     setIsOpen(false);
                   }}
-                  className="flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                  className="cursor-pointer flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                 >
                   <LogOut className="w-5 h-5 mr-3" />
                   Logout
@@ -311,7 +311,7 @@ const Navbar = () => {
                     handleUserLogout();
                     setIsOpen(false);
                   }}
-                  className="flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                  className="cursor-pointer flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                 >
                   <LogOut className="w-5 h-5 mr-3" />
                   Logout
@@ -323,7 +323,7 @@ const Navbar = () => {
                     handleAdminLogout();
                     setIsOpen(false);
                   }}
-                  className="flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                  className="cursor-pointer flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                 >
                   <LogOut className="w-5 h-5 mr-3" />
                   Logout
@@ -332,7 +332,7 @@ const Navbar = () => {
               {!isAuth && (
                 <Link
                   to="/loginDashboard"
-                  className="flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                  className="cursor-pointer flex w-full items-center justify-center px-4 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   <UserCircle className="w-5 h-5 mr-3" />

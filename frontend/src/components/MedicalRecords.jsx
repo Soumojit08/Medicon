@@ -169,7 +169,7 @@ const MedicalRecords = ({ userId, userToken }) => {
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}
-              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
+              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 cursor-pointer"
             >
               Select Files
             </button>
@@ -238,7 +238,7 @@ const MedicalRecords = ({ userId, userToken }) => {
                     <button
                       type="button"
                       onClick={() => deleteFile(record._id)}
-                      className="bg-red-600 px-4 text-white py-2 rounded-md hover:bg-red-700 transition-colors"
+                      className="bg-red-600 px-4 text-white py-2 rounded-md hover:bg-red-700 transition-colors cursor-pointer"
                     >
                       <Trash2 />
                     </button>
