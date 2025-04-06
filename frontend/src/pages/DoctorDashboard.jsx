@@ -62,7 +62,7 @@ const DoctorDashboard = () => {
               <DoctorDetailsForm doctorData={doctor} />
             </div>
             <div className="w-full">
-              <ManageSchedule />
+              <ManageSchedule doctorId={doctorId}/>
             </div>
           </div>
         </div>

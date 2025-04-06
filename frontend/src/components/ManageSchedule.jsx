@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { axiosInstance } from "../libs/axios";
+import toast from "react-hot-toast";
 
-const ManageSchedule = (token) => {
+const ManageSchedule = (doctorId) => {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   const [doctorToken, setDoctorToken] = useState(
     localStorage.getItem("doctortoken")
@@ -42,6 +43,12 @@ const ManageSchedule = (token) => {
     );
   };
 
+  useEffect(() => {
+    if (doctorId) {
+      getSchedule(doctorId);
+    }
+  }, []);
+
   const handleSave = async () => {
     try {
       const response = await axiosInstance.post(
@@ -54,21 +61,29 @@ const ManageSchedule = (token) => {
         }
       );
       const data = response.data;
-      console.log(data);
+      console.log(data); //API RESPONSE
+      toast.success("Schedule Updated Successfully");
     } catch (error) {
       console.error(error);
       console.log("failed to update schedule");
     }
   };
 
-  const handleReset = () => {
-    setSchedules((prev) =>
-      prev.map((schedule) => ({
-        ...schedule,
-        slots: [{ start: "09:00", end: "17:00" }],
-      }))
-    );
-    alert("Schedule reset to default!");
+  const getSchedule = async (doctorId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/getSchedule/${doctorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${doctorToken}`,
+          },
+        }
+      );
+
+      const data = response.data;
+    } catch (error) {
+      console.log("Error get schedule : ", error);
+    }
   };
 
   return (
@@ -186,12 +201,6 @@ const ManageSchedule = (token) => {
           className="flex-1/2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
         >
           Save Changes
-        </button>
-        <button
-          onClick={handleReset}
-          className="flex-1/2 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
-        >
-          Reset
         </button>
       </div>
     </div>
