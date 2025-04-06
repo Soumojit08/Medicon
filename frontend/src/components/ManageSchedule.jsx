@@ -1,10 +1,13 @@
 // src/components/ManageSchedule.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { axiosInstance } from "../libs/axios";
 
-const ManageSchedule = () => {
+const ManageSchedule = (token) => {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const [doctorToken, setDoctorToken] = useState(
+    localStorage.getItem("doctortoken")
+  );
   const [schedules, setSchedules] = useState(
     days.map((day) => ({
       day,
@@ -42,11 +45,11 @@ const ManageSchedule = () => {
   const handleSave = async () => {
     try {
       const response = await axiosInstance.post(
-        "/updateSchedule",
+        "/api/v1/updateSchedule",
         { schedules },
         {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${doctorToken}`,
           },
         }
       );
