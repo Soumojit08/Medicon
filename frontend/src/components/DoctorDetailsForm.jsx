@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../libs/axios";
 import toast from "react-hot-toast";
 
-const DoctorDetailsForm = ({ doctorData }) => {
+const DoctorDetailsForm = ({ doctorData, refreshData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [details, setDetails] = useState({});
 
@@ -35,7 +35,16 @@ const DoctorDetailsForm = ({ doctorData }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+    
+    // Special handling for arrays (specialization and languages)
+    if (name === "specialization" || name === "languages") {
+      // Split the comma-separated string and trim each value
+      const valueArray = value.split(",").map(item => item.trim());
+      setDetails(prevDetails => ({ ...prevDetails, [name]: valueArray }));
+    } else {
+      // Regular handling for non-array fields
+      setDetails(prevDetails => ({ ...prevDetails, [name]: value }));
+    }
   };
 
   const token = localStorage.getItem("doctortoken");
@@ -43,12 +52,13 @@ const DoctorDetailsForm = ({ doctorData }) => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
+      console.log("Submitting updated details:", details);
+      
       const response = await axiosInstance.post(
         "/api/v1/updateDetails",
         details,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           withCredentials: true,
@@ -58,12 +68,22 @@ const DoctorDetailsForm = ({ doctorData }) => {
       if (response.status === 200) {
         toast.success("Doctor details updated successfully");
         setIsEditing(false);
+        
+        // Add a small delay before refreshing data to ensure DB operations complete
+        setTimeout(() => {
+          if (refreshData) {
+            console.log("Calling refresh function after update");
+            refreshData();
+          } else {
+            toast.error("Data updated but failed to reload");
+          }
+        }, 300);
       } else {
         toast.error("Failed to update doctor details");
       }
     } catch (error) {
       console.log("error", error);
-      toast.error("Error updating doctor details");
+      toast.error("Error updating doctor details: " + (error.message || "Unknown error"));
     }
   };
 
@@ -92,13 +112,13 @@ const DoctorDetailsForm = ({ doctorData }) => {
               <input
                 type="text"
                 name="specialization"
-                value={details.specialization.join(", ") || ""}
+                value={Array.isArray(details.specialization) ? details.specialization.join(", ") : ""}
                 onChange={handleChange}
                 className="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"
               />
             ) : (
               <p className="text-gray-800">
-                {details.specialization.join(", ") || "Not available"}
+                {Array.isArray(details.specialization) ? details.specialization.join(", ") : "Not available"}
               </p>
             )}
           </div>
@@ -128,13 +148,13 @@ const DoctorDetailsForm = ({ doctorData }) => {
               <input
                 type="text"
                 name="languages"
-                value={details.languages.join(", ") || ""}
+                value={Array.isArray(details.languages) ? details.languages.join(", ") : ""}
                 onChange={handleChange}
                 className="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"
               />
             ) : (
               <p className="text-gray-800">
-                {details.languages.join(", ") || "Not available"}
+                {Array.isArray(details.languages) ? details.languages.join(", ") : "Not available"}
               </p>
             )}
           </div>

@@ -1,4 +1,3 @@
-// src/pages/DoctorDashboard.jsx
 import React, { useEffect, useState } from "react";
 import DoctorProfileHeader from "../components/DoctorProfileHeader";
 import DoctorDetailsForm from "../components/DoctorDetailsForm";
@@ -10,13 +9,14 @@ import { useParams, useNavigate } from "react-router-dom";
 const DoctorDashboard = () => {
   const { id: doctorId } = useParams();
   const [doctor, setDoctor] = useState({});
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (doctorId) {
       getDoctorData(doctorId);
     }
-  }, [doctorId]);
+  }, [doctorId, refreshTrigger]);
 
   useEffect(() => {
     const doctorToken = localStorage.getItem("doctortoken");
@@ -27,9 +27,11 @@ const DoctorDashboard = () => {
 
   const getDoctorData = async (doctorId) => {
     try {
+      console.log("Fetching doctor data for ID:", doctorId);
       const response = await axiosInstance.get(`/api/v1/doctors/${doctorId}`);
 
       if (response.data && response.data.data) {
+        console.log("Doctor data received:", response.data.data);
         setDoctor({
           name: response.data.data.name || "",
           address: response.data.data.address || "",
@@ -52,6 +54,12 @@ const DoctorDashboard = () => {
     }
   };
 
+  // Function to refresh doctor data after updates
+  const refreshDoctorData = () => {
+    console.log("Refreshing doctor data...");
+    setRefreshTrigger((prev) => prev + 1); // This will trigger the useEffect
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-grow px-4 sm:px-6 md:px-10 lg:px-20">
@@ -59,10 +67,13 @@ const DoctorDashboard = () => {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div className="w-full">
               <DoctorProfileHeader doctorData={doctor} />
-              <DoctorDetailsForm doctorData={doctor} />
+              <DoctorDetailsForm
+                doctorData={doctor}
+                refreshData={refreshDoctorData}
+              />
             </div>
             <div className="w-full">
-              <ManageSchedule doctorId={doctorId}/>
+              <ManageSchedule doctorId={doctorId} />
             </div>
           </div>
         </div>
