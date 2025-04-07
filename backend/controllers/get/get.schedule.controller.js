@@ -1,6 +1,5 @@
 import { StatusCodes } from "http-status-codes";
 import Schedule from "../../models/Schedule.model.js";
-import redis from "../../Redis/client.js"; // Import Redis client
 
 const getDoctorSchedule = async (req, res) => {
   try {
@@ -15,24 +14,7 @@ const getDoctorSchedule = async (req, res) => {
       });
     }
 
-    // 🔹 2️⃣ Check Redis cache for the schedule
-    const redisKey = day
-      ? `doctorSchedule:${doctorId}:${day}`
-      : `doctorSchedule:${doctorId}:all`;
-    const cachedSchedule = await redis.get(redisKey);
-
-    if (cachedSchedule) {
-      // If schedule is found in cache, return it
-      return res.status(StatusCodes.OK).json({
-        status: "Success",
-        message: day
-          ? `Schedule for ${day} fetched successfully (from cache).`
-          : "Weekly schedule fetched successfully (from cache).",
-        data: JSON.parse(cachedSchedule),
-      });
-    }
-
-    // 🔹 3️⃣ Fetch schedule from the database
+    // 🔹 2️⃣ Fetch schedule from the database
     const schedule = await Schedule.findOne({ doctorId });
 
     if (!schedule) {
@@ -43,7 +25,7 @@ const getDoctorSchedule = async (req, res) => {
       });
     }
 
-    // 🔹 4️⃣ Handle specific day or full schedule
+    // 🔹 3️⃣ Handle specific day or full schedule
     if (day) {
       const daySchedule = schedule.schedules[day];
 
@@ -55,10 +37,6 @@ const getDoctorSchedule = async (req, res) => {
         });
       }
 
-      // 🔹 5️⃣ Store the result in Redis cache for the specific day
-      await redis.set(redisKey, JSON.stringify(daySchedule), "EX", 3600); // Cache for 1 hour
-
-      // 🔹 6️⃣ Return the response for the specific day
       return res.status(StatusCodes.OK).json({
         status: "Success",
         message: `Schedule for ${day} fetched successfully.`,
@@ -66,13 +44,9 @@ const getDoctorSchedule = async (req, res) => {
       });
     }
 
-    // 🔹 7️⃣ Handle full weekly schedule
+    // 🔹 4️⃣ Handle full weekly schedule
     const weeklySchedule = schedule.schedules;
 
-    // 🔹 8️⃣ Store the result in Redis cache for the full schedule
-    await redis.set(redisKey, JSON.stringify(weeklySchedule), "EX", 3600); // Cache for 1 hour
-
-    // 🔹 9️⃣ Return the response for the full schedule
     return res.status(StatusCodes.OK).json({
       status: "Success",
       message: "Weekly schedule fetched successfully.",
