@@ -1969,6 +1969,14 @@ router.get("/doctors/:id", controllers.GetDoctorById);
 router.post("/appoint/book", controllers.BookAppointment);
 
 /**
+ * Get Appointments
+ * Path: /api/v1/appointments
+ * Permission: User
+ * AuthHeader: usertoken
+ */
+router.get("/appointments", Middlewares.UserAuth, controllers.GetAppointments);
+
+/**
  * Get all users
  * Path: /api/v1/users
  * Body: userid if get user by id
