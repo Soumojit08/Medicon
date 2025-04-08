@@ -69,6 +69,7 @@ const ManageSchedule = ({ doctorId }) => {
       if (response.data && response.data.status === "Success") {
         toast.success("Schedule Updated Successfully");
         getSchedule(doctorId);
+        toast.success("Schedule Reloaded");
       } else {
         toast.error("Failed to update schedule");
       }
@@ -169,7 +170,6 @@ const ManageSchedule = ({ doctorId }) => {
         console.log("Formatted schedules:", formattedSchedules);
         setSchedules(formattedSchedules);
         setIsLoading(false);
-        toast.success("Schedule loaded successfully");
       } else {
         // If no schedule is found, set default schedule
         defaultSchedule();
