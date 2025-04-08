@@ -3,6 +3,7 @@ import { Search, MapPin, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Particles from "./Particles"; // Import the Particles component
 import TypingText from "./TypingText"
+import Tooltip from "../components/ToolTip";
 
 const HomeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,19 +66,21 @@ const HomeSearch = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by doctor name or condition..."
+                placeholder="Search doctors by Specalization"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <button
-              type="submit"
-              className="px-4 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center sm:text-sm"
-            >
-              <Search className="h-5 w-5" />
-              <span className="hidden sm:inline">Search</span>
-            </button>
+            <Tooltip content={"Search Specalist Doctor Here"} position="top">
+              <button
+                type="submit"
+                className="px-4 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center sm:text-sm"
+              >
+                <Search className="h-5 w-5" />
+                <span className="hidden sm:inline">Search</span>
+              </button>
+            </Tooltip>
           </form>
         </div>
       </div>

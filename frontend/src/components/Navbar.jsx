@@ -12,7 +12,8 @@ import {
   Calendar,
 } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import axiosInstance from "../libs/axios"; // Assuming axiosInstance is configured
+import axiosInstance from "../libs/axios"; 
+import Tooltip from "./ToolTip";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -200,51 +201,55 @@ const Navbar = () => {
               ))}
 
             {/* SOS Button */}
-            <a
-              href="tel:108"
-              className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
-            >
-              <ShieldCheck className="w-4 h-4 mr-2" />
-              SOS
-            </a>
+            <Tooltip content={"Click here if emergency"} position="bottom">
+              <a
+                href="tel:108"
+                className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
+              >
+                <ShieldCheck className="w-4 h-4 mr-2" />
+                SOS
+              </a>
+            </Tooltip>
 
             {/* Auth Button */}
-            {isAuth && role === "doctor" && (
-              <button
-                onClick={handleDoctorLogout}
-                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </button>
-            )}
-            {isAuth && role === "user" && (
-              <button
-                onClick={handleUserLogout}
-                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </button>
-            )}
-            {isAuth && role === "admin" && (
-              <button
-                onClick={handleAdminLogout}
-                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </button>
-            )}
-            {!isAuth && (
-              <Link
-                to="/loginDashboard"
-                className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-              >
-                <UserCircle className="w-4 h-4 mr-2" />
-                Login
-              </Link>
-            )}
+            <Tooltip content={"Click to Login or Logout"} position="bottom">
+              {isAuth && role === "doctor" && (
+                <button
+                  onClick={handleDoctorLogout}
+                  className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </button>
+              )}
+              {isAuth && role === "user" && (
+                <button
+                  onClick={handleUserLogout}
+                  className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </button>
+              )}
+              {isAuth && role === "admin" && (
+                <button
+                  onClick={handleAdminLogout}
+                  className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </button>
+              )}
+              {!isAuth && (
+                <Link
+                  to="/loginDashboard"
+                  className="cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                >
+                  <UserCircle className="w-4 h-4 mr-2" />
+                  Login
+                </Link>
+              )}
+            </Tooltip>
           </div>
 
           {/* Mobile menu button */}
