@@ -3,7 +3,7 @@ import { Search, MapPin, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Particles from "./Particles"; // Import the Particles component
 import TypingText from "./TypingText"
-import Tooltip from "../components/ToolTip";
+import Tooltip from "../components/Tooltip";
 
 const HomeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");

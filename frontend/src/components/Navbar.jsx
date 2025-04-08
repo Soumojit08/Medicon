@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axiosInstance from "../libs/axios"; 
-import Tooltip from "./ToolTip";
+import Tooltip from "./Tooltip";
 
 const Navbar = () => {
   const navigate = useNavigate();
