@@ -12,14 +12,49 @@ const ChatInterface = () => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
+  // Function to format text with proper styling
+  const formatMessage = (text) => {
+    // Replace markdown-style bold with HTML bold
+    let formattedText = text
+      // Replace ** bold ** with HTML bold
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      // Replace * italic * with HTML italic
+      .replace(/\*(.*?)\*/g, "<em>$1</em>")
+      // Format lists with proper spacing
+      .replace(/\n\s*\*\s*/g, "<br/><br/>• ")
+      // Add extra space after colons for better readability
+      .replace(/:\s*/g, ": ")
+      // Create proper paragraph spacing
+      .replace(/\n\n/g, "<br/><br/>")
+      .replace(/\n/g, "<br/>");
+
+    return formattedText;
+  };
+
   const generateContent = async (userPrompt) => {
+    // Format the prompt to encourage brief, practical responses with proper formatting
+    const medicalPrompt = `Provide a brief, practical medical response about "${userPrompt}". 
+    
+Format your response using these guidelines:
+- Use ** bold ** for important steps or headers
+- Use * italics * for emphasis
+- Use bullet points for lists
+- Keep your answer under 150 words
+- Include proper spacing between sections
+- Focus on specific actionable advice
+- End with a reminder to seek professional help if needed`;
+
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD6s-UDSSMZppWUGetZmMtZxw-uR4-hMyo`;
 
     try {
       const response = await axios.post(
         API_URL,
         {
-          contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+          contents: [{ role: "user", parts: [{ text: medicalPrompt }] }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 300,
+          },
         },
         {
           headers: {
@@ -31,11 +66,18 @@ const ChatInterface = () => {
       // Extract AI-generated response
       const botResponse =
         response.data.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "Sorry, I couldn't generate a response.";
+        "I couldn't generate a response. Please try again.";
 
-      return botResponse;
+      // Process the response to remove any remaining disclaimers at the beginning
+      let processedResponse = botResponse
+        .replace(/^(Disclaimer|Note|Remember|Please note):[^\n]*\n*/i, "")
+        .replace(/^As an AI(.*?)$/im, "")
+        .replace(/^I'm an AI(.*?)$/im, "")
+        .trim();
+
+      return processedResponse;
     } catch (error) {
-      return "Sorry, I encountered an error.";
+      return "I'm sorry, I couldn't process your question. Please try again.";
     }
   };
 
@@ -52,10 +94,6 @@ const ChatInterface = () => {
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
-
-  // useEffect(() => {
-  //   generateContent();
-  // }, []);
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
@@ -78,7 +116,10 @@ const ChatInterface = () => {
       setIsTyping(false);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: "Sorry, I couldn't generate a response.", sender: "bot" },
+        {
+          text: "I couldn't process your question. For medical emergencies, call emergency services immediately.",
+          sender: "bot",
+        },
       ]);
     }
   };
@@ -102,6 +143,18 @@ const ChatInterface = () => {
     }
   }, [isOpen, isMinimized]);
 
+  // Add initial welcome message when chat is first opened
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      setMessages([
+        {
+          text: "Hi! I'm ORION MediBot. I can provide basic first aid advice and health information. What can I help you with today?",
+          sender: "bot",
+        },
+      ]);
+    }
+  }, [isOpen, messages.length]);
+
   return (
     <div className="fixed bottom-8 right-8 z-[9999]">
       {isOpen && (
@@ -120,7 +173,7 @@ const ChatInterface = () => {
                   }}
                 />
               </div>
-              <span className="font-medium">ORION</span>
+              <span className="font-medium">ORION MediBot</span>
             </div>
             <div className="flex space-x-3">
               <button
@@ -157,9 +210,11 @@ const ChatInterface = () => {
                         }}
                       />
                     </div>
-                    <p className="font-medium mb-2 text-blue-600">Welcome!</p>
+                    <p className="font-medium mb-2 text-blue-600">
+                      Medical Assistant
+                    </p>
                     <p className="text-sm text-gray-400">
-                      How can I assist you today?
+                      Ask about first aid or health questions
                     </p>
                   </div>
                 ) : (
@@ -180,8 +235,16 @@ const ChatInterface = () => {
                               : "bg-white text-gray-800 rounded-tl-none border border-blue-100"
                           }`}
                         >
-                          {"Response as medical adviser and give first aid " +
-                            msg.text}
+                          {msg.sender === "bot" ? (
+                            <div
+                              className="bot-message"
+                              dangerouslySetInnerHTML={{
+                                __html: formatMessage(msg.text),
+                              }}
+                            />
+                          ) : (
+                            msg.text
+                          )}
                         </div>
                       </div>
                     ))}
@@ -222,7 +285,7 @@ const ChatInterface = () => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 py-1"
-                    placeholder="Type a message..."
+                    placeholder="Ask a medical question..."
                   />
                   <button
                     onClick={sendMessage}
@@ -236,6 +299,9 @@ const ChatInterface = () => {
                   >
                     <Send size={10} className="text-white" />
                   </button>
+                </div>
+                <div className="text-center mt-2 text-xs text-gray-400">
+                  For emergencies, call 911 immediately
                 </div>
               </div>
             </>
