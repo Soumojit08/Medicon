@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion"; // Add this import at the top
 import AIbot from "../assets/robo.svg";
 import { X, Send, Maximize, Minimize } from "lucide-react";
 import axios from "axios";
@@ -309,16 +310,45 @@ Format your response using these guidelines:
         </div>
       )}
 
-      {/* Chat button */}
-      <div
-        className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 shadow-lg cursor-pointer transition-all transform hover:scale-110 hover:shadow-xl my-2"
-        onClick={toggleChat}
-        aria-label={isOpen ? "Close chat" : "Open chat"}
-      >
-        {isOpen ? (
-          <X size={28} className="text-white" />
-        ) : (
-          <img src={AIbot} alt="bot" className="h-8 w-8 invert" />
+      {/* Chat button with permanent tooltip when closed */}
+      <div className="relative">
+        <div
+          className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 shadow-lg cursor-pointer transition-all transform hover:scale-110 hover:shadow-xl my-2"
+          onClick={toggleChat}
+          aria-label={isOpen ? "Close chat" : "Open chat"}
+        >
+          {isOpen ? (
+            <X size={28} className="text-white" />
+          ) : (
+            <img src={AIbot} alt="bot" className="h-8 w-8 invert" />
+          )}
+        </div>
+
+        {/* Permanent tooltip when chat is closed */}
+        {!isOpen && (
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 25,
+              repeat: Infinity,
+              repeatType: "reverse",
+              repeatDelay: 1,
+            }}
+            className="absolute bottom-full right-0 mb-2"
+          >
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm py-2 px-4 rounded-lg shadow-lg border border-blue-400/20 backdrop-blur-sm flex items-center gap-2 whitespace-nowrap">
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-2 h-2 bg-white rounded-full"
+              />
+              <span>Click here for AI Assistance</span>
+              <div className="absolute bottom-[-6px] right-6 w-3 h-3 bg-gradient-to-br from-blue-500 to-blue-600 transform rotate-45"></div>
+            </div>
+          </motion.div>
         )}
       </div>
     </div>
