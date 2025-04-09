@@ -333,7 +333,7 @@ Format your response using these guidelines:
               type: "spring",
               stiffness: 400,
               damping: 25,
-              repeat: Infinity,
+              repeat: 1,
               repeatType: "reverse",
               repeatDelay: 1,
             }}
@@ -342,7 +342,7 @@ Format your response using these guidelines:
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm py-2 px-4 rounded-lg shadow-lg border border-blue-400/20 backdrop-blur-sm flex items-center gap-2 whitespace-nowrap">
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                transition={{ duration: 3 }}
                 className="w-2 h-2 bg-white rounded-full"
               />
               <span>Click here for AI Assistance</span>
