@@ -60,13 +60,19 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
 
     setIsLoading(true);
     try {
-      // Create date-time strings by combining selected date with slot times
+      // Create date-time strings
       const startDateTime = new Date(
         `${selectedDate}T${selectedSlot.start}`
       ).toISOString();
       const endDateTime = new Date(
         `${selectedDate}T${selectedSlot.end}`
       ).toISOString();
+
+      console.log("Sending appointment data:", {
+        doctorId,
+        startTime: startDateTime,
+        endTime: endDateTime,
+      });
 
       const response = await axiosInstance.post(
         "/api/v1/appoint/book",
@@ -85,7 +91,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
         onClose();
       }
     } catch (error) {
-      console.error("Booking error:", error);
+      console.error("Booking error:", error.response?.data || error);
       toast.error(
         error.response?.data?.message || "Failed to book appointment"
       );
@@ -117,7 +123,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
             <h2 className="text-xl font-bold text-gray-800">
               Book Appointment
             </h2>
-            <p className="text-sm text-gray-500 mt-1">with {doctor.name}</p>
+            <p className="text-sm text-gray-500 mt-1">with Dr. {doctor.name}</p>
           </div>
           <button
             onClick={onClose}
@@ -141,13 +147,14 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
                 <p className="text-gray-500">Loading available slots...</p>
               </div>
             ) : availableSlots.length > 0 ? (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto p-2">
                 {availableSlots.map((schedule) => (
                   <div key={schedule.day} className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium text-gray-700 mb-3">
+                    <h4 className="font-medium text-gray-700 mb-3 flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-blue-500" />
                       {schedule.day}
                     </h4>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-2">
                       {schedule.slots.map((slot, index) => (
                         <button
                           key={index}
@@ -155,7 +162,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
                           onClick={() =>
                             setSelectedSlot({ ...slot, day: schedule.day })
                           }
-                          className={`p-3 rounded-lg text-sm font-medium transition-all ${
+                          className={`p-3 rounded-lg text-sm font-medium transition-all cursor-pointer hover:scale-[1.02] ${
                             selectedSlot &&
                             selectedSlot.start === slot.start &&
                             selectedSlot.end === slot.end &&
