@@ -1862,108 +1862,125 @@ router.get("/doctors/:id", controllers.GetDoctorById);
 
 /**
  * @swagger
- * paths:
- *  /api/v1/appoint/book:
- *    post:
- *      summary: Book an appointment
- *      description: Book an appointment with a doctor.
- *      tags:
- *        - Appointment
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                doctorId:
- *                  type: string
- *                  description: Unique ID of the doctor.
- *                  example: "641e4c8e8e3b4a7d9f3c67c2"
- *                userId:
- *                  type: string
- *                  description: Unique ID of the user.
- *                  example: "641e4c8e8e3b4a7d9f3c68f3"
- *                date:
- *                  type: string
- *                  format: date-time
- *                  description: Appointment date and time in ISO format.
- *                  example: "2025-04-05T10:00:00.000Z"
- *      responses:
- *        201:
- *          description: Appointment booked successfully.
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  status:
- *                    type: string
- *                    example: "OK"
- *                  message:
- *                    type: string
- *                    example: "Appointment booked successfully!"
- *                  data:
- *                    type: object
- *                    properties:
- *                      _id:
- *                        type: string
- *                        example: "642e5d1e8e3b4a7d9f4d1234"
- *                      doctorId:
- *                        type: string
- *                        example: "641e4c8e8e3b4a7d9f3c67c2"
- *                      userId:
- *                        type: string
- *                        example: "641e4c8e8e3b4a7d9f3c68f3"
- *                      date:
- *                        type: string
- *                        format: date-time
- *                        example: "2025-04-05T10:00:00.000Z"
- *                      status:
- *                        type: string
- *                        example: "pending"
- *        400:
- *          description: Missing required fields.
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  status:
- *                    type: string
- *                    example: "Failed"
- *                  message:
- *                    type: string
- *                    example: "Doctor ID, user ID, and date are required."
- *        404:
- *          description: Doctor or user not found.
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  status:
- *                    type: string
- *                    example: "Failed"
- *                  message:
- *                    type: string
- *                    example: "Doctor not found."
- *        500:
- *          description: Internal Server Error.
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  status:
- *                    type: string
- *                    example: "Failed"
- *                  message:
- *                    type: string
- *                    example: "An error occurred while booking the appointment."
- *                  error:
- *                    type: string
- *                    example: "Error details for debugging."
+ * /api/v1/appointments/book:
+ *   post:
+ *     summary: Book an appointment
+ *     description: Allows a user to book an appointment with a doctor at a specific time slot.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - doctorId
+ *               - userId
+ *               - startTime
+ *               - endTime
+ *             properties:
+ *               doctorId:
+ *                 type: string
+ *                 example: "6616c5d1f7a8b0d50f8c4a1a"
+ *               userId:
+ *                 type: string
+ *                 example: "6616c5f4f7a8b0d50f8c4a1b"
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2025-04-12T10:00:00.000Z"
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2025-04-12T10:30:00.000Z"
+ *     responses:
+ *       201:
+ *         description: Appointment booked successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "OK"
+ *                 message:
+ *                   type: string
+ *                   example: "Appointment booked successfully!"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "6618abcd1234efgh5678ijkl"
+ *                     doctorId:
+ *                       type: string
+ *                       example: "6616c5d1f7a8b0d50f8c4a1a"
+ *                     userId:
+ *                       type: string
+ *                       example: "6616c5f4f7a8b0d50f8c4a1b"
+ *                     startTime:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-04-12T10:00:00.000Z"
+ *                     endTime:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-04-12T10:30:00.000Z"
+ *                     status:
+ *                       type: string
+ *                       example: "pending"
+ *       400:
+ *         description: Bad request - Missing or invalid fields.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "Doctor ID, User ID, Start Time, and End Time are required."
+ *       404:
+ *         description: Doctor or user not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "Doctor not found."
+ *       409:
+ *         description: Conflict - Overlapping appointment slot.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "Doctor already has an appointment in this time slot."
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while booking the appointment."
  */
 
 router.post("/appoint/book", controllers.BookAppointment);

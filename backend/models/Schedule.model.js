@@ -1,19 +1,20 @@
+// models/Schedule.model.ts
 import mongoose from "mongoose";
 
 const slotSchema = new mongoose.Schema({
-  start: { type: String, required: true }, 
-  end: { type: String, required: true },   
+  start: { type: String, required: true }, // e.g. "08:00"
+  end: { type: String, required: true },   // e.g. "09:00"
 });
 
 const dayScheduleSchema = new mongoose.Schema({
-  enabled: { type: Boolean, default: false }, 
-  slots: [slotSchema], 
+  enabled: { type: Boolean, default: false },
+  slots: [slotSchema],
 });
 
 const scheduleSchema = new mongoose.Schema({
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "Doctor",
     required: true,
     unique: true,
   },
@@ -26,9 +27,6 @@ const scheduleSchema = new mongoose.Schema({
     Saturday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
     Sunday: { type: dayScheduleSchema, default: { enabled: false, slots: [] } },
   },
-  lastUpdated: { type: Date, default: Date.now },
 });
 
-const Schedule = mongoose.model("Schedule", scheduleSchema);
-
-export default Schedule;
+export default mongoose.model("Schedule", scheduleSchema);
