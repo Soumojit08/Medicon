@@ -1983,7 +1983,7 @@ router.get("/doctors/:id", controllers.GetDoctorById);
  *                   example: "An error occurred while booking the appointment."
  */
 
-router.post("/appoint/book", controllers.BookAppointment);
+router.post("/appoint/book",Middlewares.UserAuth, controllers.BookAppointment);
 
 /**
  * Get Appointments

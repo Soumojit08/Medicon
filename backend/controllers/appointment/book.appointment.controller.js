@@ -12,7 +12,8 @@ const bookAppointmentController = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { doctorId, userId, date, startTime, endTime } = req.body;
+    const { doctorId, date, startTime, endTime } = req.body;
+    const userId = req.user._id;
 
     if (!doctorId || !userId || !date || !startTime || !endTime) {
       return res.status(StatusCodes.BAD_REQUEST).json({
