@@ -60,16 +60,15 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
 
     setIsLoading(true);
     try {
-      // Create date-time strings
-      const startDateTime = new Date(
-        `${selectedDate}T${selectedSlot.start}`
-      ).toISOString();
-      const endDateTime = new Date(
-        `${selectedDate}T${selectedSlot.end}`
-      ).toISOString();
+      // Format date and times properly
+      const formattedDate = selectedDate; // YYYY-MM-DD
+      const startDateTime = `${selectedSlot.start}:00`; // HH:mm:ss
+      const endDateTime = `${selectedSlot.end}:00`; // HH:mm:ss
 
-      console.log("Sending appointment data:", {
+      // Log the data being sent
+      console.log("Submitting appointment data:", {
         doctorId,
+        date: formattedDate,
         startTime: startDateTime,
         endTime: endDateTime,
       });
@@ -78,6 +77,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
         "/api/v1/appoint/book",
         {
           doctorId,
+          date: formattedDate,
           startTime: startDateTime,
           endTime: endDateTime,
         },
