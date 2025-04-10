@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
 
-// Helper function to check slot conflict
+// Time conflict checker
 const isTimeConflict = (start1, end1, start2, end2) => {
   return start1 < end2 && start2 < end1;
 };
@@ -23,7 +23,9 @@ const bookAppointmentController = async (req, res) => {
     }
 
     const appointmentDate = new Date(date);
-    const dayOfWeek = appointmentDate.toLocaleString("en-US", { weekday: "long" });
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const dayOfWeek = dayNames[appointmentDate.getUTCDay()];
+    // console.log("Booking day:", dayOfWeek);
 
     const doctor = await Models.DoctorModel.findById(doctorId).session(session);
     if (!doctor) {
@@ -39,15 +41,45 @@ const bookAppointmentController = async (req, res) => {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
     }
 
-    const schedule = await Models.ScheduleModel.findOne({ doctorId }).session(session);
-    if (!schedule || !schedule.schedules[dayOfWeek] || !schedule.schedules[dayOfWeek].enabled) {
+    const schedule = await Models.ScheduleModel.findOne({ doctorId }).session(session).lean(); // 👈 using `.lean()` to avoid mongoose doc issues
+    // console.log("Fetched Schedule:", JSON.stringify(schedule, null, 2));
+
+    // ✅ Validate structure
+    if (!schedule || !Array.isArray(schedule.schedules)) {
+      // console.log("❌ Schedule or schedules array missing");
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: "Doctor has no schedule configured." });
+    }
+
+    const daySchedule = schedule.schedules.find(
+      s => s.day?.toLowerCase() === dayOfWeek.toLowerCase()
+    );
+
+    if (!daySchedule) {
+      // console.log("❌ No schedule found for day:", dayOfWeek);
       await session.abortTransaction();
       session.endSession();
       return res.status(StatusCodes.BAD_REQUEST).json({ message: "Doctor is not available on this day." });
     }
 
-    const slotAvailable = schedule.schedules[dayOfWeek].slots.some(slot => {
-      return slot.start === startTime && slot.end === endTime;
+    if (!daySchedule.enabled) {
+      // console.log("❌ Day schedule is disabled:", daySchedule);
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: "Doctor is not available on this day." });
+    }
+
+    if (!Array.isArray(daySchedule.slots) || daySchedule.slots.length === 0) {
+      // console.log("❌ Slots are empty for", dayOfWeek);
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: "No available slots on this day." });
+    }
+
+    const slotAvailable = daySchedule.slots.some(slot => {
+      // console.log("Checking slot:", slot, "Against:", startTime, "-", endTime);
+      return slot.start <= startTime && slot.end >= endTime;
     });
 
     if (!slotAvailable) {
@@ -56,7 +88,6 @@ const bookAppointmentController = async (req, res) => {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: "Selected time slot is not available." });
     }
 
-    // Check for existing appointment conflicts
     const existing = await Models.AppointmentModel.findOne({
       doctorId,
       date: appointmentDate,
@@ -80,7 +111,7 @@ const bookAppointmentController = async (req, res) => {
       });
     }
 
-    const newAppointment = new Appointment({
+    const newAppointment = new Models.AppointmentModel({
       doctorId,
       userId,
       date: appointmentDate,
@@ -101,7 +132,7 @@ const bookAppointmentController = async (req, res) => {
   } catch (err) {
     await session.abortTransaction();
     session.endSession();
-    console.error("Booking error:", err);
+    // console.error("Booking error:", err);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: "Something went wrong.",
       error: err.message,
