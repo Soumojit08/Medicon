@@ -60,12 +60,10 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
 
     setIsLoading(true);
     try {
-      // Format date and times properly
-      const formattedDate = selectedDate; // YYYY-MM-DD
-      const startDateTime = `${selectedSlot.start}:00`; // HH:mm:ss
-      const endDateTime = `${selectedSlot.end}:00`; // HH:mm:ss
+      const formattedDate = selectedDate;
+      const startDateTime = selectedSlot.start;
+      const endDateTime = selectedSlot.end;
 
-      // Log the data being sent
       console.log("Submitting appointment data:", {
         doctorId,
         date: formattedDate,
@@ -86,9 +84,12 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
         }
       );
 
-      if (response.data?.status === "Success") {
-        toast.success("Appointment booked successfully!");
+      if (response.data?.appointment) {
+        // Only close and show success if we got an appointment back
+        toast.success("Appointment Request Raised Successfully!");
         onClose();
+      } else {
+        toast.error("Something went wrong while booking");
       }
     } catch (error) {
       console.error("Booking error:", error.response?.data || error);
