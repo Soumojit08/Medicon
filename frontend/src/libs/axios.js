@@ -1,12 +1,13 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const baseURL = import.meta.env.MODE === "development" 
-  ? "http://localhost:3000" 
-  : "http://ec2-98-81-123-148.compute-1.amazonaws.com:3000";
+const baseURL =
+  import.meta.env.VITE_MODE === "development"
+    ? import.meta.env.VITE_DEVELOPMENT_URL
+    : import.meta.env.VITE_PRODUCTION_URL;
 
-console.log("Current environment:", import.meta.env.MODE);
-console.log("Using API baseURL:", baseURL);
+console.log("Current environment:", import.meta.env.VITE_MODE);
+// console.log("Using API baseURL:", baseURL);
 
 export const axiosInstance = axios.create({
   baseURL,

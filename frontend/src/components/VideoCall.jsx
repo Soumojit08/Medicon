@@ -12,8 +12,8 @@ const VideoCall = () => {
   const [isLoading, setIsLoading] = useState(true);
   const zegoRef = useRef(null);
 
-  const appId = 1506791970;
-  const serverSecret = "9b64224b2e9a099575e998495f402395";
+  const appId = 1943313691;
+  const serverSecret = import.meta.env.VITE_SERVER_SECRET;
 
   useEffect(() => {
     let mounted = true;
