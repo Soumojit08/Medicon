@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
+import sendMail from "../../services/sendMail.js";
+import MailTemplates from "../../utils/index.utils.js";
 
 // Time conflict checker
 const isTimeConflict = (start1, end1, start2, end2) => {
@@ -123,6 +125,24 @@ const bookAppointmentController = async (req, res) => {
     await newAppointment.save({ session });
     await session.commitTransaction();
     session.endSession();
+
+    const emailData = MailTemplates.AppointBookMailContent({
+      email: user.email,
+      name: user.name,
+      doctorName: doctor.name,
+      date: appointmentDate.toDateString(),
+      startTime,
+      endTime,
+      subject: "Appointment Confirmation",
+    });
+
+    await sendMail(emailData, (error, info) => {
+      if (error) {
+        console.log("Mail Sending Error: " + error);
+      } else {
+        console.log("Mail Sent: " + info);
+      }
+    });
 
     return res.status(StatusCodes.CREATED).json({
       message: "Appointment booked successfully.",

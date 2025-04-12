@@ -30,15 +30,13 @@ app.use((err, req, res, next) => {
 });
 app.use(express.static("public"));
 
-// const corsOrigin = configs.ENV === "development" ? "http://localhost:5173" : "https://medicon-4pta.onrender.com";
-// app.use(
-//   cors({
-//     origin: corsOrigin,
-//     credentials: true,
-//   })
-// );
-
-app.use(cors());
+const corsOrigin = configs.ENV === "development" ? "http://localhost:5173" : "https://medicon-4pta.onrender.com";
+app.use(
+  cors({
+    origin: corsOrigin,
+    credentials: true,
+  })
+);
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions); // Correct usage
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
