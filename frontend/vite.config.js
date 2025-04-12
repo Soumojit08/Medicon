@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
           target:
             mode === "development"
               ? process.env.VITE_DEVELOPMENT_URL
-              : `http://ec2-98-81-123-148.compute-1.amazonaws.com:3000/api/v1`,
+              : `https://medicon-iota.vercel.app`,
           changeOrigin: true,
         },
       },
