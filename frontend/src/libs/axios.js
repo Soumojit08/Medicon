@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 const baseURL =
   import.meta.env.VITE_MODE === "development"
     ? import.meta.env.VITE_DEVELOPMENT_URL
-    : `http://medicon-oboofixfx-soumojit08s-projects.vercel.app`;
+    : `http://ec2-98-81-123-148.compute-1.amazonaws.com:3000/api/v1`;
 
 console.log("Current environment:", import.meta.env.VITE_MODE);
 // console.log("Using API baseURL:", baseURL);
