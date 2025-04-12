@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
 });
 app.use(express.static("public"));
 
-const corsOrigin = configs.ENV === "development" ? "http://localhost:5173" : "https://medicon-4pta.onrender.com";
+const corsOrigin = configs.ENV === "development" ? "http://localhost:5173" : process.env.FRONTEND;
 app.use(
   cors({
     origin: corsOrigin,
