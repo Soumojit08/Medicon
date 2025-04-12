@@ -11,8 +11,8 @@ export default defineConfig(({ mode }) => {
         "/api": {
           target:
             mode === "development"
-              ? "http://localhost:3000"
-              : "http://ec2-98-81-123-148.compute-1.amazonaws.com:3000",
+              ? process.env.VITE_DEVELOPMENT_URL
+              : process.env.VITE_PRODUCTION_URL,
           changeOrigin: true,
         },
       },

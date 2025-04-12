@@ -45,8 +45,8 @@ Format your response using these guidelines:
 - Focus on specific actionable advice
 - End with a reminder to seek professional help if needed`;
 
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD6s-UDSSMZppWUGetZmMtZxw-uR4-hMyo`;
-
+    const API_URL = import.meta.env.VITE_APP_URL;
+    
     try {
       const response = await axios.post(
         API_URL,
