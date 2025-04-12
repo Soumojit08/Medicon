@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 const baseURL =
   import.meta.env.VITE_MODE === "development"
     ? import.meta.env.VITE_DEVELOPMENT_URL
-    : `https://medicon-iota.vercel.app`;
+    : `https://medicon-nw25.onrender.com`;
 
 console.log("Current environment:", import.meta.env.VITE_MODE);
 // console.log("Using API baseURL:", baseURL);

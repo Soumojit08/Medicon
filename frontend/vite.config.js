@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
           target:
             mode === "development"
               ? process.env.VITE_DEVELOPMENT_URL
-              : `https://medicon-iota.vercel.app`,
+              : `https://medicon-nw25.onrender.com`,
           changeOrigin: true,
         },
       },
