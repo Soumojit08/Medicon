@@ -30,13 +30,28 @@ app.use((err, req, res, next) => {
 });
 app.use(express.static("public"));
 
-const corsOrigin = configs.ENV === "development" ? "http://localhost:5173" : process.env.FRONTEND;
+// Update CORS configuration for Vercel
+const corsOrigin = configs.ENV === "development" 
+  ? "http://localhost:5173" 
+  : ["https://your-frontend-domain.vercel.app", "https://medicon-frontend.vercel.app"];
+
 app.use(
   cors({
     origin: corsOrigin,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   })
 );
+
+// Update for Vercel deployment
+if (configs.ENV !== "development") {
+  app.use((req, res, next) => {
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
+    }
+    next();
+  });
+}
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions); // Correct usage
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
@@ -68,4 +83,7 @@ app.listen(configs.PORT, (err) => {
       }
     );
   }
-});
+}
+)
+
+export default app;
