@@ -44,15 +44,15 @@ const userSignUpController = async (req, res) => {
     }
 
     // Check if the user already exists
-    const redisKey = `userExists:${email}`;
-    const cachedUser = await redis.get(redisKey);
+    // const redisKey = `userExists:${email}`;
+    // const cachedUser = await redis.get(redisKey);
 
-    if (cachedUser) {
-      return res.status(StatusCodes.CONFLICT).json({
-        status: "Failed",
-        message: "User already exists! (from cache)",
-      });
-    }
+    // if (cachedUser) {
+    //   return res.status(StatusCodes.CONFLICT).json({
+    //     status: "Failed",
+    //     message: "User already exists! (from cache)",
+    //   });
+    // }
 
     // If not in cache, check the database
     const User = await Models.UserModel.findOne({ email: email });
@@ -102,7 +102,7 @@ const userSignUpController = async (req, res) => {
       subject: "Welcome to Medicon",
     });
 
-    console.log("Email Data:", emailData);
+    // console.log("Email Data:", emailData);
 
     await sendMail(emailData, (error, info) => {
       if (error) {
