@@ -31,9 +31,10 @@ app.use((err, req, res, next) => {
 app.use(express.static("public"));
 
 // Update CORS configuration for Vercel
-const corsOrigin = configs.ENV === "development" 
-  ? "http://localhost:5173" 
-  : ["https://your-frontend-domain.vercel.app", "https://medicon-frontend.vercel.app"];
+const corsOrigin =
+  configs.ENV === "development"
+    ? "http://localhost:5173"
+    : "https://medicon-za1z.vercel.app";
 
 app.use(
   cors({
