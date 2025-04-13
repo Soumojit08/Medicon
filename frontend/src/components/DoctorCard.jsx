@@ -91,7 +91,7 @@ const DoctorCard = ({ doctor, user }) => {
 
   return (
     <>
-      <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 w-full max-w-xs mb-6 overflow-hidden group">
+      <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 w-full mb-6 overflow-hidden group ">
         {/* Profile header with subtle gradient */}
         <div className="relative h-24 -mx-5 -mt-5 mb-4 bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
