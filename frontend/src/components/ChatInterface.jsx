@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion"; // Add this import at the top
+import { motion } from "framer-motion";
 import AIbot from "../assets/robo.svg";
 import { X, Send, Maximize, Minimize } from "lucide-react";
 import axios from "axios";
@@ -46,7 +46,7 @@ Format your response using these guidelines:
 - End with a reminder to seek professional help if needed`;
 
     const API_URL = import.meta.env.VITE_APP_URL;
-    
+
     try {
       const response = await axios.post(
         API_URL,
@@ -157,9 +157,9 @@ Format your response using these guidelines:
   }, [isOpen, messages.length]);
 
   return (
-    <div className="fixed bottom-8 right-8 z-[9999]">
+    <div className="fixed bottom-4 right-4 z-[9999] sm:bottom-8 sm:right-8">
       {isOpen && (
-        <div className="w-96 shadow-2xl rounded-2xl flex flex-col overflow-hidden border border-blue-100 transition-all duration-300 transform bg-white">
+        <div className="w-full max-w-xs sm:max-w-md lg:w-96 shadow-2xl rounded-2xl flex flex-col overflow-hidden border border-blue-100 transition-all duration-300 transform bg-white">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -302,7 +302,7 @@ Format your response using these guidelines:
                   </button>
                 </div>
                 <div className="text-center mt-2 text-xs text-gray-400">
-                  For emergencies, call 911 immediately
+                  For emergencies, call 108 immediately
                 </div>
               </div>
             </>
