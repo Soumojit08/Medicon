@@ -190,19 +190,27 @@ const ManageSchedule = ({ doctorId }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-bold text-blue-500">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <h3 className="text-lg font-bold text-blue-500 text-center sm:text-left">
           Manage Weekly Schedule
         </h3>
+        <button
+          onClick={handleSave}
+          className="mt-4 sm:mt-0 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Save Changes
+        </button>
       </div>
       {schedules && schedules.length > 0 ? (
         <div className="space-y-4">
           {schedules.map((schedule) => (
             <div key={schedule.day} className="bg-zinc-100 p-4 rounded-lg">
-              <div className="flex justify-between items-center mb-4">
-                <p className="text-gray-800 font-medium">{schedule.day}</p>
+              <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+                <p className="text-gray-800 font-medium text-center sm:text-left">
+                  {schedule.day}
+                </p>
                 {/* Slider Toggle Switch */}
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label className="relative inline-flex items-center cursor-pointer mt-2 sm:mt-0">
                   <input
                     type="checkbox"
                     checked={schedule.enabled}
@@ -235,7 +243,7 @@ const ManageSchedule = ({ doctorId }) => {
                   schedule.slots.map((slot, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between"
+                      className="flex flex-col sm:flex-row items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-4">
                         <input
@@ -316,14 +324,6 @@ const ManageSchedule = ({ doctorId }) => {
           </button>
         </div>
       )}
-      <div className="flex gap-4 mt-6">
-        <button
-          onClick={handleSave}
-          className="flex-1/2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          Save Changes
-        </button>
-      </div>
     </div>
   );
 };
