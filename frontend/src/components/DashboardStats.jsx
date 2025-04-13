@@ -121,7 +121,7 @@ const DashboardStats = () => {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats &&
           stats.map((stat, index) => {
             const colorClasses = getColorClasses(stat.color);
@@ -169,7 +169,7 @@ const DashboardStats = () => {
             />
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {healthMetrics &&
             healthMetrics.map((metric, index) => {
               const colorClasses = getColorClasses(metric.color);

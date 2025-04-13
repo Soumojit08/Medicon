@@ -30,7 +30,7 @@ const Tooltip = ({ children, content, position = "top", className = "" }) => {
           {/* Arrow */}
           <div
             className={`
-              absolute w-2 h-2 bg-gray-900 transform rotate-45
+              absolute w-2 h-2 bg-gray-900 transform rotate-45 sm:hidden
               ${
                 position === "top"
                   ? "bottom-[-4px] left-1/2 -translate-x-1/2"

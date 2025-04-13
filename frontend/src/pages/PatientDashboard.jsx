@@ -93,8 +93,7 @@ const PatientDashboard = () => {
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* {console.log("user in patient dashboard :", user)} */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {doctors.map((doctor) => (
                   <DoctorCard key={doctor._id} doctor={doctor} user={user} />
                 ))}
@@ -102,8 +101,15 @@ const PatientDashboard = () => {
             )}
           </div>
 
-          <AppointmentsSection />
-          <MedicalRecords userId={userId} userToken={usrtoken} />
+          {/* Appointments Section */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <AppointmentsSection />
+          </div>
+
+          {/* Medical Records Section */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <MedicalRecords userId={userId} userToken={usrtoken} />
+          </div>
         </div>
       </div>
       <Footer />

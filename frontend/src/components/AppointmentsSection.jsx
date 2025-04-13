@@ -119,14 +119,14 @@ const AppointmentsSection = () => {
     <div className="bg-white rounded-xl shadow-sm p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 mb-6">
         <h2 className="text-xl font-semibold">Upcoming Appointments</h2>
-        <div className="flex items-center space-x-4">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="relative w-full sm:w-auto">
             <input
               type="text"
               placeholder="Search appointments..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <Search
               className="absolute left-3 top-2.5 text-gray-400"
@@ -136,7 +136,7 @@ const AppointmentsSection = () => {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Status</option>
             <option value="upcoming">Upcoming</option>
@@ -146,7 +146,7 @@ const AppointmentsSection = () => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Types</option>
             <option value="Video Call">Video Call</option>
@@ -155,7 +155,7 @@ const AppointmentsSection = () => {
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+            className="w-full sm:w-auto p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
           >
             <RefreshCw
               className={`text-gray-600 ${isLoading ? "animate-spin" : ""}`}
@@ -169,7 +169,7 @@ const AppointmentsSection = () => {
         {filteredAppointments.map((appointment) => (
           <div
             key={appointment.id}
-            className="flex items-center justify-between p-4 rounded-lg border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-1"
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-1"
           >
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
@@ -200,7 +200,7 @@ const AppointmentsSection = () => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 mt-4 sm:mt-0">
               <div
                 className={`flex items-center space-x-2 px-3 py-1 rounded-full ${getStatusColor(
                   appointment.status

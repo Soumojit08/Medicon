@@ -115,11 +115,11 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}
         exit={{ scale: 0.95 }}
-        className="bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+        className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
           <div>
             <h2 className="text-xl font-bold text-gray-800">
               Book Appointment

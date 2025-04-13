@@ -9,14 +9,14 @@ const DoctorProfileHeader = ({ doctorData }) => {
   }
 
   return (
-    <div className="flex flex-col items-start gap-4 mb-6 shadow-md rounded-lg p-6">
+    <div className="flex flex-col md:flex-row items-start gap-4 mb-6 shadow-md rounded-lg p-6">
       <div className="flex items-center gap-4">
-          <div className="relative mb-2 h-24 w-24 rounded-full border-4 border-blue-600 shadow-lg overflow-hidden bg-white group-hover:border-blue-100 transition-colors duration-300">
-            <Image
-              pic={doctorData.profilepic}
-              className="h-full w-full object-cover"
-            />
-          </div>
+        <div className="relative mb-2 h-24 w-24 rounded-full border-4 border-blue-600 shadow-lg overflow-hidden bg-white group-hover:border-blue-100 transition-colors duration-300">
+          <Image
+            pic={doctorData.profilepic}
+            className="h-full w-full object-cover"
+          />
+        </div>
         <div>
           <h2 className="text-xl font-bold text-blue-500">
             {doctorData.name}

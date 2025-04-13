@@ -8,7 +8,7 @@ const MedicalRecords = ({ userId, userToken }) => {
   const [fileNames, setFileNames] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [records, setRecords] = useState([]);
-  const [value, setValue] = useState([])
+  const [value, setValue] = useState([]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const MedicalRecords = ({ userId, userToken }) => {
       );
 
       console.log(response.data.data);
-      setValue(response.data.data)
+      setValue(response.data.data);
 
       if (response.data && response.data.status === "OK") {
         const files = response.data.data?.files || [];
@@ -155,7 +155,7 @@ const MedicalRecords = ({ userId, userToken }) => {
     <div className="bg-white p-6 rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* File Selection Section */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <h2 className="text-xl font-bold">Medical Records</h2>
           <div className="flex items-center space-x-2">
             <input
@@ -169,7 +169,7 @@ const MedicalRecords = ({ userId, userToken }) => {
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}
-              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 cursor-pointer"
+              className="bg-gray-200 text-gray-800 px-4 py-2 w-full sm:w-auto rounded-md hover:bg-gray-300 cursor-pointer"
             >
               Select Files
             </button>
@@ -182,7 +182,10 @@ const MedicalRecords = ({ userId, userToken }) => {
             <p className="font-semibold mb-2">Selected files:</p>
             <div className="space-y-3">
               {Array.from(files).map((file, index) => (
-                <div key={index} className="flex items-center gap-4">
+                <div
+                  key={index}
+                  className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
+                >
                   <input
                     type="text"
                     placeholder="Enter certificate name"
@@ -214,7 +217,7 @@ const MedicalRecords = ({ userId, userToken }) => {
           {records.length > 0 ? (
             records.map((record, index) => (
               <div className="bg-gray-50 p-4 rounded-lg" key={index}>
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-gray-300 text-blue-600 rounded-lg flex items-center justify-center">
                       <Newspaper />
@@ -227,18 +230,18 @@ const MedicalRecords = ({ userId, userToken }) => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
                     <a
                       href={record.fileURL}
                       download={record.fileName}
-                      className="bg-white border border-blue-500 text-blue-500 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors"
+                      className="bg-white border border-blue-500 text-blue-500 px-4 py-2 w-full sm:w-auto rounded-md hover:bg-blue-500 hover:text-white transition-colors text-center"
                     >
                       Download
                     </a>
                     <button
                       type="button"
                       onClick={() => deleteFile(record._id)}
-                      className="bg-red-600 px-4 text-white py-2 rounded-md hover:bg-red-700 transition-colors cursor-pointer"
+                      className="bg-red-600 px-4 py-2 w-full sm:w-auto text-white rounded-md hover:bg-red-700 transition-colors text-center flex items-center justify-center"
                     >
                       <Trash2 />
                     </button>

@@ -40,7 +40,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/register"
+                  to="/loginDashboard"
                   className="hover:text-white transition-colors"
                 >
                   Register as Patient
@@ -48,7 +48,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/doctor-register"
+                  to="/loginDashboard"
                   className="hover:text-white transition-colors"
                 >
                   Join as Doctor
@@ -73,15 +73,18 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="flex items-center">
                 <Phone className="h-4 w-4 mr-2" />
-                <span>+1 234 567 890</span>
+                <span>+91 7439932564</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-4 w-4 mr-2" />
-                <span>support@medicon.com</span>
+                <span>medicon2k25@gmail.com</span>
               </li>
               <li className="flex items-center">
                 <MapPin className="h-4 w-4 mr-2" />
-                <span>123 Healthcare St, Medical City</span>
+                <span>
+                  National Highway 6, Banitabla, Uluberia, Howrah, West Bengal
+                  711316
+                </span>
               </li>
             </ul>
           </div>
