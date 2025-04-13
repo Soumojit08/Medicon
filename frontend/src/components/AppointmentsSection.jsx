@@ -1,73 +1,59 @@
 // src/components/AppointmentsSection.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Calendar,
   Clock,
   Video,
   MessageSquare,
-  Search,
-  Filter,
   RefreshCw,
   CheckCircle,
   XCircle,
   AlertCircle,
 } from "lucide-react";
+import axiosInstance from "../libs/axios";
+import toast from "react-hot-toast";
+import Image from "./Image";
 
-const AppointmentsSection = () => {
+const AppointmentsSection = ({ userToken }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [appointments, setAppointments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterType, setFilterType] = useState("all");
 
-  // Static data for appointments
-  const appointmentsData = [
-    {
-      id: 1,
-      doctor: "Dr. Sarah Johnson",
-      specialization: "Cardiologist",
-      date: "2024-03-25",
-      time: "10:00 AM",
-      type: "Video Call",
-      status: "upcoming",
-      duration: "30 mins",
-    },
-    {
-      id: 2,
-      doctor: "Dr. Michael Chen",
-      specialization: "Neurologist",
-      date: "2024-03-24",
-      time: "2:30 PM",
-      type: "In Person",
-      status: "completed",
-      duration: "45 mins",
-    },
-    {
-      id: 3,
-      doctor: "Dr. Emily Brown",
-      specialization: "Pediatrician",
-      date: "2024-03-23",
-      time: "11:00 AM",
-      type: "Video Call",
-      status: "cancelled",
-      duration: "30 mins",
-    },
-    {
-      id: 4,
-      doctor: "Dr. David Wilson",
-      specialization: "Orthopedist",
-      date: "2024-03-26",
-      time: "3:00 PM",
-      type: "In Person",
-      status: "upcoming",
-      duration: "45 mins",
-    },
-  ];
+  useEffect(() => {
+    if (userToken) {
+      getAppointments();
+    }
+  }, [userToken]);
 
-  const [appointments, setAppointments] = useState(appointmentsData);
+  const getAppointments = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/appointments", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+        withCredentials: true,
+      });
+
+      if (response.data?.data) {
+        setAppointments(response.data.data);
+      } else {
+        toast.error("No appointments found!");
+      }
+    } catch (error) {
+      toast.error("Something went wrong in loading appointments!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "upcoming":
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "confirmed":
         return "bg-blue-100 text-blue-800";
       case "completed":
         return "bg-green-100 text-green-800";
@@ -80,8 +66,10 @@ const AppointmentsSection = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case "upcoming":
+      case "pending":
         return <AlertCircle className="w-4 h-4" />;
+      case "confirmed":
+        return <CheckCircle className="w-4 h-4" />;
       case "completed":
         return <CheckCircle className="w-4 h-4" />;
       case "cancelled":
@@ -94,63 +82,43 @@ const AppointmentsSection = () => {
   const filteredAppointments = appointments
     .filter((appointment) => {
       const matchesSearch =
-        appointment.doctor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        appointment.specialization
+        appointment.doctorId.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        appointment.doctorId.specialization
+          .join(", ")
           .toLowerCase()
           .includes(searchTerm.toLowerCase());
       const matchesStatus =
         filterStatus === "all" || appointment.status === filterStatus;
-      const matchesType =
-        filterType === "all" || appointment.type === filterType;
-      return matchesSearch && matchesStatus && matchesType;
+      return matchesSearch && matchesStatus;
     })
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const handleRefresh = () => {
-    setIsLoading(true);
-    // Simulate API call with setTimeout
-    setTimeout(() => {
-      setAppointments(appointmentsData);
-      setIsLoading(false);
-    }, 1000);
+    try {
+      getAppointments();
+      toast.success("Refreshed appointments");
+    } catch (error) {
+      toast.error("Failed to refresh! Try Later");
+    }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className="bg-white rounded-xl p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 mb-6">
-        <h2 className="text-xl font-semibold">Upcoming Appointments</h2>
+        <h2 className="text-xl font-semibold">Your Appointments</h2>
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <div className="relative w-full sm:w-auto">
-            <input
-              type="text"
-              placeholder="Search appointments..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <Search
-              className="absolute left-3 top-2.5 text-gray-400"
-              size={20}
-            />
-          </div>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
             className="w-full sm:w-auto px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Status</option>
-            <option value="upcoming">Upcoming</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
-          </select>
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="w-full sm:w-auto px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="all">All Types</option>
-            <option value="Video Call">Video Call</option>
-            <option value="In Person">In Person</option>
           </select>
           <button
             onClick={handleRefresh}
@@ -168,21 +136,22 @@ const AppointmentsSection = () => {
       <div className="space-y-4">
         {filteredAppointments.map((appointment) => (
           <div
-            key={appointment.id}
+            key={appointment._id}
             className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-1"
           >
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
-                <span className="text-blue-600 font-medium">
-                  {appointment.doctor.charAt(0)}
-                </span>
+              <div className="relative mb-2 h-24 w-24 rounded-full border-4 border-blue-600 shadow-lg overflow-hidden bg-white group-hover:border-blue-100 transition-colors duration-300">
+                <Image
+                  pic={appointment.doctorId.profilepic}
+                  className="h-full w-full object-cover"
+                />
               </div>
               <div>
                 <h3 className="font-medium text-gray-800">
-                  {appointment.doctor}
+                  {appointment.doctorId.name}
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {appointment.specialization}
+                  {appointment.doctorId.specialization.join(", ")}
                 </p>
                 <div className="flex items-center space-x-2 mt-1">
                   <Calendar className="w-4 h-4 text-gray-400" />
@@ -191,10 +160,7 @@ const AppointmentsSection = () => {
                   </span>
                   <Clock className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-500">
-                    {appointment.time}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    • {appointment.duration}
+                    {appointment.startTime} - {appointment.endTime}
                   </span>
                 </div>
               </div>

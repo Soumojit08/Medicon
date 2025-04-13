@@ -18,7 +18,7 @@ const DashboardHeader = ({ user }) => {
         <div className="flex justify-between items-center py-4">
           {/* User Info */}
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center overflow-hidden border">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-blue-500">
               <UserImage
                 pic={user.profilepic}
                 className="object-cover w-full h-full"

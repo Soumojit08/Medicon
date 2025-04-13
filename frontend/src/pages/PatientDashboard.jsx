@@ -103,7 +103,7 @@ const PatientDashboard = () => {
 
           {/* Appointments Section */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <AppointmentsSection />
+            <AppointmentsSection user={user} userToken={usrtoken} userId={userId} />
           </div>
 
           {/* Medical Records Section */}
