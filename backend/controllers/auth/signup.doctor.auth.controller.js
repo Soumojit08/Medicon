@@ -5,6 +5,8 @@ import configs from "../../configs/index.configs.js";
 import clodinary from "../../services/cloudinary.js";
 import fs from "fs";
 import redis from "../../Redis/client.js";
+import sendMail from "../../services/sendMail.js";
+import MailTemplates from "../../utils/index.utils.js";
 
 const doctorSignUpController = async (req, res) => {
   try {
@@ -42,17 +44,6 @@ const doctorSignUpController = async (req, res) => {
       });
     }
 
-    // Generate a unique Redis key for checking if the doctor already exists
-    const redisKey = `doctorExists:${email}:${phonenumber}:${registrationId}`;
-    const cachedDoctor = await redis.get(redisKey);
-
-    if (cachedDoctor) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        status: "Failed",
-        message: "Doctor already exists! (from cache)",
-      });
-    }
-
     // Check if doctor already exists in the database
     const existingDoctor = await Models.DoctorModel.findOne({
       $or: [
@@ -63,8 +54,6 @@ const doctorSignUpController = async (req, res) => {
     });
 
     if (existingDoctor) {
-      // Store the result in Redis cache with a short expiration (5 minutes)
-      await redis.set(redisKey, JSON.stringify(existingDoctor), "EX", 300);
 
       return res.status(StatusCodes.BAD_REQUEST).json({
         status: "Failed",
@@ -108,6 +97,19 @@ const doctorSignUpController = async (req, res) => {
 
     // Save to DB
     await newDoctor.save();
+
+    const emailData = MailTemplates.SignUpDoctorMailContent({
+      email: email,
+      doctorName: name
+    });
+
+    await sendMail(emailData, (error, info) => {
+      if (error) {
+        console.log("Mail Sending Error: " + error);
+      } else {
+        console.log("Mail Sent: " + info);
+      }
+    });
 
     return res.status(StatusCodes.CREATED).json({
       status: "OK",
