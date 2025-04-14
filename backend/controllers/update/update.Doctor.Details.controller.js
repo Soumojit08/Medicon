@@ -1,6 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
 import redis from "../../Redis/client.js";
+import MailTemplates from "../../utils/index.utils.js";
+import sendMail from "../../services/sendMail.js";
 
 const updateDoctorDetailsController = async (req, res, next) => {
   try {
@@ -76,6 +78,22 @@ const updateDoctorDetailsController = async (req, res, next) => {
         message: "Doctor not found",
       });
     }
+
+    const emailData = MailTemplates.UpdateDoctorDetsMailContent({
+      email: updatedDoctorDetails.email,
+      doctorName: updatedDoctorDetails.name,
+      updatedFields: req.body
+    });
+
+    // console.log(emailData);
+
+    await sendMail(emailData, (error, info) => {
+      if (error) {
+        console.log("Mail Sending Error: " + error);
+      } else {
+        console.log("Mail Sent: " + info);
+      }
+    });
 
     return res.status(StatusCodes.OK).json({
       status: "Success",
