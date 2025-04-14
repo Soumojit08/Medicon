@@ -86,6 +86,10 @@ const DoctorSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  experience: {
+    type: Number,
+    default: 0
+  },
   facts: {
     type: String,
     default: "Each patient is a story waiting to be heard—listen with compassion, heal with expertise.",

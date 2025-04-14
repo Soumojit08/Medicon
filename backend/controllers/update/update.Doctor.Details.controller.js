@@ -5,7 +5,6 @@ import redis from "../../Redis/client.js";
 const updateDoctorDetailsController = async (req, res, next) => {
   try {
     const doctorId = req.user?.id || req.doctor?._id;
-    console.log("Doctor ID:", doctorId);
 
     if (!doctorId) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -30,9 +29,11 @@ const updateDoctorDetailsController = async (req, res, next) => {
       updatedDetails.consultationFee = fee;
     }
 
-    // ✅ Convert experience to a number
+    // ✅ Convert experience string like "20 years" to 20
     if (updatedDetails.experience !== undefined) {
-      const exp = Number(updatedDetails.experience);
+      const exp = Number(
+        String(updatedDetails.experience).replace(/[^0-9.-]+/g, "")
+      );
       if (isNaN(exp)) {
         return res.status(StatusCodes.BAD_REQUEST).json({
           status: "Failed",
@@ -75,12 +76,6 @@ const updateDoctorDetailsController = async (req, res, next) => {
         message: "Doctor not found",
       });
     }
-
-    // Generate a unique Redis key for the doctor's details
-    const redisKey = `doctorDetails:${doctorId}`;
-
-    // Cache the updated doctor details with a 5 min expiration
-    await redis.set(redisKey, JSON.stringify(updatedDoctorDetails), "EX", 300);
 
     return res.status(StatusCodes.OK).json({
       status: "Success",
