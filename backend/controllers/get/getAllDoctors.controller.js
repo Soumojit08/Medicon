@@ -20,23 +20,23 @@ const getAllDoctors = async (req, res, next) => {
         }
 
         // Handle verified doctors
-        const redisKey = isVerified ? `allVerifiedDoctors` : `allDoctors`;
-        const cachedDoctors = await redis.get(redisKey);
+        // const redisKey = isVerified ? `allVerifiedDoctors` : `allDoctors`;
+        // const cachedDoctors = await redis.get(redisKey);
 
-        if (cachedDoctors) {
-            return res.status(StatusCodes.OK).json({
-                status: 'OK',
-                message: isVerified ? "All verified Doctors!" : "All Doctors",
-                data: JSON.parse(cachedDoctors)
-            });
-        }
+        // if (cachedDoctors) {
+        //     return res.status(StatusCodes.OK).json({
+        //         status: 'OK',
+        //         message: isVerified ? "All verified Doctors!" : "All Doctors",
+        //         data: JSON.parse(cachedDoctors)
+        //     });
+        // }
 
         // Fetch from database if not in cache
         const query = isVerified ? { isVerified: true } : {};
         const doctors = await Models.DoctorModel.find(query).select("-password");
 
         // Store the result in Redis cache
-        await redis.set(redisKey, JSON.stringify(doctors), "EX", 300); // Cache for 5 minutes
+        // await redis.set(redisKey, JSON.stringify(doctors), "EX", 300); // Cache for 5 minutes
 
         return res.status(StatusCodes.OK).json({
             status: 'OK',

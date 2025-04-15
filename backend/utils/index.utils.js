@@ -1,4 +1,5 @@
 import appointmentBookingSuccessfulMailTemplate from "./Mails/appointmentBook.mail.template.js";
+import appointmentStatusUpdateMailContent from "./Mails/appointmentStatus.mail.template.js";
 import deletedDoctorMailContent from "./Mails/deleteDoctor.mail.template.js";
 import doctorVerificationSuccessfulContent from "./Mails/doctorVerification.mail.template.js";
 import doctorWelcomeMailContent from "./Mails/signUpDoctor.mail.template.js";
@@ -11,7 +12,8 @@ const MailTemplates = {
     DeleteDoctorMailContent: deletedDoctorMailContent,
     UpdateDoctorDetsMailContent: updatedDoctorMailContent,
     SignUpDoctorMailContent: doctorWelcomeMailContent,
-    VerificationDoctorContent: doctorVerificationSuccessfulContent
+    VerificationDoctorContent: doctorVerificationSuccessfulContent,
+    AppointmentStatusUpdateContent: appointmentStatusUpdateMailContent
 }
 
 export default MailTemplates;
