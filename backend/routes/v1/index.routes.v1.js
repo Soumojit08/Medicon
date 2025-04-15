@@ -2767,6 +2767,14 @@ router.get("/get-medical-certificate", Middlewares.UserAuth, controllers.GetMedi
  */
 
 /**
+ * Get All Appointments
+ * Path: /api/v1/get-all-appointments
+ * Permission: Admin
+ */
+
+router.get("/get-all-appointments", Middlewares.AdminAuth, controllers.GetAllAppointments);
+
+/**
  * @swagger
  * /api/v1/delete-medical-certificate:
  *   delete:

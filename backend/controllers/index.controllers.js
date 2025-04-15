@@ -25,6 +25,7 @@ import getNearbyDoctors from "./get/getNearbyDoctors.controller.js";
 import getCertificateController from "./get/getCertificates.controller.js";
 import deleteMedicalCertificateController from "./delete/deleteMedicalCertificate.controller.js";
 import getAppointmentController from "./get/get.appointments.controller.js";
+import getAllAppointments from "./get/getAllappointments.controller.js";
 
 const controllers = {
   UserSignUp: userSignUpController, // SignUp Controller for user...
@@ -54,6 +55,7 @@ const controllers = {
   GetNearbyDoctors: getNearbyDoctors, // Get nearby doctors
   GetMedicalCertificates: getCertificateController, // Get logged-In user's medical certificates
   DeleteMedicalCertificate: deleteMedicalCertificateController, // Delete Medical Certificates...
+  GetAllAppointments: getAllAppointments, //Get all appointments
 };
 
 export default controllers;

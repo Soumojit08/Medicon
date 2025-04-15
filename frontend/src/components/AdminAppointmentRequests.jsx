@@ -1,25 +1,17 @@
 // src/components/AdminAppointmentRequests.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { axiosInstance } from "../libs/axios";
 
 const AdminAppointmentRequests = () => {
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      patientName: "John Doe",
-      doctorName: "Dr. Jane Smith",
-      date: "2024-03-20",
-      time: "10:00 AM",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      patientName: "Alice Johnson",
-      doctorName: "Dr. John Doe",
-      date: "2024-03-21",
-      time: "11:00 AM",
-      status: "Pending",
-    },
-  ]);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const admintoken = localStorage.getItem("admintoken");
+
+  useEffect(() => {
+    if (admintoken) {
+      fetchAppointments();
+    }
+  }, [admintoken]);
 
   const handleApprove = (id) => {
     setAppointments((prev) =>
@@ -50,11 +42,25 @@ const AdminAppointmentRequests = () => {
     alert(`Appointment ${id} marked as waiting.`);
   };
 
+  const fetchAppointments = async () => {
+    try {
+      const response = await axiosInstance.get("/api/v1/get-all-appointments", {
+        headers: {
+          Authorization: `Bearer ${admintoken}`,
+        },
+      });
+      console.log(response.data);
+      setAppointments(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {appointments.map((appointment) => (
         <div
-          key={appointment.id}
+          key={appointment._id}
           className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
         >
           <div>
