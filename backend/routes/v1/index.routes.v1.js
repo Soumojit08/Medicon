@@ -2862,4 +2862,11 @@ router.get("/get-all-appointments", Middlewares.AdminAuth, controllers.GetAllApp
 
 router.delete("/delete-medical-certificate", Middlewares.UserAuth, controllers.DeleteMedicalCertificate);
 
+/**
+ * Update Appointment Status
+ * Path: /api/v1/appointments/:appointmentId/status
+ * Permission: Admin
+ */
+router.post("/appointments/:appointmentId/status", Middlewares.AdminAuth, controllers.UpdateAppointmentStatus);
+
 export default router;
