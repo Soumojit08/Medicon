@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../libs/axios";
 import toast from "react-hot-toast";
+import Image from "./Image";
 
 const AdminDoctorVerification = () => {
   const [doctors, setDoctors] = useState([]);
@@ -130,14 +131,25 @@ const AdminDoctorVerification = () => {
             key={doctor._id}
             className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
           >
-            <div>
-              <h3 className="text-lg font-bold">{doctor.name}</h3>
-              <p className="text-sm text-gray-600">
-                {doctor.specialization.join(", ")}
-              </p>
-              <p className="text-sm text-gray-600">
-                Registration ID: {doctor.registrationId}
-              </p>
+            <div className="flex justify-center items-center gap-4">
+              <div className="relative mb-2 h-24 w-24 rounded-full border-4 border-blue-600 shadow-lg overflow-hidden bg-white group-hover:border-blue-100 transition-colors duration-300">
+                <Image
+                  pic={doctor.profilepic}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold">{doctor.name}</h3>
+                <p className="text-sm text-gray-600 font-bold">
+                  {doctor.specialization.join(", ")}
+                </p>
+                <p className="text-sm font-semibold text-gray-600">
+                  Registration ID: {doctor.registrationId}
+                </p>
+                <p className="text-sm text-gray-600 text-clip w-5/6">
+                  Address: {doctor.address}
+                </p>
+              </div>
             </div>
             <div className="flex gap-2">
               <button
