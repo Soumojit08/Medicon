@@ -3,7 +3,18 @@ import Models from "../../models/index.models.js";
 
 const getAllAppointments = async (req, res) => {
   try {
-    const appointments = await Models.AppointmentModel.find();
+    const appointments = await Models.AppointmentModel.find()
+      .populate({
+        path: "doctorId",
+        select:
+          "name email specialization registrationId address isVerified consultationFee",
+        model: Models.DoctorModel,
+      })
+      .populate({
+        path: "userId",
+        select: "name email phonenumber",
+        model: Models.UserModel,
+      });
 
     res.status(StatusCodes.OK).json({
       status: "success",
