@@ -1,5 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
+import sendMail from "../../services/sendMail.js";
+import MailTemplates from "../../utils/index.utils.js";
 
 const updateAppointmentStatus = async (req, res) => {
   try {
@@ -27,6 +29,24 @@ const updateAppointmentStatus = async (req, res) => {
 
     appointment.status = status;
     await appointment.save();
+
+    const emailData = MailTemplates.AppointmentStatusUpdateContent({
+      recipientEmail: appointment.userId.email,
+      recipientName: appointment.doctorId.name,
+      doctorName: appointment.doctorId.name, // Opposite direction for doctor's view
+      appointmentDate: appointment.date.toLocaleString(),
+      status
+    });
+
+    console.log(emailData);
+
+    await sendMail(emailData, (error, info) => {
+      if (error) {
+        console.log("Mail Sending Error: " + error);
+      } else {
+        console.log("Mail Sent: " + info);
+      }
+    });
 
     res.status(StatusCodes.OK).json({
       status: "success",
