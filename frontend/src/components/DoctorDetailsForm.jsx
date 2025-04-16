@@ -178,7 +178,7 @@ const DoctorDetailsForm = ({ doctorData, refreshData }) => {
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
             <label className="!text-blue-500 !font-medium !text-lg">
-              Consultation Fee
+              Consultation Fee (₹)
             </label>
             {isEditing ? (
               <input
@@ -214,7 +214,7 @@ const DoctorDetailsForm = ({ doctorData, refreshData }) => {
           </div>
           <div className="bg-zinc-100 py-2 px-4 sm:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded text-base sm:text-lg">
             <label className="!text-blue-500 !font-medium !text-lg">
-              Experience
+              Experience (Years)
             </label>
             {isEditing ? (
               <input

@@ -32,7 +32,7 @@ const DoctorProfileHeader = ({ doctorData }) => {
           </p>
         </div>
       </div>
-      <QuickStats />
+      <QuickStats doctor={doctorData}/>
     </div>
   );
 };

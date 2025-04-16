@@ -27,6 +27,7 @@ import deleteMedicalCertificateController from "./delete/deleteMedicalCertificat
 import getAppointmentController from "./get/get.appointments.controller.js";
 import getAllAppointments from "./get/getAllappointments.controller.js";
 import updateAppointmentStatus from "./update/updateAppointmentStatus.controller.js";
+import reviewController from "./review/review.controller.js";
 
 const controllers = {
   UserSignUp: userSignUpController, // SignUp Controller for user...
@@ -57,7 +58,8 @@ const controllers = {
   GetMedicalCertificates: getCertificateController, // Get logged-In user's medical certificates
   DeleteMedicalCertificate: deleteMedicalCertificateController, // Delete Medical Certificates...
   GetAllAppointments: getAllAppointments, //Get all appointments
-  UpdateAppointmentStatus: updateAppointmentStatus, 
+  UpdateAppointmentStatus: updateAppointmentStatus,
+  ReviewDoctor: reviewController,
 };
 
 export default controllers;

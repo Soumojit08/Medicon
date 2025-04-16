@@ -21,7 +21,8 @@ const DoctorSchema = new mongoose.Schema({
   },
   profilepic: {
     type: String,
-    default: "https://th.bing.com/th/id/OIP.bxvaxfb76xs-iWKbTzc4QwHaHL?rs=1&pid=ImgDetMain",
+    default:
+      "https://th.bing.com/th/id/OIP.bxvaxfb76xs-iWKbTzc4QwHaHL?rs=1&pid=ImgDetMain",
   },
   specialization: {
     type: [String],
@@ -88,11 +89,12 @@ const DoctorSchema = new mongoose.Schema({
   },
   experience: {
     type: Number,
-    default: 0
+    default: 0,
   },
   facts: {
     type: String,
-    default: "Each patient is a story waiting to be heard—listen with compassion, heal with expertise.",
+    default:
+      "Each patient is a story waiting to be heard—listen with compassion, heal with expertise.",
   },
   isOnline: {
     type: Boolean,
@@ -105,6 +107,22 @@ const DoctorSchema = new mongoose.Schema({
   isBusy: {
     type: Boolean,
     default: false,
+  },
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
+  averageRating: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5,
+  },
+  totalReviews: {
+    type: Number,
+    default: 0,
   },
 });
 

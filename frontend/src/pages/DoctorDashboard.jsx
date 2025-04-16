@@ -30,8 +30,8 @@ const DoctorDashboard = () => {
       console.log("Fetching doctor data for ID:", doctorId);
       const response = await axiosInstance.get(`/api/v1/doctors/${doctorId}`);
 
+      console.log("Doctor data received:", response.data.data);
       if (response.data && response.data.data) {
-        console.log("Doctor data received:", response.data.data);
         setDoctor({
           name: response.data.data.name || "",
           address: response.data.data.address || "",
@@ -45,6 +45,8 @@ const DoctorDashboard = () => {
           education: response.data.data.education || "",
           facts: response.data.data.facts || "",
           isVerified: response.data.data.isVerified || false,
+          averageRating: response.data.data.averageRating || "",
+          totalReviews: response.data.data.totalReviews || "",
         });
       } else {
         console.warn("Doctor data is missing in response");

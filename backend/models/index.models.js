@@ -4,6 +4,7 @@ import Appointment from "./Appointment.model.js";
 import Schedule from "./Schedule.model.js";
 import Admin from "./Admins.model.js";
 import MedicalCertificate from "./MedicalCertificate.model.js";
+import Review from "./Review.model.js";
 
 const Models = {
   UserModel: User,
@@ -11,7 +12,8 @@ const Models = {
   AppointmentModel: Appointment,
   ScheduleModel: Schedule,
   AdminModel: Admin,
-  MedicalCertificateModel: MedicalCertificate
+  MedicalCertificateModel: MedicalCertificate,
+  ReviewModel: Review,
 };
 
 export default Models;

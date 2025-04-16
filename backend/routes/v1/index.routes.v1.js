@@ -2869,4 +2869,15 @@ router.delete("/delete-medical-certificate", Middlewares.UserAuth, controllers.D
  */
 router.post("/appointments/:appointmentId/status", Middlewares.AdminAuth, controllers.UpdateAppointmentStatus);
 
+/**
+ * Review Doctor
+ * Path: /api/v1/review-doctor
+ * Permission: User
+ */
+
+router.post("/reviews", Middlewares.UserAuth, controllers.ReviewDoctor)
+
+// router.get("/reviews/:doctorId", Middlewares.UserAuth, controllers.GetDoctorReviews)
+
+
 export default router;
