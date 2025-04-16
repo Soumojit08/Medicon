@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema(
     upcomingAppointment: {
       type: Number,
       default: 0
+    },
+    completedAppointments: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: true }

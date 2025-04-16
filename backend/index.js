@@ -10,6 +10,7 @@ import swaggerJSDoc from "swagger-jsdoc"; // Corrected import
 import swaggerOptions from "./services/swaggerOptions.js";
 import redis from "./Redis/client.js";
 import connectRedis from "./Redis/connectRedis.js";
+import "./jobs/autoAppointmantStatusUpdate.job.js" //CORN Job for auto appointment status update...
 
 const app = express();
 
