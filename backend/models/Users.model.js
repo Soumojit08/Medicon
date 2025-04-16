@@ -39,6 +39,10 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    upcomingAppointment: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );

@@ -27,6 +27,12 @@ const updateAppointmentStatus = async (req, res) => {
       });
     }
 
+    if (status == "confirmed" && appointment.status !== "confirmed") {
+      await Models.UserModel.findByIdAndUpdate(appointment.userId._id,
+        { $inc: { upcomingAppointment: 1 } },
+        { new: true });
+    }
+
     appointment.status = status;
     await appointment.save();
 
@@ -38,7 +44,7 @@ const updateAppointmentStatus = async (req, res) => {
       status
     });
 
-    console.log(emailData);
+    // console.log(emailData);
 
     await sendMail(emailData, (error, info) => {
       if (error) {
