@@ -14,6 +14,7 @@ Medicon is an innovative healthcare platform designed to seamlessly connect doct
 - **Mongoose** - ODM for MongoDB
 - **Redis** - In-memory data store for caching
 - **Socket.io** - Real-time event-based communication
+- **ReactJS** - For Frontend
 
 ### Real-Time Communication
 
