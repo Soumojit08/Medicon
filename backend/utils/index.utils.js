@@ -13,7 +13,7 @@ const MailTemplates = {
     UpdateDoctorDetsMailContent: updatedDoctorMailContent,
     SignUpDoctorMailContent: doctorWelcomeMailContent,
     VerificationDoctorContent: doctorVerificationSuccessfulContent,
-    AppointmentStatusUpdateContent: appointmentStatusUpdateMailContent
+    AppointmentStatusUpdateContent: appointmentStatusUpdateMailContent,
 }
 
 export default MailTemplates;
