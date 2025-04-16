@@ -23,14 +23,6 @@ const autoUpdateAppointments = async () => {
         },
       });
 
-      await sendMail(emailData, (error, info) => {
-        if (error) {
-          console.log("Mail Sending Error: " + error);
-        } else {
-          console.log("Mail Sent: " + info);
-        }
-      });
-
       console.log(`Completed Appointment: ${appt._id}`);
     }
 
