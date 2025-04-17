@@ -8,6 +8,7 @@ import {
   Twitter,
   Instagram,
   Linkedin,
+  Github,
 } from "lucide-react";
 
 const Footer = () => {
@@ -56,10 +57,19 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/about"
+                  to="https://github.com/Soumojit08/Medicon"
+                  className="hover:text-white transition-colors"
+                  target="_blank"
+                >
+                  Want to contribute?
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/buymeacoffee"
                   className="hover:text-white transition-colors"
                 >
-                  About Us
+                  Buy us a Coffee
                 </Link>
               </li>
             </ul>
@@ -80,7 +90,7 @@ const Footer = () => {
                 <span>medicon2k25@gmail.com</span>
               </li>
               <li className="flex items-center">
-                <MapPin className="h-4 w-4 mr-2" />
+                <MapPin className="h-6 w-6 mr-2" />
                 <span>
                   National Highway 6, Banitabla, Uluberia, Howrah, West Bengal
                   711316
@@ -93,11 +103,15 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">Follow Us</h4>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-white transition-colors">
-                <Facebook className="h-6 w-6" />
+              <a
+                href="https://github.com/Soumojit08/Medicon"
+                className="hover:text-white transition-colors"
+                target="_blank"
+              >
+                <Github className="h-6 w-6" />
               </a>
               <a href="#" className="hover:text-white transition-colors">
-                <Twitter className="h-6 w-6" />
+                <Facebook className="h-6 w-6" />
               </a>
               <a href="#" className="hover:text-white transition-colors">
                 <Instagram className="h-6 w-6" />
@@ -111,6 +125,49 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
+          <div className="flex justify-center items-center">
+            <p className="mr-2 text-base font-semibold text-white ">
+              Developed by :
+            </p>
+            <ul className="flex items-center gap-3">
+              <li>
+                <a
+                  href="https://github.com/Soumojit08"
+                  className="hover:text-white transition-colors"
+                  target="_blank"
+                >
+                  Soumojit Banerjee
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/subrata-code"
+                  className="hover:text-white transition-colors"
+                  target="_blank"
+                >
+                  Subrata Bag
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/Samiran2004"
+                  className="hover:text-white transition-colors"
+                  target="_blank"
+                >
+                  Samiran Samanta
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/SayanRik"
+                  className="hover:text-white transition-colors"
+                  target="_blank"
+                >
+                  Sayan Ghosh
+                </a>
+              </li>
+            </ul>
+          </div>
           <p>&copy; {new Date().getFullYear()} Medicon. All rights reserved.</p>
         </div>
       </div>
