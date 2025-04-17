@@ -12,46 +12,49 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-const DashboardStats = () => {
+const DashboardStats = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  // Static data for stats
+  console.log(user);
+  // Stats data from user
   const statsData = [
     {
       title: "Upcoming Appointments",
-      value: "3",
+      value: user.upcomingAppointment || "0",
       icon: Calendar,
       color: "blue",
-      trend: "+2",
+      trend: "+0",
       trendUp: true,
     },
     {
       title: "Completed Appointments",
-      value: "12",
+      value: user.completedAppointment || "0",
       icon: Clock,
       color: "green",
-      trend: "+5",
-      trendUp: true,
-    },
-    {
-      title: "Doctors Consulted",
-      value: "8",
-      icon: User,
-      color: "purple",
-      trend: "+1",
+      trend: "+0",
       trendUp: true,
     },
     {
       title: "Medical Records",
-      value: "15",
+      value: user.medicalRecords || "0",
       icon: FileText,
       color: "orange",
-      trend: "-2",
-      trendUp: false,
+      trend: "+0",
+      trendUp: true,
+    },
+    {
+      title: "Connected Devices",
+      value: user.iotDevices || "0",
+      icon: User,
+      color: "white",
+      trend: "+0",
+      trendUp: true,
+      bg: "bg-blue-500",
+      text: "text-white",
     },
   ];
 
-  // Static data for health metrics
+  // Static data for health metrics (keeping this as it's not part of user data)
   const healthMetricsData = [
     {
       title: "Blood Pressure",
@@ -128,7 +131,13 @@ const DashboardStats = () => {
             return (
               <div
                 key={index}
-                className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
+                className={`rounded-xl cursor-pointer shadow-sm p-6 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 ${
+                  stat.bg
+                    ? stat.bg
+                    : "bg-white" && stat.text
+                    ? stat.text
+                    : "text-black"
+                }`}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-lg ${colorClasses.bg}`}>
@@ -147,8 +156,20 @@ const DashboardStats = () => {
                     <span className="text-sm font-medium">{stat.trend}</span>
                   </div>
                 </div>
-                <h3 className="text-gray-500 text-sm mb-1">{stat.title}</h3>
-                <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                <h3
+                  className={`${
+                    stat.text ? stat.text : "text-gray-500"
+                  } text-sm mb-1`}
+                >
+                  {stat.title}
+                </h3>
+                <p
+                  className={`text-2xl font-bold  ${
+                    stat.text ? stat.text : "text-gray-800"
+                  }`}
+                >
+                  {stat.value}
+                </p>
               </div>
             );
           })}

@@ -43,7 +43,12 @@ const PatientDashboard = () => {
           phonenumber: response.data.data.phonenumber || "",
           profilepic: response.data.data.profilepic || "",
           email: response.data.data.email || "",
+          upcomingAppointment: response.data.data.upcomingAppointment,
+          completedAppointments: response.data.data.completedAppointments,
+          medicalRecords: response.data.data.medicalRecords,
+          iotDevices: response.data.data.iotDevices,
         });
+        // console.log("User Data:", user);
       } else {
         console.warn("User data is missing in response");
       }
@@ -81,7 +86,7 @@ const PatientDashboard = () => {
           <DashboardHeader user={user} />
 
           {/* Other Sections */}
-          <DashboardStats />
+          <DashboardStats user={user} />
 
           {/* Doctors Grid */}
           <div className="bg-white p-6 rounded-lg shadow-md">
@@ -103,7 +108,11 @@ const PatientDashboard = () => {
 
           {/* Appointments Section */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <AppointmentsSection user={user} userToken={usrtoken} userId={userId} />
+            <AppointmentsSection
+              user={user}
+              userToken={usrtoken}
+              userId={userId}
+            />
           </div>
 
           {/* Medical Records Section */}
