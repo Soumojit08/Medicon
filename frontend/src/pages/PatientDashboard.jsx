@@ -43,12 +43,12 @@ const PatientDashboard = () => {
           phonenumber: response.data.data.phonenumber || "",
           profilepic: response.data.data.profilepic || "",
           email: response.data.data.email || "",
-          upcomingAppointment: response.data.data.upcomingAppointment,
-          completedAppointments: response.data.data.completedAppointments,
-          medicalRecords: response.data.data.medicalRecords,
-          iotDevices: response.data.data.iotDevices,
+          upcomingAppointment: response.data.data.upcomingAppointment || 0,
+          completedAppointments: response.data.data.completedAppointments || 0,
+          medicalRecords: response.data.data.medicalRecords || 0,
+          iotDevices: response.data.data.iotDevices || 0,
         });
-        // console.log("User Data:", user);
+        console.log("User Data:", user);
       } else {
         console.warn("User data is missing in response");
       }

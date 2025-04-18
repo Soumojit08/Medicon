@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Calendar,
   Clock,
@@ -14,47 +14,42 @@ import {
 
 const DashboardStats = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [stats, setStats] = useState([]);
 
   console.log(user);
-  // Stats data from user
-  const statsData = [
-    {
-      title: "Upcoming Appointments",
-      value: user.upcomingAppointment || "0",
-      icon: Calendar,
-      color: "blue",
-      trend: "+0",
-      trendUp: true,
-    },
-    {
-      title: "Completed Appointments",
-      value: user.completedAppointment || "0",
-      icon: Clock,
-      color: "green",
-      trend: "+0",
-      trendUp: true,
-    },
-    {
-      title: "Medical Records",
-      value: user.medicalRecords || "0",
-      icon: FileText,
-      color: "orange",
-      trend: "+0",
-      trendUp: true,
-    },
-    {
-      title: "Connected Devices",
-      value: user.iotDevices || "0",
-      icon: User,
-      color: "white",
-      trend: "+0",
-      trendUp: true,
-      bg: "bg-blue-500",
-      text: "text-white",
-    },
-  ];
 
-  // Static data for health metrics (keeping this as it's not part of user data)
+  useEffect(() => {
+    const newStatsData = [
+      {
+        title: "Upcoming Appointments",
+        value: user.upcomingAppointment,
+        icon: Calendar,
+        color: "blue",
+      },
+      {
+        title: "Completed Appointments",
+        value: user.completedAppointments,
+        icon: Clock,
+        color: "green",
+      },
+      {
+        title: "Medical Records",
+        value: user.medicalRecords,
+        icon: FileText,
+        color: "orange",
+      },
+      {
+        title: "Connected Devices",
+        value: user.iotDevices || "0",
+        icon: User,
+        color: "white",
+        bg: "bg-blue-500",
+        text: "text-white",
+      },
+    ];
+    setStats(newStatsData);
+  }, [user]);
+
   const healthMetricsData = [
     {
       title: "Blood Pressure",
@@ -81,8 +76,6 @@ const DashboardStats = ({ user }) => {
       status: "Healthy",
     },
   ];
-
-  const [stats, setStats] = useState(statsData);
   const [healthMetrics, setHealthMetrics] = useState(healthMetricsData);
 
   const getColorClasses = (color) => {
@@ -147,14 +140,7 @@ const DashboardStats = ({ user }) => {
                     className={`flex items-center ${
                       stat.trendUp ? "text-green-600" : "text-red-600"
                     }`}
-                  >
-                    {stat.trendUp ? (
-                      <ArrowUp size={16} />
-                    ) : (
-                      <ArrowDown size={16} />
-                    )}
-                    <span className="text-sm font-medium">{stat.trend}</span>
-                  </div>
+                  ></div>
                 </div>
                 <h3
                   className={`${
