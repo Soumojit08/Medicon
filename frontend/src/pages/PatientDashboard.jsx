@@ -5,7 +5,7 @@ import DashboardStats from "../components/DashboardStats";
 import AppointmentsSection from "../components/AppointmentsSection";
 import MedicalRecords from "../components/MedicalRecords";
 import DoctorCard from "../components/DoctorCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../libs/axios";
 import { toast } from "react-hot-toast";
 
@@ -15,6 +15,7 @@ const PatientDashboard = () => {
   const [doctors, setDoctors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [usrtoken, setUsrtoken] = useState();
+  const [userLocation, setUserLocation] = useState(null);
   const navigate = useNavigate();
 
   // Check if user is authenticated
@@ -48,7 +49,7 @@ const PatientDashboard = () => {
           medicalRecords: response.data.data.medicalRecords || 0,
           iotDevices: response.data.data.iotDevices || 0,
         });
-        console.log("User Data:", user);
+        // console.log("User Data:", user);
       } else {
         console.warn("User data is missing in response");
       }
@@ -57,26 +58,57 @@ const PatientDashboard = () => {
     }
   };
 
-  // Fetch available doctors
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axiosInstance.get("/api/v1/doctors", {
-          params: { isVerified: true },
-        });
-        console.log("Fetched Doctors:", response.data.data);
+  // Fetch available nearby doctors
+  const fetchNearbyDoctors = async (latitude, longitude) => {
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/nearby-doctors", {
+        params: {
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          maxDistance: 10000, // 10km in meters
+        },
+      });
+      console.log("Fetched Doctors:", response.data.data);
+      if (response.data && response.data.status === "OK") {
         setDoctors(response.data.data || []);
-      } catch (error) {
-        console.error("Error fetching doctors:", error);
-        toast.error("Failed to fetch doctors.");
-      } finally {
-        setIsLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching doctors:", error);
+      toast.error("Failed to fetch doctors.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchDoctors();
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      setIsLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          toast.error("Please enable location services to find nearby doctors");
+          setIsLoading(false);
+        }
+      );
+    } else {
+      toast.error("Geolocation is not supported by your browser");
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    if (userLocation) {
+      console.log("User Location:", userLocation);
+      fetchNearbyDoctors(userLocation.latitude, userLocation.longitude);
+    }
+  }, [userLocation]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -90,9 +122,16 @@ const PatientDashboard = () => {
 
           {/* Doctors Grid */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              Available Doctors
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">
+                Nearby Available Doctors
+              </h2>
+              <Link to="/find-doctors">
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600 transition-colors">
+                  View More Doctors
+                </button>
+              </Link>
+            </div>
             {isLoading ? (
               <div className="flex justify-center items-center h-40">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>

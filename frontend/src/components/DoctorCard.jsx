@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Video, CalendarDays, BadgeCheck, Circle } from "lucide-react";
+import {
+  Video,
+  CalendarDays,
+  BadgeCheck,
+  Mail,
+  MapPinHouse,
+  Star,
+} from "lucide-react";
 import Image from "./Image";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../libs/axios";
@@ -68,16 +75,16 @@ const DoctorCard = ({ doctor, user }) => {
     });
   };
 
-  const sendVideoCallRequest = async (doctorId, roomId) => {
-    try {
-      // Here you would make an API call to notify the doctor
-      // For now, we'll just navigate to the video call room
-      navigate(`/video-call/${roomId}`);
-    } catch (error) {
-      console.error("Error sending video call request:", error);
-      toast.error("Failed to send video call request");
-    }
-  };
+  // const sendVideoCallRequest = async (doctorId, roomId) => {
+  //   try {
+  //     // Here you would make an API call to notify the doctor
+  //     // For now, we'll just navigate to the video call room
+  //     navigate(`/video-call/${roomId}`);
+  //   } catch (error) {
+  //     console.error("Error sending video call request:", error);
+  //     toast.error("Failed to send video call request");
+  //   }
+  // };
 
   const openModal = () => {
     const userToken = localStorage.getItem("usertoken");
@@ -116,35 +123,16 @@ const DoctorCard = ({ doctor, user }) => {
             )}
           </h2>
           <p className="text-blue-600 text-sm font-medium bg-blue-50 rounded-full py-1 px-3 inline-flex">
-            {doctor.specialization}
+            {doctor.specialization.join(", ")}
           </p>
         </div>
 
         {/* Doctor Details with fixed height for address */}
         <div className="space-y-3 text-sm mb-5 px-2 h-[72px]">
-          {" "}
           {/* Fixed height container */}
           <div className="flex items-start gap-3 text-gray-600">
             <div className="text-blue-500 mt-0.5 flex-shrink-0">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
+              <MapPinHouse size={16} />
             </div>
             <span className="text-gray-700 line-clamp-2 leading-tight break-words">
               {doctor.address}
@@ -152,21 +140,20 @@ const DoctorCard = ({ doctor, user }) => {
           </div>
           <div className="flex items-center gap-3 text-gray-600">
             <div className="text-blue-500">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
+              <Mail size={16} />
             </div>
             <span className="text-gray-700 truncate">{doctor.email}</span>
+          </div>
+
+          <div className="flex items-start gap-3 text-gray-600">
+            <div className="text-blue-500 mt-0.5 flex-shrink-0">
+              <Star size={16} />
+            </div>
+            <span className="text-gray-700 line-clamp-2 leading-tight break-words">
+              {doctor.averageRating
+                ? `${Number(doctor.averageRating).toFixed(1)}`
+                : "No rating yet"}
+            </span>
           </div>
         </div>
 
