@@ -2887,5 +2887,12 @@ router.post("/reviews", Middlewares.UserAuth, controllers.ReviewDoctor)
 
 // router.get("/reviews/:doctorId", Middlewares.UserAuth, controllers.GetDoctorReviews)
 
+/**
+ * Update health data
+ * Path: /api/v1/health
+ * Body: bpData, spO2Data, heartRateData, userId
+ */
+router.post("/health", controllers.UpdateHealthData);
+
 
 export default router;

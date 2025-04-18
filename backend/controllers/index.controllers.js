@@ -29,6 +29,7 @@ import getAllAppointments from "./get/getAllappointments.controller.js";
 import updateAppointmentStatus from "./update/updateAppointmentStatus.controller.js";
 import reviewController from "./review/review.controller.js";
 import getAppointmentForDoctorController from "./get/get.appointmentForDoctor.controller.js";
+import UpdateHealthDataController from "./update/update.healthData.controller.js";
 
 const controllers = {
   UserSignUp: userSignUpController, // SignUp Controller for user...
@@ -62,6 +63,7 @@ const controllers = {
   UpdateAppointmentStatus: updateAppointmentStatus,
   ReviewDoctor: reviewController,
   GetAllAppointmentsForDoctor: getAppointmentForDoctorController,
+  UpdateHealthData: UpdateHealthDataController
 };
 
 export default controllers;
