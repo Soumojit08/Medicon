@@ -34,11 +34,17 @@ const getUserByIdController = async (req, res) => {
                     message: "User not found!",
                 });
             }
+            let HealthData = await Models.HealthModel.findOne({ user: User._id });
+
+            let data = {
+                User,
+                HealthData
+            }
 
             return res.status(StatusCodes.OK).json({
                 status: 'OK',
                 message: `User with id: ${id}`,
-                data: User,
+                data
             });
         } catch (error) {
             return res.status(StatusCodes.BAD_REQUEST).json({

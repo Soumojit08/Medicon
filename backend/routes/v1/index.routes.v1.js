@@ -2889,10 +2889,10 @@ router.post("/reviews", Middlewares.UserAuth, controllers.ReviewDoctor)
 
 /**
  * Update health data
- * Path: /api/v1/health
+ * Path: /api/v1/iot/health
  * Body: bpData, spO2Data, heartRateData, userId
  */
-router.post("/health", controllers.UpdateHealthData);
+router.post("/iot/health", controllers.UpdateHealthData);
 
 
 export default router;
