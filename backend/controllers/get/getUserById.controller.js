@@ -13,17 +13,17 @@ const getUserByIdController = async (req, res) => {
         }
 
         // Generate a unique Redis key for the user ID
-        const redisKey = `user:${id}`;
+        // const redisKey = `user:${id}`;
 
-        // Check if data is present in Redis cache
-        const cachedUser = await redis.get(redisKey);
-        if (cachedUser) {
-            return res.status(StatusCodes.OK).json({
-                status: 'OK',
-                message: `User with id: ${id}`,
-                data: JSON.parse(cachedUser),
-            });
-        }
+        // // Check if data is present in Redis cache
+        // const cachedUser = await redis.get(redisKey);
+        // if (cachedUser) {
+        //     return res.status(StatusCodes.OK).json({
+        //         status: 'OK',
+        //         message: `User with id: ${id}`,
+        //         data: JSON.parse(cachedUser),
+        //     });
+        // }
 
         // Fetch from database if not in cache
         try {
@@ -34,9 +34,6 @@ const getUserByIdController = async (req, res) => {
                     message: "User not found!",
                 });
             }
-
-            // Store the result in Redis cache with a 5-minute expiration
-            await redis.set(redisKey, JSON.stringify(User), "EX", 300);
 
             return res.status(StatusCodes.OK).json({
                 status: 'OK',
