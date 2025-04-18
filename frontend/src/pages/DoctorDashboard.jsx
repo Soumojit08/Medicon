@@ -5,12 +5,14 @@ import ManageSchedule from "../components/ManageSchedule";
 import Footer from "../components/Footer";
 import { axiosInstance } from "../libs/axios";
 import { useParams, useNavigate } from "react-router-dom";
+import AppointmentList from "../components/AppointmentList";
 
 const DoctorDashboard = () => {
   const { id: doctorId } = useParams();
   const [doctor, setDoctor] = useState({});
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const navigate = useNavigate();
+  const [doctorToken, setDoctorToken] = useState();
 
   useEffect(() => {
     if (doctorId) {
@@ -19,10 +21,10 @@ const DoctorDashboard = () => {
   }, [doctorId, refreshTrigger]);
 
   useEffect(() => {
-    const doctorToken = localStorage.getItem("doctortoken");
-    if (!doctorToken) {
-      navigate("/loginDashboard");
-    }
+    setDoctorToken(localStorage.getItem("doctortoken"));
+    // if (!doctorToken) {
+    //   navigate("/loginDashboard");
+    // }
   }, [navigate]);
 
   const getDoctorData = async (doctorId) => {
@@ -73,6 +75,7 @@ const DoctorDashboard = () => {
                 doctorData={doctor}
                 refreshData={refreshDoctorData}
               />
+              <AppointmentList doctorId={doctorId} Token={doctorToken} />
             </div>
             <div className="w-full">
               <ManageSchedule doctorId={doctorId} />
