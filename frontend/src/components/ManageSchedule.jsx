@@ -5,7 +5,7 @@ import { axiosInstance } from "../libs/axios";
 import toast from "react-hot-toast";
 
 const ManageSchedule = ({ doctorId }) => {
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const [schedules, setSchedules] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const doctorToken = localStorage.getItem("doctortoken");
