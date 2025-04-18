@@ -136,7 +136,7 @@ const DoctorCard = ({ doctor, user }) => {
 
         {/* Doctor Details with fixed height for address */}
         <div className="space-y-3 text-sm mb-5 px-2 h-[72px]">
-          {/* Fixed height container */}
+          
           <div className="flex items-start gap-3 text-gray-600">
             <div className="text-blue-500 mt-0.5 flex-shrink-0">
               <MapPinHouse size={16} />
