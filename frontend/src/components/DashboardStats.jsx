@@ -16,7 +16,7 @@ const DashboardStats = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState([]);
 
-  console.log(user);
+  // console.log(user); 
 
   useEffect(() => {
     const newStatsData = [
