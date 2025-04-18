@@ -100,7 +100,7 @@ const DoctorCard = ({ doctor, user }) => {
     <>
       <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 w-full mb-6 overflow-hidden group ">
         {/* Profile header with subtle gradient */}
-        <div className="relative h-24 -mx-5 -mt-5 mb-4 bg-gradient-to-r from-blue-50 to-blue-100">
+        <div className="relative h-18 -mx-5 -mt-5 mb-4 bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
             <div className="relative mb-2 h-20 w-20 rounded-full border-[3px] border-white shadow-lg overflow-hidden bg-white group-hover:border-blue-100 transition-colors duration-300">
               <Image
@@ -122,14 +122,20 @@ const DoctorCard = ({ doctor, user }) => {
               />
             )}
           </h2>
-          <p className="text-blue-600 text-sm font-medium bg-blue-50 rounded-full py-1 px-3 inline-flex">
-            {doctor.specialization.join(", ")}
+          <p className="text-blue-600 text-sm font-medium bg-blue-50 rounded-full py-1 px-3 inline-flex max-w-full">
+            {doctor.specialization.length > 2 ? (
+              <span className="truncate">
+                {doctor.specialization.slice(0, 2).join(", ")} +
+                {doctor.specialization.length - 2} more
+              </span>
+            ) : (
+              doctor.specialization.join(", ")
+            )}
           </p>
         </div>
 
         {/* Doctor Details with fixed height for address */}
         <div className="space-y-3 text-sm mb-5 px-2 h-[72px]">
-          {/* Fixed height container */}
           <div className="flex items-start gap-3 text-gray-600">
             <div className="text-blue-500 mt-0.5 flex-shrink-0">
               <MapPinHouse size={16} />
@@ -147,6 +153,17 @@ const DoctorCard = ({ doctor, user }) => {
 
           <div className="flex items-start gap-3 text-gray-600">
             <div className="text-blue-500 mt-0.5 flex-shrink-0">
+              <CalendarDays size={16} />
+            </div>
+            <span className="text-gray-700 line-clamp-2 leading-tight break-words">
+              {doctor.experience
+                ? `${Number(doctor.experience)} years`
+                : "No Experience Mentioned"}
+            </span>
+          </div>
+
+          <div className="flex items-start gap-3 text-gray-600">
+            <div className="text-blue-500 mt-0.5 flex-shrink-0">
               <Star size={16} />
             </div>
             <span className="text-gray-700 line-clamp-2 leading-tight break-words">
@@ -158,7 +175,7 @@ const DoctorCard = ({ doctor, user }) => {
         </div>
 
         {/* Fee and Action Buttons */}
-        <div className="border-t border-gray-100 pt-4">
+        <div className="pt-8">
           <p className="text-center font-medium text-gray-800 mb-4">
             <span className="text-blue-600 text-lg font-semibold">
               {doctor.consultationFee || 0} INR
