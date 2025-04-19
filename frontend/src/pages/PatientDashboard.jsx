@@ -48,6 +48,9 @@ const PatientDashboard = () => {
           completedAppointments: response.data.data.completedAppointments || 0,
           medicalRecords: response.data.data.medicalRecords || 0,
           iotDevices: response.data.data.iotDevices || 0,
+          bloodPressure: response.data.data.bloodPressure || "Not Available",
+          heartRate: response.data.data.heartRate || "Not Available",
+          spo2: response.data.data.spo2 || "Not Available",
         });
         // console.log("User Data:", user);
       } else {

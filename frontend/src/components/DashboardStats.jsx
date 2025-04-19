@@ -53,7 +53,7 @@ const DashboardStats = ({ user }) => {
   const healthMetricsData = [
     {
       title: "Blood Pressure",
-      value: "120/80",
+      value: user.bloodPressure || "Not Available",
       unit: "mmHg",
       icon: Activity,
       color: "blue",
@@ -61,19 +61,19 @@ const DashboardStats = ({ user }) => {
     },
     {
       title: "Heart Rate",
-      value: "72",
+      value: user.heartRate || "Not Available",
       unit: "bpm",
       icon: Heart,
       color: "red",
       status: "Normal",
     },
     {
-      title: "BMI",
-      value: "24.5",
-      unit: "kg/m²",
+      title: "SPO2",
+      value: user.spo2 || "Not Available",
+      unit: "%",
       icon: TrendingUp,
       color: "green",
-      status: "Healthy",
+      status: "Normal",
     },
   ];
   const [healthMetrics, setHealthMetrics] = useState(healthMetricsData);
