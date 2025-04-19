@@ -37,13 +37,15 @@ const corsOrigin =
     ? "http://localhost:5173"
     : "https://medicon-za1z.vercel.app";
 
-app.use(
-  cors({
-    origin: corsOrigin,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-  })
-);
+// app.use(
+//   cors({
+//     origin: corsOrigin,
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+//   })
+// );
+
+app.use(cors());
 
 // Update for Vercel deployment
 if (configs.ENV !== "development") {
