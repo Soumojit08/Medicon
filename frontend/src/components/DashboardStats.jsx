@@ -7,40 +7,38 @@ import {
   Activity,
   Heart,
   TrendingUp,
-  ArrowUp,
-  ArrowDown,
   RefreshCw,
 } from "lucide-react";
 
 const DashboardStats = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState([]);
-
-  // console.log(user); 
+  const [healthMetrics, setHealthMetrics] = useState([]);
 
   useEffect(() => {
+    // Update stats data dynamically based on user data
     const newStatsData = [
       {
         title: "Upcoming Appointments",
-        value: user.upcomingAppointment,
+        value: user.upcomingAppointment || 0,
         icon: Calendar,
         color: "blue",
       },
       {
         title: "Completed Appointments",
-        value: user.completedAppointments,
+        value: user.completedAppointments || 0,
         icon: Clock,
         color: "green",
       },
       {
         title: "Medical Records",
-        value: user.medicalRecords,
+        value: user.medicalRecords || 0,
         icon: FileText,
         color: "orange",
       },
       {
         title: "Connected Devices",
-        value: user.iotDevices || "0",
+        value: user.iotDevices || 0,
         icon: User,
         color: "white",
         bg: "bg-blue-500",
@@ -48,35 +46,40 @@ const DashboardStats = ({ user }) => {
       },
     ];
     setStats(newStatsData);
-  }, [user]);
 
-  const healthMetricsData = [
-    {
-      title: "Blood Pressure",
-      value: user.bloodPressure || "Not Available",
-      unit: "mmHg",
-      icon: Activity,
-      color: "blue",
-      status: "Normal",
-    },
-    {
-      title: "Heart Rate",
-      value: user.heartRate || "Not Available",
-      unit: "bpm",
-      icon: Heart,
-      color: "red",
-      status: "Normal",
-    },
-    {
-      title: "SPO2",
-      value: user.spo2 || "Not Available",
-      unit: "%",
-      icon: TrendingUp,
-      color: "green",
-      status: "Normal",
-    },
-  ];
-  const [healthMetrics, setHealthMetrics] = useState(healthMetricsData);
+    // Update health metrics dynamically based on user data
+    const newHealthMetricsData = [
+      {
+        title: "Blood Pressure",
+        value: user.bloodPressure || "Not Available",
+        unit: "mmHg",
+        icon: Activity,
+        color: "blue",
+        status:
+          user.bloodPressure >= 90 && user.bloodPressure <= 120
+            ? "Normal"
+            : "Abnormal",
+      },
+      {
+        title: "Heart Rate",
+        value: user.heartRate || "Not Available",
+        unit: "bpm",
+        icon: Heart,
+        color: "red",
+        status:
+          user.heartRate >= 60 && user.heartRate <= 100 ? "Normal" : "Abnormal",
+      },
+      {
+        title: "SPO2",
+        value: user.spo2 || "Not Available",
+        unit: "%",
+        icon: TrendingUp,
+        color: "green",
+        status: user.spo2 >= 95 ? "Healthy" : "Low",
+      },
+    ];
+    setHealthMetrics(newHealthMetricsData);
+  }, [user]);
 
   const getColorClasses = (color) => {
     const colorMap = {
@@ -108,8 +111,6 @@ const DashboardStats = ({ user }) => {
     setIsLoading(true);
     // Simulate API call with setTimeout
     setTimeout(() => {
-      setStats(statsData);
-      setHealthMetrics(healthMetricsData);
       setIsLoading(false);
     }, 1000);
   };
@@ -136,11 +137,6 @@ const DashboardStats = ({ user }) => {
                   <div className={`p-3 rounded-lg ${colorClasses.bg}`}>
                     <stat.icon className={colorClasses.text} size={24} />
                   </div>
-                  <div
-                    className={`flex items-center ${
-                      stat.trendUp ? "text-green-600" : "text-red-600"
-                    }`}
-                  ></div>
                 </div>
                 <h3
                   className={`${

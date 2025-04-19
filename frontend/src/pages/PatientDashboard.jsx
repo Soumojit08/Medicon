@@ -37,22 +37,25 @@ const PatientDashboard = () => {
   const getUserData = async (userId) => {
     try {
       const response = await axiosInstance.get(`/api/v1/users/${userId}`);
+      console.log(response.data.data);
       if (response.data && response.data.data) {
         setUser({
-          _id: response.data.data._id || "",
-          name: response.data.data.name || "",
-          phonenumber: response.data.data.phonenumber || "",
-          profilepic: response.data.data.profilepic || "",
-          email: response.data.data.email || "",
-          upcomingAppointment: response.data.data.upcomingAppointment || 0,
-          completedAppointments: response.data.data.completedAppointments || 0,
-          medicalRecords: response.data.data.medicalRecords || 0,
-          iotDevices: response.data.data.iotDevices || 0,
-          bloodPressure: response.data.data.bloodPressure || "Not Available",
-          heartRate: response.data.data.heartRate || "Not Available",
-          spo2: response.data.data.spo2 || "Not Available",
+          _id: response.data.data.User._id || "",
+          name: response.data.data.User.name || "",
+          phonenumber: response.data.data.User.phonenumber || "",
+          profilepic: response.data.data.User.profilepic || "",
+          email: response.data.data.User.email || "",
+          upcomingAppointment: response.data.data.User.upcomingAppointment || 0,
+          completedAppointments:
+            response.data.data.User.completedAppointments || 0,
+          medicalRecords: response.data.data.User.medicalRecords || 0,
+          iotDevices: response.data.data.User.iotDevices || 0,
+          bloodPressure:
+            response.data.data.HealthData.bpData || "Not Available",
+          heartRate:
+            response.data.data.HealthData.heartRateData || "Not Available",
+          spo2: response.data.data.HealthData.spO2Data || "Not Available",
         });
-        // console.log("User Data:", user);
       } else {
         console.warn("User data is missing in response");
       }
