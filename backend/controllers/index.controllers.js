@@ -41,6 +41,7 @@ import userDashboardController from "./dash/user.dash.controller.js";           
 import bookAppointment from "./appointment/book.appointment.controller.js";               // Book appointment with a doctor
 import reviewController from "./review/review.controller.js";                             // Post a review for a doctor
 import videoCallRequestController from "./videocall/videoCallRequest.controller.js";      // Request a video call with a doctor
+import sosController from "./sos/sos.controller.js";
 
 // ===================== EXPORT CONTROLLER OBJECT =====================
 const controllers = {
@@ -87,6 +88,8 @@ const controllers = {
   BookAppointment: bookAppointment,
   ReviewDoctor: reviewController,
   VideoCallRequest: videoCallRequestController,
+
+  SendSoS: sosController
 };
 
 export default controllers;

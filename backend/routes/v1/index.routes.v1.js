@@ -1983,7 +1983,7 @@ router.get("/doctors/:id", controllers.GetDoctorById);
  *                   example: "An error occurred while booking the appointment."
  */
 
-router.post("/appoint/book",Middlewares.UserAuth, controllers.BookAppointment);
+router.post("/appoint/book", Middlewares.UserAuth, controllers.BookAppointment);
 
 /**
  * Get Appointments
@@ -2893,6 +2893,12 @@ router.post("/reviews", Middlewares.UserAuth, controllers.ReviewDoctor)
  * Body: bpData, spO2Data, heartRateData, userId
  */
 router.post("/iot/health", controllers.UpdateHealthData);
+
+/**
+ * Send SOS alert...
+ * path: /api/v1/sos
+ */
+router.post("/sos", controllers.SendSoS);
 
 
 export default router;
