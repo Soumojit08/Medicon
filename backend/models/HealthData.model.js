@@ -15,8 +15,14 @@ const HealthSchema = new mongoose.Schema({
         required: true
     },
     heartRateData: {
-        type: Number,
-        required: true
+        systolic: {
+            type: Number,
+            required: true
+        },
+        diastolic: {
+            type: Number,
+            required: true
+        }
     }
 }, {
     timestamps: true
