@@ -39,6 +39,7 @@ const PatientDashboard = () => {
       const response = await axiosInstance.get(`/api/v1/users/${userId}`);
       console.log(response.data.data);
       if (response.data && response.data.data) {
+        const healthData = response.data.data.HealthData || {};
         setUser({
           _id: response.data.data.User._id || "",
           name: response.data.data.User.name || "",
@@ -50,11 +51,9 @@ const PatientDashboard = () => {
             response.data.data.User.completedAppointments || 0,
           medicalRecords: response.data.data.User.medicalRecords || 0,
           iotDevices: response.data.data.User.iotDevices || 0,
-          bloodPressure:
-            response.data.data.HealthData.bpData || "Not Available",
-          heartRate:
-            response.data.data.HealthData.heartRateData || "Not Available",
-          spo2: response.data.data.HealthData.spO2Data || "Not Available",
+          bloodPressure: healthData.bpData || "Not Available",
+          heartRate: healthData.heartRateData || "Not Available",
+          spo2: healthData.spO2Data || "Not Available",
         });
       } else {
         console.warn("User data is missing in response");

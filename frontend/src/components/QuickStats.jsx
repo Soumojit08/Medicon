@@ -2,9 +2,9 @@ import React from "react";
 
 const QuickStats = ({ doctor }) => {
   const stats = [
-    { icon: "👥", number: doctor.totalReviews, label: "Reviews" },
-    { icon: "📅", number: doctor.experience, label: "Years Experience" },
-    { icon: "⭐", number: doctor.averageRating.toFixed(1), label: "Rated" },
+    { icon: "👥", number: doctor.totalReviews ? doctor.totalReviews : "N/A", label: "Reviews" },
+    { icon: "📅", number: doctor.experience ? doctor.experience : "N/A", label: "Years Experience" },
+    { icon: "⭐", number: doctor.averageRating ? doctor.averageRating.toFixed(1) : "N/A", label: "Rated" },
   ];
 
 
