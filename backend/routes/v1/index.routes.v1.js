@@ -2900,5 +2900,13 @@ router.post("/iot/health", controllers.UpdateHealthData);
  */
 router.post("/sos", controllers.SendSoS);
 
+/**
+ * Get All Reviews
+ * Path: /api/v1/reviews
+ * Permission: Admin
+ */
+router.get("/reviews", controllers.GetAllReviews);
+
+
 
 export default router;

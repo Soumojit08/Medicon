@@ -36,7 +36,7 @@ const MedicalRecords = ({ userId, userToken }) => {
         const files = response.data.data?.files || [];
         setRecords(files);
         if (files.length === 0) {
-          toast.info("No records found");
+          toast("No records found");
         }
       } else {
         toast.error(response.data?.message || "Failed to fetch records");

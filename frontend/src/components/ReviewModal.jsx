@@ -30,7 +30,7 @@ const ReviewModal = ({
           doctorId: doctor._id,
           appointmentId,
           rating,
-          review,
+          review: review || "No remark given", // Ensure review is never empty
         },
         {
           headers: {
@@ -39,12 +39,18 @@ const ReviewModal = ({
         }
       );
 
-      toast.success("Thank you for your review!");
-      onReviewSubmit();
-      console.log("Review submitted successfully! Response:", response.data);
+      if (response.data) {
+        toast.success("Thank you for your review!");
+        onReviewSubmit();
+        onClose();
+      }
     } catch (error) {
       console.error("Error submitting review:", error);
-      toast.error("Failed to submit review. Please try again.");
+      if (error.response) {
+        toast.error(error.response.data.message || "Failed to submit review");
+      } else {
+        toast.error("Failed to submit review. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -90,7 +96,7 @@ const ReviewModal = ({
               htmlFor="review"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Your Review
+              Your Review (Optional)
             </label>
             <textarea
               id="review"
