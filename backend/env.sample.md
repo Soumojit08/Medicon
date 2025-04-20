@@ -23,3 +23,17 @@ REDIS_HOST="Redis cloud host name"
 REDIS_PORT="Redis cloud port"
 
 REDIS_PASSWORD="Redis cloud password"
+
+EMAIL_ADDRESS=""
+
+EMAIL_PASSWORD="email app password"
+
+TWILO_RECOVERY="Twilio recovery key"
+
+TWILIO_ACCOUNT_SID
+
+TWILIO_AUTH_TOKEN
+
+TWILIO_PHONE_NUMBER
+
+PROD_URI
