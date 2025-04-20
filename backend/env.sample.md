@@ -30,10 +30,10 @@ EMAIL_PASSWORD="email app password"
 
 TWILO_RECOVERY="Twilio recovery key"
 
-TWILIO_ACCOUNT_SID
+TWILIO_ACCOUNT_SID="Twilio account sid"
 
-TWILIO_AUTH_TOKEN
+TWILIO_AUTH_TOKEN="Twilio auth token"
 
-TWILIO_PHONE_NUMBER
+TWILIO_PHONE_NUMBER="Twilio ph number"
 
-PROD_URI
+PROD_URI="production url"
