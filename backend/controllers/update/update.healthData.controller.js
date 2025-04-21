@@ -6,10 +6,17 @@ const UpdateHealthDataController = async (req, res) => {
     const { bpData, spO2Data, heartRateData, userId } = req.body;
 
     // Basic field validation
-    if (!userId || !bpData || !spO2Data || !heartRateData?.systolic || !heartRateData?.diastolic) {
+    if (
+      !userId ||
+      !bpData ||
+      !spO2Data ||
+      !heartRateData?.systolic ||
+      !heartRateData?.diastolic
+    ) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         status: "error",
-        message: "All health fields (bpData, spO2Data, heartRateData.systolic, heartRateData.diastolic) and userId are required",
+        message:
+          "All health fields (bpData, spO2Data, heartRateData.systolic, heartRateData.diastolic) and userId are required",
       });
     }
 
@@ -38,6 +45,17 @@ const UpdateHealthDataController = async (req, res) => {
         upsert: true,
       }
     );
+
+    // 🔥 Emit the updated health data in real-time
+    const io = req.app.get("io");
+    io.emit("healthUpdate", {
+      userId,
+      name: user.name,
+      bpData,
+      spO2Data,
+      heartRateData,
+      timestamp: new Date(),
+    });
 
     return res.status(StatusCodes.OK).json({
       status: "success",
