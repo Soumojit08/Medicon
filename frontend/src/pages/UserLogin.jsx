@@ -42,6 +42,7 @@ function UserLogin() {
       if (response.status === 200) {
         localStorage.setItem("usertoken", data.token);
         localStorage.setItem("userId", userId);
+        localStorage.setItem("secNumber", response.data.data.secNumber);
         toast.success("Login successful");
         navigate(`/patientDashboard/${userId}`);
       } else {

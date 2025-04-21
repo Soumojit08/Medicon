@@ -72,6 +72,7 @@ const userLoginController = async (req, res) => {
     profilepic: User.profilepic,
     phonenumber: User.phonenumber,
     geoLocation: User.geoLocation,
+    secNumber: User.secNumber,
   };
 
   const token = await JWT.sign(playLoad, configs.JWT_SECRET, {

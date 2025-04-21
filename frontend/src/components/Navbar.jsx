@@ -14,6 +14,7 @@ import {
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axiosInstance from "../libs/axios"; 
 import Tooltip from "./Tooltip";
+import SOS from "./SOS";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Navbar = () => {
     const doctorToken = localStorage.getItem("doctortoken");
     const userToken = localStorage.getItem("usertoken");
     const adminToken = localStorage.getItem("admintoken");
+    const secNumber = localStorage.getItem("secNumber");
 
     if (doctorToken) {
       setIsAuth(true);
@@ -81,6 +83,7 @@ const Navbar = () => {
   const handleUserLogout = () => {
     localStorage.removeItem("usertoken");
     localStorage.removeItem("userId");
+    localStorage.removeItem("secNumber");
     setIsAuth(false);
     setRole(null);
     navigate("/loginDashboard");
@@ -202,13 +205,14 @@ const Navbar = () => {
 
             {/* SOS Button */}
             <Tooltip content={"Click here if emergency"} position="bottom">
-              <a
+              {/* <a
                 href="tel:108"
                 className="flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
               >
                 <ShieldCheck className="w-4 h-4 mr-2" />
                 SOS
-              </a>
+              </a> */}
+              <SOS />
             </Tooltip>
 
             {/* Auth Button */}
