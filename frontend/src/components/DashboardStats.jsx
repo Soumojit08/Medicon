@@ -37,8 +37,8 @@ const DashboardStats = ({ user }) => {
         color: "orange",
       },
       {
-        title: "Connected Devices",
-        value: user.iotDevices || 0,
+        title: "Health Band",
+        value: user.iotDevices ? "Connected" : "Not Available",
         icon: User,
         color: "white",
         bg: "bg-blue-500",
