@@ -51,12 +51,22 @@ const DashboardStats = ({ user }) => {
     const newHealthMetricsData = [
       {
         title: "Blood Pressure",
-        value: user.bloodPressure || "Not Available",
+        value: {
+          systolic: user?.bloodPressure?.systolic || "Not Available",
+          diastolic: user?.bloodPressure?.diastolic || "Not Available",
+        },
         unit: "mmHg",
         icon: Activity,
         color: "blue",
         status:
-          user.bloodPressure >= 90 && user.bloodPressure <= 120
+          !user?.bloodPressure ||
+          user.bloodPressure.systolic === "Not Available" ||
+          user.bloodPressure.diastolic === "Not Available"
+            ? "Not Available"
+            : user.bloodPressure.systolic >= 90 &&
+              user.bloodPressure.systolic <= 120 &&
+              user.bloodPressure.diastolic >= 60 &&
+              user.bloodPressure.diastolic <= 80
             ? "Normal"
             : "Abnormal",
       },
@@ -191,7 +201,9 @@ const DashboardStats = ({ user }) => {
                   </div>
                   <div className="flex items-baseline space-x-2">
                     <p className="text-2xl font-bold text-gray-800">
-                      {metric.value}
+                      {metric.title === "Blood Pressure"
+                        ? `${metric.value.systolic}/${metric.value.diastolic}`
+                        : metric.value}
                     </p>
                     <span className="text-gray-500">{metric.unit}</span>
                   </div>

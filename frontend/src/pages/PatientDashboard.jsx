@@ -51,7 +51,10 @@ const PatientDashboard = () => {
             response.data.data.User.completedAppointments || 0,
           medicalRecords: response.data.data.User.medicalRecords || 0,
           iotDevices: response.data.data.User.iotDevices || 0,
-          bloodPressure: healthData.bpData || "Not Available",
+          bloodPressure: {
+            systolic: healthData.bpData.systolic || "Not Available",
+            diastolic: healthData.bpData.diastolic || "Not Available",
+          },
           heartRate: healthData.heartRateData || "Not Available",
           spo2: healthData.spO2Data || "Not Available",
         });
