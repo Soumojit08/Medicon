@@ -8,10 +8,10 @@ const UpdateHealthDataController = async (req, res) => {
     // Basic field validation
     if (
       !userId ||
-      !bpData ||
+      !heartRateData ||
       !spO2Data ||
-      !heartRateData?.systolic ||
-      !heartRateData?.diastolic
+      !bpData?.systolic ||
+      !bpData?.diastolic
     ) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         status: "error",
@@ -33,11 +33,11 @@ const UpdateHealthDataController = async (req, res) => {
     const updatedHealthData = await Models.HealthModel.findOneAndUpdate(
       { user: userId },
       {
-        bpData,
+        heartRateData,
         spO2Data,
-        heartRateData: {
-          systolic: heartRateData.systolic,
-          diastolic: heartRateData.diastolic,
+        bpData: {
+          systolic: bpData.systolic,
+          diastolic: bpData.diastolic,
         },
       },
       {

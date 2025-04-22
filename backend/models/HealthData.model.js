@@ -6,7 +6,7 @@ const HealthSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    bpData: {
+    heartRateData: {
         type: Number,
         required: true
     },
@@ -14,7 +14,7 @@ const HealthSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    heartRateData: {
+    bpData: {
         systolic: {
             type: Number,
             required: true
