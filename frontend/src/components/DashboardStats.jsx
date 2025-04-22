@@ -9,14 +9,81 @@ import {
   TrendingUp,
   RefreshCw,
 } from "lucide-react";
+import socket from "../libs/socket";
 
 const DashboardStats = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState([]);
   const [healthMetrics, setHealthMetrics] = useState([]);
 
+  // console.log("User data:", user);
+  // Listen for real-time health updates
   useEffect(() => {
-    // Update stats data dynamically based on user data
+    if (!user || !user._id) {
+      console.log("Waiting for user data...");
+      return;
+    }
+
+    console.log("User data in useEffect:", user);
+    console.log("Setting up healthUpdate listener for user:", user._id);
+
+    const handleHealthUpdate = (data) => {
+      console.log("Received healthUpdate data:", data);
+      console.log("Current user ID:", user._id);
+
+      if (data.userId === user._id) {
+        console.log("Updating metrics for user:", user._id);
+        setHealthMetrics((prevMetrics) => {
+          return prevMetrics.map((metric) => {
+            if (metric.title === "Blood Pressure") {
+              return {
+                ...metric,
+                value: {
+                  systolic: data.bpData.systolic,
+                  diastolic: data.bpData.diastolic,
+                },
+                status:
+                  data.bpData.systolic >= 90 &&
+                  data.bpData.systolic <= 120 &&
+                  data.bpData.diastolic >= 60 &&
+                  data.bpData.diastolic <= 80
+                    ? "Normal"
+                    : "Abnormal",
+              };
+            } else if (metric.title === "Heart Rate") {
+              return {
+                ...metric,
+                value: data.heartRateData,
+                status:
+                  data.heartRateData >= 60 && data.heartRateData <= 100
+                    ? "Normal"
+                    : "Abnormal",
+              };
+            } else if (metric.title === "SPO2") {
+              return {
+                ...metric,
+                value: data.spO2Data,
+                status: data.spO2Data >= 95 ? "Healthy" : "Low",
+              };
+            }
+            return metric;
+          });
+        });
+      } else {
+        console.log("User IDs don't match. Skipping update.");
+      }
+    };
+
+    socket.on("healthUpdate", handleHealthUpdate);
+
+    return () => {
+      console.log("Cleaning up healthUpdate listener");
+      socket.off("healthUpdate", handleHealthUpdate);
+    };
+  }, [user]);
+
+  // Initial data setup
+  useEffect(() => {
     const newStatsData = [
       {
         title: "Upcoming Appointments",
@@ -47,19 +114,18 @@ const DashboardStats = ({ user }) => {
     ];
     setStats(newStatsData);
 
-    // Update health metrics dynamically based on user data
     const newHealthMetricsData = [
       {
         title: "Blood Pressure",
         value: {
-          systolic: user?.bloodPressure?.systolic || "Not Available",
-          diastolic: user?.bloodPressure?.diastolic || "Not Available",
+          systolic: user.bloodPressure?.systolic || "Not Available",
+          diastolic: user.bloodPressure?.diastolic || "Not Available",
         },
         unit: "mmHg",
         icon: Activity,
         color: "blue",
         status:
-          !user?.bloodPressure ||
+          !user.bloodPressure ||
           user.bloodPressure.systolic === "Not Available" ||
           user.bloodPressure.diastolic === "Not Available"
             ? "Not Available"
@@ -119,7 +185,6 @@ const DashboardStats = ({ user }) => {
 
   const handleRefresh = () => {
     setIsLoading(true);
-    // Simulate API call with setTimeout
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);

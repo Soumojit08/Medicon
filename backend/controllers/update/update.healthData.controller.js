@@ -56,6 +56,7 @@ const UpdateHealthDataController = async (req, res) => {
       heartRateData,
       timestamp: new Date(),
     });
+    console.log("Health data updated successfully for", user.name);
 
     return res.status(StatusCodes.OK).json({
       status: "success",
