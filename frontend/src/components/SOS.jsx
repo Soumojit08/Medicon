@@ -5,7 +5,8 @@ import { toast } from "react-hot-toast";
 
 const SOS = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const emNumber = localStorage.getItem("secNumber");
+  const secNumber = localStorage.getItem("secNumber");
+  const [emNumber, setEmNumber] = useState(`+91${secNumber}`);
   const userId = localStorage.getItem("userId");
 
   const handleSOS = async () => {
