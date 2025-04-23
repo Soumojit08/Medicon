@@ -11,7 +11,9 @@ import {
 } from "lucide-react";
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "http://localhost:3000";
+const SOCKET_URL = "https://medicon-nw25.onrender.com";
+// const SOCKET_URL = "http://localhost:3000";
+
 let socket;
 
 const DashboardStats = ({ user }) => {
