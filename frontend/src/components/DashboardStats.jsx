@@ -11,8 +11,6 @@ import {
 } from "lucide-react";
 import { io } from "socket.io-client";
 
-// Create socket connection outside component to avoid recreation on re-renders
-// You should change this URL to match your actual backend URL
 const SOCKET_URL = "http://localhost:3000";
 let socket;
 
@@ -28,7 +26,6 @@ const DashboardStats = ({ user }) => {
     if (!socket) {
       socket = io(SOCKET_URL);
 
-      // Handle connection events
       socket.on("connect", () => {
         console.log("Socket connected successfully!");
         setConnected(true);
@@ -47,10 +44,30 @@ const DashboardStats = ({ user }) => {
 
     // Clean up socket connection when component unmounts
     return () => {
+      // When component unmounts, we just remove listeners but keep the socket
+      // This avoids errors during logout
       if (socket) {
-        console.log("Cleaning up socket connection");
-        socket.disconnect();
+        console.log("Removing socket listeners on component unmount");
+        socket.off("connect");
+        socket.off("connect_error");
+        socket.off("disconnect");
+      }
+    };
+  }, []);
+
+  // Separate useEffect for global socket cleanup on logout or unmount
+  useEffect(() => {
+    // This will only run when the component is completely unmounted
+    return () => {
+      // Only disconnect if we're unmounting completely (like during logout)
+      if (socket) {
+        console.log("Disconnecting socket on complete unmount");
+        // Save reference to the socket before cleanup
+        const socketRef = socket;
+        // Setting socket to null first
         socket = null;
+        // Then disconnect using the saved reference
+        socketRef.disconnect();
       }
     };
   }, []);
@@ -115,8 +132,11 @@ const DashboardStats = ({ user }) => {
 
     // Clean up the event listener
     return () => {
-      console.log("Removing healthUpdate listener");
-      socket.off("healthUpdate", handleHealthUpdate);
+      // Check if socket still exists before calling off
+      if (socket) {
+        console.log("Removing healthUpdate listener");
+        socket.off("healthUpdate", handleHealthUpdate);
+      }
     };
   }, [user, connected]);
 
@@ -244,20 +264,6 @@ const DashboardStats = ({ user }) => {
 
   return (
     <div className="space-y-6">
-      {/* Connection status indicator */}
-      <div className="flex items-center">
-        <div
-          className={`w-3 h-3 rounded-full mr-2 ${
-            connected ? "bg-green-500" : "bg-red-500"
-          }`}
-        ></div>
-        <span className="text-sm text-gray-500">
-          {connected
-            ? "Real-time updates connected"
-            : "Real-time updates disconnected"}
-        </span>
-      </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats &&
