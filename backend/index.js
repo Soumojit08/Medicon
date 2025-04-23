@@ -15,22 +15,27 @@ import connectRedis from "./Redis/connectRedis.js";
 import "./jobs/autoAppointmantStatusUpdate.job.js";
 
 const app = express();
-const server = http.createServer(app); // Create HTTP server
+const server = http.createServer(app);
+
+// Allowed Origins for CORS
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://medicon-za1z.vercel.app"
+];
+
+// Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin:
-      configs.ENV === "development"
-        ? "http://localhost:5173"
-        : "https://medicon-za1z.vercel.app",
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
     credentials: true,
-  },
+  }
 });
 
 app.set("trust proxy", true);
+app.set("io", io); // Attach io to app instance (for use in controllers)
 
-app.set("io", io); // Attach io to app instance (to use in controllers)
-
-// Connect Database...
+// Connect DB + Redis
 const db_URI =
   configs.ENV === "development" ? configs.DB_URI : configs.MONGODB_URI;
 Db_Connect(db_URI);
@@ -42,26 +47,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static("public"));
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something went wrong!");
-});
-
-// CORS
-const corsOrigin =
-  configs.ENV === "development"
-    ? "http://localhost:5173"
-    : "https://medicon-za1z.vercel.app";
-
+// CORS Middleware
 app.use(
   cors({
-    origin: corsOrigin,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
 
+// Handle preflight (OPTIONS) requests in production
 if (configs.ENV !== "development") {
   app.use((req, res, next) => {
     if (req.method === "OPTIONS") {
@@ -71,7 +72,7 @@ if (configs.ENV !== "development") {
   });
 }
 
-// Swagger
+// Swagger Setup
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
@@ -80,9 +81,20 @@ app.use("/api/v1", apiRoutes);
 
 // Socket.IO connection
 io.on("connection", (socket) => {
-  console.log("Client connected:", socket.id);
+  console.log("🔌 Client connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("❌ Client disconnected:", socket.id);
+  });
 });
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});
+
+// Start Server
 server.listen(configs.PORT, (err) => {
   if (err) {
     figlet("E r r o r  t o  c o n n e c t  s e r v e r  !❌❌❌", (err, data) => {
