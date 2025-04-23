@@ -18,7 +18,9 @@ const configs = {
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
   TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
   TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
-  TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER
+  TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
+  ARCJET_KEY: process.env.ARCJET_KEY,
+  ARCJET_ENV: process.env.ARCJET_ENV
 };
 
 export default configs;

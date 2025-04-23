@@ -26,6 +26,8 @@ const io = new Server(server, {
   },
 });
 
+app.set("trust proxy", true);
+
 app.set("io", io); // Attach io to app instance (to use in controllers)
 
 // Connect Database...
