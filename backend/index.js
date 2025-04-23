@@ -63,14 +63,14 @@ app.use(
 );
 
 // Handle preflight (OPTIONS) requests in production
-if (configs.ENV !== "development") {
-  app.use((req, res, next) => {
-    if (req.method === "OPTIONS") {
-      return res.status(200).end();
-    }
-    next();
-  });
-}
+// if (configs.ENV !== "development") {
+//   app.use((req, res, next) => {
+//     if (req.method === "OPTIONS") {
+//       return res.status(200).end();
+//     }
+//     next();
+//   });
+// }
 
 // Swagger Setup
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
