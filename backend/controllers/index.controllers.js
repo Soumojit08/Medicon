@@ -19,6 +19,7 @@ import getAllAppointments from "./get/getAllappointments.controller.js";        
 import getAppointmentForDoctorController from "./get/get.appointmentForDoctor.controller.js"; // Get appointments for a doctor
 import getAllUsers from "./get/getAllUsers.controller.js";                                // Get all registered users
 import getAllReviews from "./get/get.Allreview.controller.js"; // Get all reviews
+import getHealthByIdController from "./get/get.healthById.controller.js"; // Get health data by user ID
 
 // ===================== UPDATE CONTROLLERS =====================
 import updateDoctorDetailsController from "./update/update.Doctor.Details.controller.js"; // Update doctor personal details
@@ -67,6 +68,7 @@ const controllers = {
   GetAllAppointmentsForDoctor: getAppointmentForDoctorController,
   GetAllUsers: getAllUsers,
   GetAllReviews: getAllReviews,
+  GetHealthById: getHealthByIdController,
 
   // ✏️ Update
   UpdateDoctorDetails: updateDoctorDetailsController,

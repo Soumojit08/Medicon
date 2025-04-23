@@ -2907,6 +2907,11 @@ router.post("/sos", controllers.SendSoS);
  */
 router.get("/reviews", controllers.GetAllReviews);
 
-
+/**
+ * Get Health Data by User ID
+ * Path: /api/v1/health/:userId
+ * Permission: User
+ */
+router.get("/health/:userId", controllers.GetHealthById); 
 
 export default router;
