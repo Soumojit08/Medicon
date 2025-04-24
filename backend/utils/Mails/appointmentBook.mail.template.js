@@ -76,7 +76,7 @@ const appointmentBookingSuccessfulMailTemplate = ({
                 <div class="content">
                     <h1>Appointment Confirmed</h1>
                     <p>Dear ${name},</p>
-                    <p>Your appointment with <strong>Dr. ${doctorName}</strong> has been successfully booked.</p>
+                    <p>Your appointment with <strong>${doctorName}</strong> has been successfully booked.</p>
                     
                     <div class="details">
                         <p><strong>Date:</strong> ${date}</p>
@@ -86,10 +86,10 @@ const appointmentBookingSuccessfulMailTemplate = ({
   
                     <p>We’ll send you a reminder before your appointment.</p>
   
-                    <a href="https://medicon.onrender.com/appointments" class="button">View Appointments</a>
+                    <a href="https://medicon-za1z.vercel.app/" class="button">View Appointments</a>
   
                     <div class="footer">
-                        <p>&copy; 2024 Medicon. All rights reserved.</p>
+                        <p>&copy; 2025 Medicon. All rights reserved.</p>
                         <p>Medicon HealthTech Pvt Ltd, 123 Wellness Avenue, HealthCity, HC 56789</p>
                     </div>
                 </div>

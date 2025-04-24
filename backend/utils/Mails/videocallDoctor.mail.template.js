@@ -79,7 +79,7 @@ const videoCallLinkMailTemplateForDoctor = ({ email, name, link, date, startTime
                   <a href="${link}" class="button">Join Video Call</a>
   
                   <div class="footer">
-                      <p>&copy; 2024 Medicon. All rights reserved.</p>
+                      <p>&copy; 2025 Medicon. All rights reserved.</p>
                       <p>Medicon HealthTech Pvt Ltd, 123 Wellness Avenue, HealthCity, HC 56789</p>
                   </div>
               </div>

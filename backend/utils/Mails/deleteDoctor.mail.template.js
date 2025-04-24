@@ -48,7 +48,7 @@ const deletedDoctorMailContent = ({ email, doctorName, reason }) => {
             <div class="container">
                 <div class="content">
                     <h1>Account Deletion Notice</h1>
-                    <p>Dear Dr. ${doctorName},</p>
+                    <p>Dear ${doctorName},</p>
                     <p>We would like to inform you that your account has been <strong>successfully removed</strong> from the Medicon platform.</p>
                     
                     ${reason ? `<p><strong>Reason:</strong> ${reason}</p>` : ''}
@@ -58,7 +58,7 @@ const deletedDoctorMailContent = ({ email, doctorName, reason }) => {
                     <p>Thank you for being a part of Medicon.</p>
   
                     <div class="footer">
-                        <p>&copy; 2024 Medicon. All rights reserved.</p>
+                        <p>&copy; 2025 Medicon. All rights reserved.</p>
                         <p>Medicon HealthTech Pvt Ltd</p>
                     </div>
                 </div>

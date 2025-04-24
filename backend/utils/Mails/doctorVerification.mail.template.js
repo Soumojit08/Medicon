@@ -56,7 +56,7 @@ const doctorVerificationSuccessfulContent = ({ email, subject, doctorName}) => {
                 <body>
                     <div class="container">
                         <div class="content">
-                            <h1>🎉 Congratulations, Dr. ${doctorName}!</h1>
+                            <h1>🎉 Congratulations, ${doctorName}!</h1>
                             <p>Your Medicon account has been successfully verified by our admin team.</p>
                             <p>You can now start consulting with patients, managing appointments, and providing expert healthcare services.</p>
                             <p>🚀 <strong>Next Steps:</strong></p>
@@ -67,9 +67,9 @@ const doctorVerificationSuccessfulContent = ({ email, subject, doctorName}) => {
                                 <li>🤖 Use the AI chatbot to enhance patient interactions.</li>
                             </ul>
                             <p>Click the button below to access your doctor portal:</p>
-                            <a href="https://medicon.onrender.com/doctor-dashboard" class="button">Go to Dashboard</a>
+                            <a href="https://medicon-za1z.vercel.app/" class="button">Go to Dashboard</a>
                             <div class="footer">
-                                <p>&copy; 2024 Medicon. All rights reserved.</p>
+                                <p>&copy; 2025 Medicon. All rights reserved.</p>
                                 <p>Medicon HealthTech Pvt Ltd, 123 Wellness Avenue, HealthCity, HC 56789</p>
                             </div>
                         </div>
