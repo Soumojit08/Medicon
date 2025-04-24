@@ -13,6 +13,7 @@ import swaggerOptions from "./services/swaggerOptions.js";
 import redis from "./Redis/client.js";
 import connectRedis from "./Redis/connectRedis.js";
 import "./jobs/autoAppointmantStatusUpdate.job.js";
+import "./jobs/autoVideoCallLinkSend.job.js";
 
 const app = express();
 const server = http.createServer(app);
