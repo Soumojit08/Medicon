@@ -7,8 +7,7 @@ import { ArrowLeft } from "lucide-react";
 function VideoCall() {
   const { appointmentId } = useParams();
   const navigate = useNavigate();
-  const userToken =
-    localStorage.getItem("usertoken") || localStorage.getItem("doctortoken");
+  const userToken = localStorage.getItem("doctortoken");
   const [userName, setUserName] = useState("");
 
   const handleGoBack = () => {
@@ -17,10 +16,11 @@ function VideoCall() {
   };
 
   useEffect(() => {
-    if (!userToken) {
+    if (userToken) {
       setUserName(`User-${Math.floor(Math.random() * 1000)}`);
+    } else {
+      setUserName(`Doctor-${Math.floor(Math.random() * 1000)}`);
     }
-    setUserName(`Doctor-${Math.floor(Math.random() * 1000)}`);
   }, [userToken, navigate]);
 
   const myMeeting = async (element) => {
@@ -63,20 +63,8 @@ function VideoCall() {
     }
   };
 
-  // Use useEffect to handle cleanup when component unmounts
-  useEffect(() => {
-    return () => {
-      // Cleanup code when component unmounts
-      try {
-        // Any ZegoCloud cleanup needed can be added here
-      } catch (error) {
-        console.error("Error during cleanup:", error);
-      }
-    };
-  }, []);
-
   return (
-    <div className="relative flex flex-col h-screen bg-gray-0">
+    <div className="relative flex flex-col h-screen bg-gray-50">
       {/* Video call container */}
       <div className="flex-1 w-full" ref={myMeeting} />
 
@@ -94,5 +82,4 @@ function VideoCall() {
   );
 }
 
-// Explicitly export the component
 export default VideoCall;
