@@ -6,9 +6,9 @@ import {
   Phone,
   Mail,
   CheckCircle,
-  XCircle,
   AlertCircle,
   RefreshCw,
+  Video,
 } from "lucide-react";
 import axiosInstance from "../libs/axios";
 import { toast } from "react-hot-toast";
@@ -35,6 +35,7 @@ const AppointmentList = ({ doctorId, Token }) => {
         }
       );
       setAppointments(response.data.appointments);
+      console.log("Appointments API : ", response.data.appointments);
     } catch (error) {
       console.error("Error fetching appointments:", error);
       toast.error("Failed to fetch appointments");
@@ -58,6 +59,22 @@ const AppointmentList = ({ doctorId, Token }) => {
         return <CheckCircle className="w-4 h-4" />;
       default:
         return <AlertCircle className="w-4 h-4" />;
+    }
+  };
+
+  const handleVideocall = async (appointmentId, doctorId) => {
+    try {
+      // console.log("Appointment Id: ", appointmentId);
+      // console.log("Doctor Id: ", doctorId);
+      const response = await axiosInstance.post("/api/v1/video-call/request", {
+        appointmentId,
+        doctorId,
+      });
+      console.log("VideoCall Response : ", response.data);
+      toast.success("VideoCall link send to email successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Problem generating appointment link");
     }
   };
 
@@ -132,19 +149,31 @@ const AppointmentList = ({ doctorId, Token }) => {
                 </div>
 
                 {/* Appointment Details */}
-                <div className="flex flex-col gap-2 text-sm">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Calendar className="w-4 h-4" />
-                    <span>
-                      {new Date(appointment.date).toLocaleDateString()}
-                    </span>
+                <div className="flex flex-row-reverse gap-2 text-sm">
+                  <div>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <Calendar className="w-4 h-4" />
+                      <span>
+                        {new Date(appointment.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <Clock className="w-4 h-4" />
+                      <span>
+                        {appointment.startTime} - {appointment.endTime}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Clock className="w-4 h-4" />
-                    <span>
-                      {appointment.startTime} - {appointment.endTime}
+                  <button
+                    onClick={() =>
+                      handleVideocall(appointment._id, appointment.doctorId)
+                    }
+                    className="bg-blue-100 p-2 rounded-lg cursor-pointer border-none hover:bg-blue-200"
+                  >
+                    <span className="text-blue-500">
+                      <Video className="w-6 h-6" />
                     </span>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
