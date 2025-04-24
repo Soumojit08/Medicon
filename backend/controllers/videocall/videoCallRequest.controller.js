@@ -1,35 +1,66 @@
-import { getReasonPhrase, StatusCodes } from "http-status-codes";
-import JWT from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
-import configs from "../../configs/index.configs.js";
+import { generateVideoCallLink } from "../../jobs/autoVideoCallLinkSend.job.js";
+import sendMail from "../../services/sendMail.js";
 
 const videoCallRequestController = async (req, res) => {
   try {
-    const { doctorId, isBusy } = req.body;
+    const { appointmentId, doctorId } = req.body;
 
-    if (!doctorId || isBusy === undefined) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        status: "Failed",
-        message: "Doctor ID and isBusy status are required",
-      });
-    }
+    // Check appointment exists and is confirmed
+    const appointment = await Models.AppointmentModel.findOne({
+      _id: appointmentId,
+      doctorId: doctorId,
+      status: "confirmed",
+    }).populate("userId doctorId");
 
-    const doctor = await Models.DoctorModel.findById(doctorId);
-    if (!doctor) {
+    if (!appointment) {
       return res.status(StatusCodes.NOT_FOUND).json({
         status: "Failed",
-        message: "Doctor not found",
+        message: "Confirmed appointment not found.",
       });
     }
 
-    // Update isBusy status
-    doctor.isBusy = isBusy;
-    await doctor.save();
+    // Generate video call link
+    const link = generateVideoCallLink(appointment._id);
+
+    // Send mail to User
+    const userMail = {
+      to: appointment.userId.email,
+      subject: "Your Video Appointment Link",
+      html: `<p>Hello ${appointment.userId.name},</p>
+            <p>Your video consultation is ready. Click the link below to join:</p>
+            <a href="${link}">${link}</a>`,
+    };
+
+    // Send mail to Doctor
+    const doctorMail = {
+      to: appointment.doctorId.email,
+      subject: "Patient Video Call Link",
+      html: `<p>Hello ${appointment.doctorId.name},</p>
+            <p>Your consultation is ready. Join via this link:</p>
+            <a href="${link}">${link}</a>`,
+    };
+
+    await sendMail(userMail, (error, info) => {
+      if (error) {
+        console.log("Mail Sending Error:", error);
+      } else {
+        console.log("Mail Sent:", info);
+      }
+    });
+    await sendMail(doctorMail, (error, info) => {
+      if (error) {
+        console.log("Mail Sending Error:", error);
+      } else {
+        console.log("Mail Sent:", info);
+      }
+    });
 
     return res.status(StatusCodes.OK).json({
-      status: "OK",
-      message: `Doctor is now ${isBusy ? "busy" : "available"}`,
+      status: "Success",
+      message: "Video call link sent to doctor and user.",
+      link,
     });
   } catch (error) {
     console.error("Video Call Request Error:", error);
@@ -40,4 +71,4 @@ const videoCallRequestController = async (req, res) => {
   }
 };
 
-export default videoCallRequestController
+export default videoCallRequestController;

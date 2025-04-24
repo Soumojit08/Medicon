@@ -2,7 +2,7 @@ import cron from "node-cron";
 import Models from "../models/index.models.js";
 import sendMail from "../services/sendMail.js";
 
-const generateVideoCallLink = (appointmentId) => {
+export const generateVideoCallLink = (appointmentId) => {
     // You can replace this with your actual ZEGOCLOUD/Agora link generation logic
     return `https://medicon-za1z.vercel.app/videocall/${appointmentId}`;
 };
