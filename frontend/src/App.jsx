@@ -51,7 +51,7 @@ const App = () => {
           <Route path="/find-doctors" element={<FindDoctors />} />
 
           {/* VideoCall  */}
-          <Route path="/video-call/:roomId" element={<VideoCall />} />
+          <Route path="/videocall/:appointmentId" element={<VideoCall />} />
 
           {/* Buy us a Coffee */}
           <Route path="/buymeacoffee" element={<BuyMeACoffee />} />

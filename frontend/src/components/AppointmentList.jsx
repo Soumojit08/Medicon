@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Calendar,
   Clock,
@@ -16,6 +17,7 @@ import { toast } from "react-hot-toast";
 const AppointmentList = ({ doctorId, Token }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [appointments, setAppointments] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (doctorId && Token) {
@@ -70,8 +72,11 @@ const AppointmentList = ({ doctorId, Token }) => {
         appointmentId,
         doctorId,
       });
-      console.log("VideoCall Response : ", response.data);
-      toast.success("VideoCall link send to email successfully");
+
+      if (response.data) {
+        toast.success("VideoCall link send to email successfully");
+        navigate(`/videocall/${appointmentId}`);
+      }
     } catch (error) {
       console.log(error);
       toast.error("Problem generating appointment link");
