@@ -230,7 +230,7 @@ const DoctorInfoPage = () => {
           </div>
 
           {/* Ratings & Reviews Summary */}
-          <div className="bg-white rounded-xl shadow-md p-6">
+          <div className="bg-white rounded-xl shadow-md p-6 mb-8">
             <h3 className="text-lg font-semibold mb-2">Ratings & Reviews</h3>
             <div className="flex items-center gap-2 mt-2">
               <Star className="text-yellow-500 fill-yellow-500" size={24} />
@@ -240,6 +240,32 @@ const DoctorInfoPage = () => {
               <span className="text-gray-500">
                 ({doctor.totalReviews || 0} reviews)
               </span>
+            </div>
+          </div>
+
+          {/* Location Map */}
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <h3 className="text-lg font-semibold mb-2">Location</h3>
+            <div className="h-48 w-full rounded-lg overflow-hidden">
+              <iframe
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${
+                  (doctor.geoLocation?.coordinates?.[0] || 88.0776323) - 0.5
+                },${
+                  (doctor.geoLocation?.coordinates?.[1] || 22.4808608) - 0.5
+                },${
+                  (doctor.geoLocation?.coordinates?.[0] || 88.0776323) + 0.5
+                },${
+                  (doctor.geoLocation?.coordinates?.[1] || 22.4808608) + 0.5
+                }&layer=mapnik&marker=${
+                  doctor.geoLocation?.coordinates?.[1] || 22.4808608
+                },${doctor.geoLocation?.coordinates?.[0] || 88.0776323}`}
+              ></iframe>
             </div>
           </div>
         </div>
