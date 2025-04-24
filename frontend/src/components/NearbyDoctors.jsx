@@ -150,7 +150,7 @@ const NearbyDoctors = ({ searchTerm, specialization }) => {
                   onClick={() =>
                     (window.location.href = `/book-appointment/${doctor._id}`)
                   }
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                  className="w-full bg-blue-600 cursor-pointer text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
                 >
                   Book Appointment
                 </button>

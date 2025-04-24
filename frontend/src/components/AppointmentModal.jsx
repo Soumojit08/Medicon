@@ -128,7 +128,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -209,7 +209,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor, user }) => {
           <button
             type="submit"
             disabled={isLoading || !selectedSlot || !selectedDate}
-            className={`w-full flex items-center justify-center gap-2 px-4 py-3 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ${
+            className={`w-full flex items-center justify-center cursor-pointer gap-2 px-4 py-3 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ${
               isLoading || !selectedSlot || !selectedDate
                 ? "opacity-75 cursor-not-allowed"
                 : "transform hover:-translate-y-0.5"

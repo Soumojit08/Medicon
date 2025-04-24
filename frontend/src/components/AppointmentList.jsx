@@ -96,7 +96,7 @@ const AppointmentList = ({ doctorId, Token }) => {
         <button
           onClick={handleRefresh}
           disabled={isLoading}
-          className="w-full sm:w-auto p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+          className="w-full cursor-pointer sm:w-auto p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
         >
           <RefreshCw
             className={`text-gray-600 ${isLoading ? "animate-spin" : ""}`}

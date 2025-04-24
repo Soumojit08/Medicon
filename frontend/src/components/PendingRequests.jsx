@@ -124,7 +124,7 @@ const PendingRequests = () => {
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+            className="p-2 cursor-pointer rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
           >
             <RefreshCw
               className={`text-gray-600 ${isLoading ? "animate-spin" : ""}`}

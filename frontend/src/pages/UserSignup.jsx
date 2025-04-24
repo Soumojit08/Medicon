@@ -217,7 +217,7 @@ const UserSignup = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="w-full cursor-pointer flex justify-center py-2.5 px-4 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
                 {isLoading ? "Processing..." : "Sign Up"}
               </button>

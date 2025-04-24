@@ -147,7 +147,7 @@ const AdminAppointmentRequests = () => {
                         updateAppointmentStatus(appointment._id, "confirmed")
                       }
                       disabled={updating}
-                      className="flex-1 bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 disabled:opacity-50"
+                      className="flex-1 cursor-pointer bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 disabled:opacity-50"
                     >
                       {updating ? "Updating..." : "Confirm"}
                     </button>
@@ -156,7 +156,7 @@ const AdminAppointmentRequests = () => {
                         updateAppointmentStatus(appointment._id, "cancelled")
                       }
                       disabled={updating}
-                      className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600 disabled:opacity-50"
+                      className="flex-1 cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600 disabled:opacity-50"
                     >
                       {updating ? "Updating..." : "Cancel"}
                     </button>

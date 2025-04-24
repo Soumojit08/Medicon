@@ -156,7 +156,7 @@ const AvailableDoctors = () => {
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+            className="p-2 cursor-pointer rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
           >
             <RefreshCw
               className={`text-gray-600 ${isLoading ? "animate-spin" : ""}`}
@@ -219,7 +219,7 @@ const AvailableDoctors = () => {
               </div>
             </div>
 
-            <button className="w-full mt-6 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+            <button className="w-full mt-6 bg-blue-500 cursor-pointer text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
               Book Appointment
             </button>
           </div>
@@ -236,7 +236,7 @@ const AvailableDoctors = () => {
       )}
 
       <div className="mt-6 text-center">
-        <button className="text-blue-500 hover:text-blue-600 font-medium">
+        <button className="text-blue-500 cursor-pointer hover:text-blue-600 font-medium">
           View All Doctors
         </button>
       </div>

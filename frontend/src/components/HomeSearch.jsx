@@ -75,7 +75,7 @@ const HomeSearch = () => {
             <Tooltip content={"Search Specalist Doctor Here"} position="top">
               <button
                 type="submit"
-                className="px-4 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center sm:text-sm"
+                className="px-4 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 cursor-pointer transition-colors flex items-center justify-center sm:text-sm"
               >
                 <Search className="h-5 w-5" />
                 <span className="hidden sm:inline">Search</span>

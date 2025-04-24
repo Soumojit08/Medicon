@@ -178,14 +178,14 @@ Format your response using these guidelines:
             </div>
             <div className="flex space-x-3">
               <button
-                className="flex items-center justify-center w-8 h-8 hover:bg-blue-900 hover:bg-opacity-20 rounded-full transition-colors"
+                className="flex cursor-pointer items-center justify-center w-8 h-8 hover:bg-blue-900 hover:bg-opacity-20 rounded-full transition-colors"
                 onClick={toggleMinimize}
                 aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
               >
                 {isMinimized ? <Maximize size={16} /> : <Minimize size={16} />}
               </button>
               <button
-                className="flex items-center justify-center w-8 h-8 hover:bg-blue-900 hover:bg-opacity-20 rounded-full transition-colors"
+                className="flex items-center justify-center cursor-pointer w-8 h-8 hover:bg-blue-900 hover:bg-opacity-20 rounded-full transition-colors"
                 onClick={toggleChat}
                 aria-label="Close chat"
               >
@@ -290,7 +290,7 @@ Format your response using these guidelines:
                   />
                   <button
                     onClick={sendMessage}
-                    className={`flex items-center justify-center w-10 h-8 rounded-full transform transition-all duration-200 ${
+                    className={`flex items-center cursor-pointer justify-center w-10 h-8 rounded-full transform transition-all duration-200 ${
                       input.trim() === ""
                         ? "bg-gray-300 cursor-not-allowed"
                         : "bg-gradient-to-r from-blue-500 to-blue-600 shadow-md hover:shadow-lg hover:scale-105"

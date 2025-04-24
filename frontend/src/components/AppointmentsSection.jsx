@@ -148,7 +148,7 @@ const AppointmentsSection = ({ userToken }) => {
             <button
               onClick={handleRefresh}
               disabled={isLoading}
-              className="w-full sm:w-auto p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+              className="w-full cursor-pointer sm:w-auto p-2 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
             >
               <RefreshCw
                 className={`text-gray-600 ${isLoading ? "animate-spin" : ""}`}
@@ -205,20 +205,17 @@ const AppointmentsSection = ({ userToken }) => {
 
                 <div className="flex items-center space-x-2">
                   {appointment.type === "Video Call" && (
-                    <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                    <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                       <Video className="w-5 h-5 text-blue-500" />
                     </button>
                   )}
-                  <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                    <MessageSquare className="w-5 h-5 text-blue-500" />
-                  </button>
                   {appointment.status === "confirmed" &&
                     !appointment.review && (
                       <button
                         onClick={() =>
                           handleReviewClick(appointment.doctorId, appointment)
                         }
-                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 cursor-pointer"
                       >
                         <Star className="w-5 h-5" />
                         <span>Leave a Review</span>

@@ -195,7 +195,7 @@ const DoctorInfoPage = () => {
             </p>
             <button
               onClick={openModal}
-              className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+              className="mt-4 cursor-pointer w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
             >
               <Calendar size={18} />
               Book Appointment

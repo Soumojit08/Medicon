@@ -196,7 +196,7 @@ const ManageSchedule = ({ doctorId }) => {
         </h3>
         <button
           onClick={handleSave}
-          className="mt-4 sm:mt-0 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          className="mt-4 cursor-pointer sm:mt-0 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
         >
           Save Changes
         </button>
@@ -292,7 +292,7 @@ const ManageSchedule = ({ doctorId }) => {
                       </div>
                       <button
                         onClick={() => removeTimeSlot(schedule.day, index)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-500 cursor-pointer hover:text-red-700"
                       >
                         <AiOutlineClose />
                       </button>
@@ -301,7 +301,7 @@ const ManageSchedule = ({ doctorId }) => {
                 <div>
                   <button
                     onClick={() => addTimeSlot(schedule.day)}
-                    className="text-blue-500 hover:text-blue-700"
+                    className="text-blue-500 hover:text-blue-700 cursor-pointer"
                   >
                     + Add Slot
                   </button>
@@ -318,7 +318,7 @@ const ManageSchedule = ({ doctorId }) => {
           </p>
           <button
             onClick={defaultSchedule}
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            className="mt-4 bg-blue-500 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
           >
             Create Default Schedule
           </button>

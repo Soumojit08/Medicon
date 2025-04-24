@@ -98,7 +98,7 @@ const DoctorDetailsForm = ({ doctorData, refreshData }) => {
           <button
             type="button"
             onClick={handleEdit}
-            className="text-blue-500 border border-blue-500 px-3 py-1 sm:px-4 sm:py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors text-sm sm:text-base"
+            className="text-blue-500 cursor-pointer border border-blue-500 px-3 py-1 sm:px-4 sm:py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors text-sm sm:text-base"
           >
             {isEditing ? "Cancel" : "Edit"}
           </button>
@@ -236,7 +236,7 @@ const DoctorDetailsForm = ({ doctorData, refreshData }) => {
       {isEditing && (
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600 transition-colors"
+          className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600 transition-colors"
         >
           Save
         </button>

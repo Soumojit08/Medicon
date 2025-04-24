@@ -203,7 +203,7 @@ const MedicalRecords = ({ userId, userToken }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`mt-4 w-full ${
+              className={`mt-4 w-full cursor-pointer ${
                 isLoading ? "bg-blue-400" : "bg-blue-600"
               } text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:hover:bg-blue-400`}
             >
@@ -241,7 +241,7 @@ const MedicalRecords = ({ userId, userToken }) => {
                     <button
                       type="button"
                       onClick={() => deleteFile(record._id)}
-                      className="bg-red-600 px-4 py-2 w-full sm:w-auto text-white rounded-md hover:bg-red-700 transition-colors text-center flex items-center justify-center"
+                      className="bg-red-600 cursor-pointer px-4 py-2 w-full sm:w-auto text-white rounded-md hover:bg-red-700 transition-colors text-center flex items-center justify-center"
                     >
                       <Trash2 />
                     </button>
