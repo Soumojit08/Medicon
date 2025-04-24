@@ -1594,9 +1594,13 @@ router.post("/logout-doctor", Middlewares.DoctorAuth, controllers.DoctorLogout);
  *                    example: "Internal Server Error"
  */
 
+// router.post(
+//   "/video-call/request",
+//   Middlewares.DoctorAuth,
+//   controllers.VideoCallRequest
+// );
 router.post(
   "/video-call/request",
-  Middlewares.DoctorAuth,
   controllers.VideoCallRequest
 );
 
