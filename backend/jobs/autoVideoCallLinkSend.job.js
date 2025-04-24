@@ -1,76 +1,79 @@
 import cron from "node-cron";
 import Models from "../models/index.models.js";
 import sendMail from "../services/sendMail.js";
+import MailTemplates from "../utils/index.utils.js";
 
 export const generateVideoCallLink = (appointmentId) => {
-    // You can replace this with your actual ZEGOCLOUD/Agora link generation logic
-    return `https://medicon-za1z.vercel.app/videocall/${appointmentId}`;
+  return `https://medicon-za1z.vercel.app/videocall/${appointmentId}`;
 };
 
 const autoVideoCallLinkSend = async () => {
-    try {
-        const now = new Date();
-        const currentDate = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
-        const currentTime = now.toTimeString().split(" ")[0].slice(0, 5); // "HH:MM"
+  try {
+    const now = new Date();
 
-        // Get appointments for now ± 1 minute to handle time sync tolerance
-        const confirmedAppointments = await Models.AppointmentModel.find({
-            status: "confirmed",
-            date: { $lte: now },
-        }).populate("userId doctorId");
+    const confirmedAppointments = await Models.AppointmentModel.find({
+      status: "confirmed",
+      date: { $lte: now },
+    }).populate("userId doctorId");
 
-        for (const appt of confirmedAppointments) {
-            // Match time window
-            const apptStart = appt.startTime;
-            const [apptHour, apptMin] = apptStart.split(":").map(Number);
-            const apptTime = new Date(appt.date);
-            apptTime.setHours(apptHour, apptMin);
+    for (const appt of confirmedAppointments) {
+      const apptStart = appt.startTime;
+      const [apptHour, apptMin] = apptStart.split(":").map(Number);
+      const apptTime = new Date(appt.date);
+      apptTime.setHours(apptHour, apptMin);
 
-            const diff = Math.abs(now - apptTime);
-            const diffMinutes = Math.floor(diff / 60000); // milliseconds to minutes
+      const diff = Math.abs(now - apptTime);
+      const diffMinutes = Math.floor(diff / 60000);
 
-            if (diffMinutes <= 1) {
-                const link = generateVideoCallLink(appt._id);
+      if (diffMinutes <= 1) {
+        const link = generateVideoCallLink(appt._id);
 
-                const userMail = {
-                    to: appt.userId.email,
-                    subject: "Your Video Appointment Link",
-                    html: `<p>Hello ${appt.userId.name},</p>
-                <p>Your video consultation is about to begin. Join using the link below:</p>
-                <a href="${link}">${link}</a>`,
-                };
+        const formattedDate = appt.date.toISOString().split("T")[0];
 
-                const doctorMail = {
-                    to: appt.doctorId.email,
-                    subject: "Patient Video Call Link",
-                    html: `<p>Hello Dr. ${appt.doctorId.name},</p>
-                <p>You have an upcoming consultation. Join using the link below:</p>
-                <a href="${link}">${link}</a>`,
-                };
+        const userMail = MailTemplates.VideoCallUserMailContent({
+          email: appt.userId.email,
+          name: appt.userId.name,
+          link,
+          date: formattedDate,
+          startTime: appt.startTime,
+          endTime: appt.endTime,
+          doctorName: appt.doctorId.name,
+        });
 
-                await sendMail(userMail, (error, info) => {
-                    if (error) {
-                        console.log("Mail Sending Error:", error);
-                    } else {
-                        console.log("Mail Sent:", info);
-                    }
-                });
-                await sendMail(doctorMail, (error, info) => {
-                    if (error) {
-                        console.log("Mail Sending Error:", error);
-                    } else {
-                        console.log("Mail Sent:", info);
-                    }
-                });
+        const doctorMail = MailTemplates.VideoCallDoctorMailContent({
+          email: appt.doctorId.email,
+          name: appt.doctorId.name,
+          link,
+          date: formattedDate,
+          startTime: appt.startTime,
+          endTime: appt.endTime,
+          doctorName: appt.doctorId.name,
+        });
 
-                console.log(`Video call link sent for appointment: ${appt._id}`);
-            }
-        }
+        await sendMail(userMail, (error, info) => {
+          if (error) {
+            console.log("User Mail Sending Error:", error);
+          } else {
+            console.log("User Mail Sent:", info.response);
+          }
+        });
 
-        console.log("Video call link job finished.");
-    } catch (error) {
-        console.error("Error in autoVideoCallLinkSend:", error.message);
+        await sendMail(doctorMail, (error, info) => {
+          if (error) {
+            console.log("Doctor Mail Sending Error:", error);
+          } else {
+            console.log("Doctor Mail Sent:", info.response);
+          }
+        });
+
+        console.log(`Video call link sent for appointment: ${appt._id}`);
+      }
     }
+
+    console.log("Video call link job finished.");
+  } catch (error) {
+    console.error("Error in autoVideoCallLinkSend:", error.message);
+  }
 };
 
 // Run every 2 minutes

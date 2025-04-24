@@ -6,6 +6,8 @@ import doctorWelcomeMailContent from "./Mails/signUpDoctor.mail.template.js";
 import UserSignUpMailConfirmationMailContent from "./Mails/signUpUser.mail.template.js";
 import sosAlertMailTemplate from "./Mails/sos.mail.template.js";
 import updatedDoctorMailContent from "./Mails/updateDoctorDets.mail.template.js";
+import videoCallLinkMailTemplateForDoctor from "./Mails/videocallDoctor.mail.template.js";
+import videoCallLinkMailTemplateForUser from "./Mails/videocallUser.mail.template.js";
 
 const MailTemplates = {
     SignUpMailContent: UserSignUpMailConfirmationMailContent,
@@ -15,7 +17,9 @@ const MailTemplates = {
     SignUpDoctorMailContent: doctorWelcomeMailContent,
     VerificationDoctorContent: doctorVerificationSuccessfulContent,
     AppointmentStatusUpdateContent: appointmentStatusUpdateMailContent,
-    SOSMailContent: sosAlertMailTemplate
+    SOSMailContent: sosAlertMailTemplate,
+    VideoCallUserMailContent: videoCallLinkMailTemplateForUser,
+    VideoCallDoctorMailContent: videoCallLinkMailTemplateForDoctor
 }
 
 export default MailTemplates;
