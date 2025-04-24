@@ -64,7 +64,7 @@ const AppointmentList = ({ doctorId, Token }) => {
     }
   };
 
-  const handleVideocall = async (appointmentId, doctorId) => {
+  const handleVideocall = async (appointmentId, doctorId, userId) => {
     try {
       // console.log("Appointment Id: ", appointmentId);
       // console.log("Doctor Id: ", doctorId);
@@ -171,7 +171,11 @@ const AppointmentList = ({ doctorId, Token }) => {
                   </div>
                   <button
                     onClick={() =>
-                      handleVideocall(appointment._id, appointment.doctorId)
+                      handleVideocall(
+                        appointment._id,
+                        appointment.doctorId,
+                        appointment.userId
+                      )
                     }
                     className="bg-blue-100 p-2 rounded-lg cursor-pointer border-none hover:bg-blue-200"
                   >
