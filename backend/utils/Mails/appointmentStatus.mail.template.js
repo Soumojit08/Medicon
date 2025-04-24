@@ -50,8 +50,9 @@ const appointmentStatusUpdateMailContent = ({ recipientEmail, recipientName, doc
               <p>Your appointment with ${doctorName} scheduled for <strong>${appointmentDate}</strong> has been <strong style="color: ${statusColor}; text-transform: capitalize;">${status}</strong>.</p>
               <p>If you have any questions or concerns, please contact our support team.</p>
               <p>Thank you for using Medicon!</p>
+              <a href="https://medicon-za1z.vercel.app/" class="button">View Appointments</a>
               <div class="footer">
-                  &copy; 2024 Medicon HealthTech Pvt Ltd. All rights reserved.
+                  &copy; 2025 Medicon HealthTech Pvt Ltd. All rights reserved.
               </div>
           </div>
       </body>

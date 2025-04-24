@@ -66,7 +66,7 @@ const updatedDoctorMailContent = ({ email, doctorName, updatedFields }) => {
                   <p>Thank you for staying updated with Medicon.</p>
   
                   <div class="footer">
-                      <p>&copy; 2024 Medicon. All rights reserved.</p>
+                      <p>&copy; 2025 Medicon. All rights reserved.</p>
                       <p>Medicon HealthTech Pvt Ltd</p>
                   </div>
               </div>

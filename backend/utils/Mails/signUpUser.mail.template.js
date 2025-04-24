@@ -71,9 +71,9 @@ const UserSignUpMailConfirmationMailContent = ({
                             <li>🤖 Get instant health advice from our AI-powered chatbot.</li>
                         </ul>
                         <p>We are excited to have you onboard and look forward to supporting your healthcare needs.</p>
-                        <a href="https://medicon.onrender.com" class="button">Start Your Journey</a>
+                        <a href="https://medicon-za1z.vercel.app/" class="button">Start Your Journey</a>
                         <div class="footer">
-                            <p>&copy; 2024 Medicon. All rights reserved.</p>
+                            <p>&copy; 2025 Medicon. All rights reserved.</p>
                             <p>Medicon HealthTech Pvt Ltd, 123 Wellness Avenue, HealthCity, HC 56789</p>
                         </div>
                     </div>
