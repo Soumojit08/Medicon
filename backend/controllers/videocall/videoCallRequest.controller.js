@@ -2,12 +2,12 @@ import { StatusCodes } from "http-status-codes";
 import Models from "../../models/index.models.js";
 import { generateVideoCallLink } from "../../jobs/autoVideoCallLinkSend.job.js";
 import sendMail from "../../services/sendMail.js";
+import MailTemplates from "../../utils/index.utils.js";
 
 const videoCallRequestController = async (req, res) => {
   try {
     const { appointmentId, doctorId } = req.body;
 
-    // Check appointment exists and is confirmed
     const appointment = await Models.AppointmentModel.findOne({
       _id: appointmentId,
       doctorId: doctorId,
@@ -21,39 +21,43 @@ const videoCallRequestController = async (req, res) => {
       });
     }
 
-    // Generate video call link
     const link = generateVideoCallLink(appointment._id);
+    const formattedDate = appointment.date.toISOString().split("T")[0];
 
-    // Send mail to User
-    const userMail = {
-      to: appointment.userId.email,
-      subject: "Your Video Appointment Link",
-      html: `<p>Hello ${appointment.userId.name},</p>
-            <p>Your video consultation is ready. Click the link below to join:</p>
-            <a href="${link}">${link}</a>`,
-    };
+    // Prepare email content using templates
+    const userMail = MailTemplates.VideoCallUserMailContent({
+      email: appointment.userId.email,
+      name: appointment.userId.name,
+      link,
+      date: formattedDate,
+      startTime: appointment.startTime,
+      endTime: appointment.endTime,
+      doctorName: appointment.doctorId.name,
+    });
 
-    // Send mail to Doctor
-    const doctorMail = {
-      to: appointment.doctorId.email,
-      subject: "Patient Video Call Link",
-      html: `<p>Hello ${appointment.doctorId.name},</p>
-            <p>Your consultation is ready. Join via this link:</p>
-            <a href="${link}">${link}</a>`,
-    };
+    const doctorMail = MailTemplates.VideoCallDoctorMailContent({
+      email: appointment.doctorId.email,
+      name: appointment.doctorId.name,
+      link,
+      date: formattedDate,
+      startTime: appointment.startTime,
+      endTime: appointment.endTime,
+      doctorName: appointment.doctorId.name,
+    });
 
     await sendMail(userMail, (error, info) => {
       if (error) {
-        console.log("Mail Sending Error:", error);
+        console.log("User Mail Sending Error:", error);
       } else {
-        console.log("Mail Sent:", info);
+        console.log("User Mail Sent:", info.response);
       }
     });
+
     await sendMail(doctorMail, (error, info) => {
       if (error) {
-        console.log("Mail Sending Error:", error);
+        console.log("Doctor Mail Sending Error:", error);
       } else {
-        console.log("Mail Sent:", info);
+        console.log("Doctor Mail Sent:", info.response);
       }
     });
 
