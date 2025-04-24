@@ -17,6 +17,7 @@ import AdminDoctorVerification from "./components/AdminDoctorVerification";
 import Home from "./pages/Home";
 import VideoCall from "./components/VideoCall";
 import BuyMeACoffee from "./components/BuyMeACoffee";
+import DoctorInfoPage from "./pages/DoctorInfoPage";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/doctorLogin" element={<DoctorLogin />} />
           <Route path="/doctorSignup" element={<DoctorSignup />} />
           <Route path="/doctorDashboard/:id" element={<DoctorDashboard />} />
+          <Route path="/doctorprofile/:id" element={<DoctorInfoPage />} />
 
           {/* User Routes */}
           <Route path="/userLogin" element={<UserLogin />} />

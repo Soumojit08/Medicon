@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Video,
   CalendarDays,
   BadgeCheck,
   Mail,
@@ -15,76 +14,7 @@ import AppointmentModal from "./AppointmentModal";
 
 const DoctorCard = ({ doctor, user }) => {
   const navigate = useNavigate();
-  const isOnline = doctor.isOnline;
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleVideoCallStatus = async (isBusy) => {
-    const doctorToken = localStorage.getItem("doctortoken");
-    const doctorId = localStorage.getItem("doctorId");
-
-    if (doctorToken && doctorId) {
-      try {
-        await axiosInstance.post(
-          "/api/v1/update-doctor-status",
-          {
-            doctorId,
-            isBusy,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${doctorToken}`,
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Error updating busy status:", error);
-      }
-    }
-  };
-
-  const handleVideoCall = () => {
-    // Check if user is logged in
-    const userToken = localStorage.getItem("usertoken");
-
-    if (!userToken) {
-      toast.error("Please login to start a video call");
-      navigate("/userLogin");
-      return;
-    }
-
-    // Generate a unique room ID
-    const roomId = `room_${doctor._id}_${Date.now()}`;
-
-    // Log the doctor and user details
-    console.log("Navigating to VideoCall with:", {
-      doctorId: doctor._id,
-      doctorName: doctor.name,
-      patientId: user._id,
-      patientName: user.name,
-    });
-
-    // Navigate to the VideoCall component with doctor and patient details
-    navigate(`/video-call/${roomId}`, {
-      state: {
-        doctor,
-        patient: {
-          id: user._id,
-          name: user.name,
-        },
-      },
-    });
-  };
-
-  // const sendVideoCallRequest = async (doctorId, roomId) => {
-  //   try {
-  //     // Here you would make an API call to notify the doctor
-  //     // For now, we'll just navigate to the video call room
-  //     navigate(`/video-call/${roomId}`);
-  //   } catch (error) {
-  //     console.error("Error sending video call request:", error);
-  //     toast.error("Failed to send video call request");
-  //   }
-  // };
 
   const openModal = () => {
     const userToken = localStorage.getItem("usertoken");
@@ -94,6 +24,10 @@ const DoctorCard = ({ doctor, user }) => {
       return;
     }
     setIsModalOpen(true);
+  };
+
+  const handleViewMore = () => {
+    navigate(`/doctorprofile/${doctor._id}`, { state: { user } });
   };
 
   return (
@@ -185,16 +119,10 @@ const DoctorCard = ({ doctor, user }) => {
 
           <div className="flex gap-3">
             <button
-              onClick={handleVideoCall}
-              disabled={!isOnline}
-              className={`flex-1 flex items-center justify-center gap-2 ${
-                isOnline
-                  ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              } text-sm py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md`}
+              className="cursor-pointer flex-1 flex items-center justify-center gap-2 border border-none bg-blue-500 text-white hover:bg-blue-600 text-sm py-2.5 px-4 rounded-lg transition-all duration-200"
+              onClick={handleViewMore}
             >
-              <Video size={16} />
-              <span>{isOnline ? "Video Call" : "Offline"}</span>
+              View More
             </button>
             <button
               onClick={openModal}
