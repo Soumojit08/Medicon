@@ -14,7 +14,7 @@ import redis from "./Redis/client.js";
 import connectRedis from "./Redis/connectRedis.js";
 import "./jobs/autoAppointmantStatusUpdate.job.js";
 import "./jobs/autoVideoCallLinkSend.job.js";
-import "./jobs/autoHealthUpdate.job.js"
+import autoHealthUpdateJob from "./jobs/autoHealthUpdate.job.js"; // updated
 
 const app = express();
 const server = http.createServer(app);
@@ -35,7 +35,7 @@ const io = new Server(server, {
 });
 
 app.set("trust proxy", true);
-app.set("io", io); // Attach io to app instance (for use in controllers)
+app.set("io", io); // Attach io to app instance for global access
 
 // Connect DB + Redis
 const db_URI =
@@ -64,16 +64,6 @@ app.use(
   })
 );
 
-// Handle preflight (OPTIONS) requests in production
-// if (configs.ENV !== "development") {
-//   app.use((req, res, next) => {
-//     if (req.method === "OPTIONS") {
-//       return res.status(200).end();
-//     }
-//     next();
-//   });
-// }
-
 // Swagger Setup
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
@@ -89,6 +79,9 @@ io.on("connection", (socket) => {
     console.log("❌ Client disconnected:", socket.id);
   });
 });
+
+// Cron Job for auto health update with Socket.IO access
+autoHealthUpdateJob(app);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
