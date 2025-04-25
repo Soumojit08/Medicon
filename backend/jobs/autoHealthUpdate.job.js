@@ -63,5 +63,5 @@ const autoHealthUpdate = async (app) => {
 
 // Export scheduler
 export default function scheduleHealthUpdateJob(app) {
-  cron.schedule("*/20 * * * * *", () => autoHealthUpdate(app));
+  cron.schedule("*/10 * * * * *", () => autoHealthUpdate(app));
 }
