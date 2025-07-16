@@ -3,30 +3,14 @@ import { Star } from "lucide-react";
 import axiosInstance from "../libs/axios";
 
 const Marquee = ({
-  children,
+  reviews = [],
   direction = "left",
   speed = 30,
   pauseOnHover = true,
   className = "",
 }) => {
   const [isPaused, setIsPaused] = useState(false);
-  const [reviews, setReviews] = useState([]);
   const contentRef = useRef(null);
-
-  const fetchReviews = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/reviews");
-      if (response.data && response.data.data) {
-        setReviews(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchReviews();
-  }, []);
 
   return (
     <div
@@ -49,9 +33,11 @@ const Marquee = ({
         <div className="flex gap-4">
           {reviews.map((review) => (
             <ReviewCard
-              key={review._id}
-              avatar={review.userId.profilepic}
-              name={review.userId.name}
+              key={review.id || review._id}
+              avatar={
+                review.avatar || (review.userId && review.userId.profilepic)
+              }
+              name={review.name || (review.userId && review.userId.name)}
               rating={review.rating}
               review={review.review ? review.review : "No remark given"}
             />
@@ -61,9 +47,11 @@ const Marquee = ({
         <div className="flex gap-4">
           {reviews.map((review) => (
             <ReviewCard
-              key={`duplicate-${review._id}`}
-              avatar={review.userId.profilepic}
-              name={review.userId.name}
+              key={`duplicate-${review.id || review._id}`}
+              avatar={
+                review.avatar || (review.userId && review.userId.profilepic)
+              }
+              name={review.name || (review.userId && review.userId.name)}
               rating={review.rating}
               review={review.review ? review.review : "No remark given"}
             />

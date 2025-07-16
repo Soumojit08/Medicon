@@ -180,11 +180,12 @@ const Home = () => {
         <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
           What Our Customers Say
         </h2>
-        <Marquee direction="left" speed={30} className="py-4">
-          {reviews.map((review) => (
-            <ReviewCard key={review.id} {...review} />
-          ))}
-        </Marquee>
+        <Marquee
+          direction="left"
+          speed={30}
+          className="py-4"
+          reviews={reviews}
+        />
       </section>
 
       {/* Trust Indicators */}
